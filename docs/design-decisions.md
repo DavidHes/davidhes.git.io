@@ -3,9 +3,6 @@ title: Design Decisions
 nav_order: 3
 ---
 
-{: .label }
-[Jane Dane]
-
 {: .no_toc }
 # Design decisions
 
@@ -16,27 +13,32 @@ nav_order: 3
 {: toc }
 </details>
 
-## 01: [Title]
+## 01: [CSS Style] 
 
-### Meta
+### Meta 
 
-Status
-: **Work in progress** - Decided - Obsolete
+Status 
 
-Updated
-: DD-MMM-YYYY
+: **Work in progress**  
 
-### Problem statement
+Updated 
 
-[Describe the problem to be solved or the goal to be achieved. Include relevant context information.]
+: 20.06.2024 
 
-### Decision
+### Problem statement 
 
-[Describe **which** design decision was taken for **what reason** and by **whom**.]
+For the web application, we need a CSS file or at least some CSS to style the web application. The problem is that writing custom CSS code for the entire site is very time-consuming, and since we don't have much time, we need to find a quick solution that allows us to style the website according to our preferences. 
 
-### Regarded options
+### Decision 
 
-[Describe any possible design decision that will solve the problem. Assess these options, e.g., via a simple pro/con list.]
+We (Majd) have decided to use Bootstrap as a framework to create the CSS styles for the website for the following reasons. Firstly, using Bootstrap offers a significantly faster development process compared to writing our own CSS file, which is crucial for us as we don't have a lot of time and want to focus on the database and the functionality of the web application. Secondly, Bootstrap includes a built-in responsive grid system that makes it easier to adapt to different screen sizes. 
+
+### Regarded options 
+
+|  | Pro | Contra |
+| --- | --- | --- |
+| **Custom CSS File** | ✔️ Full control over the styling <br> ✔️ Unique, custom design | ❌ Time-consuming |
+| **Bootstrap** | ✔️ Fast development <br> ✔️ Low effort <br> ✔️ Suitable for CSS beginners | ❌ High load time due to the many Bootstrap libraries <br> ❌ Less design flexibility |
 
 ---
 
