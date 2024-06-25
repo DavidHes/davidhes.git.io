@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block HEADER %}
+    <h2>{% block TITLE %}Company Registration{% endblock %}</h2>
+{% endblock %}
+
+{% block CONTENT %}
+    <div class="container mt-5">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.companyname.label(class="form-control-label") }}
+                {{ form.companyname(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.street.label(class="form-control-label") }}
+                {{ form.street(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.city.label(class="form-control-label") }}
+                {{ form.city(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.postcode.label(class="form-control-label") }}
+                {{ form.postcode(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label(class="form-control-label") }}
+                {{ form.password(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.email.label(class="form-control-label") }}
+                {{ form.email(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.openinghour.label(class="form-control-label") }}
+                {{ form.openinghour(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.closinghour.label(class="form-control-label") }}
+                {{ form.closinghour(class="form-control") }}
+            </div>
+
+            <div class="form-check">
+                {{ form.terms(class="form-check-input") }}
+                {{ form.terms.label(class="form-check-label") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+{% endblock %}

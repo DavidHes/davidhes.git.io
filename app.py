@@ -6,103 +6,60 @@ app = Flask(__name__)
 
 app.config.from_mapping(
     SECRET_KEY = 'secret_key_just_for_dev_environment',
-    BOOTSTRAP_BOOTSWATCH_THEME = 'pulse'
+    BOOTSTRAP_BOOTSWATCH_THEME = 'journal'
 )
-
-from db import db, Todo, List, insert_sample  # (1.)
-
 bootstrap = Bootstrap5(app)
 
 @app.route('/')
-@app.route('/index')
-def index():
-    return redirect(url_for('todos'))
+def base():
+    return render_template('base.html')
 
-@app.route('/todos/', methods=['GET', 'POST'])
-def todos():
-    form = forms.CreateTodoForm()
-    if request.method == 'GET':
-        todos = db.session.execute(db.select(Todo).order_by(Todo.id)).scalars()  # !!
-        return render_template('todos.html', todos=todos, form=form)
-    else:  # request.method == 'POST'
-        if form.validate():
-            todo = Todo(description=form.description.data)  # !!
-            db.session.add(todo)  # !!
-            db.session.commit()  # !!
-            flash('Todo has been created.', 'success')
-        else:
-            flash('No todo creation: validation error.', 'warning')
-        return redirect(url_for('todos'))
+@app.route('/favourites/')
+def favourites():
+     return render_template('favourite.html')
 
-@app.route('/todos/<int:id>', methods=['GET', 'POST'])
-def todo(id):
-    todo = db.session.get(Todo, id)  # !!
-    form = forms.TodoForm(obj=todo)  # (2.)  # !!
-    if request.method == 'GET':
-        if todo:
-            if todo.lists: form.list_id.data = todo.lists[0].id  # (3.)  # !!
-            choices = db.session.execute(db.select(List).order_by(List.name)).scalars()  # !!
-            form.list_id.choices = [(0, 'List?')] + [(c.id, c.name) for c in choices]  # !!
-            return render_template('todo.html', form=form)
-        else:
-            abort(404)
-    else:  # request.method == 'POST'
-        if form.method.data == 'PATCH':
-            if form.validate():
-                form.populate_obj(todo)  # (4.)
-                todo.populate_lists([form.list_id.data])  # (5.)  # !!
-                db.session.add(todo)  # !!
-                db.session.commit()  # !!
-                flash('Todo has been updated.', 'success')
-            else:
-                flash('No todo update: validation error.', 'warning')
-            return redirect(url_for('todo', id=id))
-        elif form.method.data == 'DELETE':
-            db.session.delete(todo)  # !!
-            db.session.commit()  # !!
-            flash('Todo has been deleted.', 'success')
-            return redirect(url_for('todos'), 303)
-        else:
-            flash('Nothing happened.', 'info')
-            return redirect(url_for('todo', id=id))
+@app.route('/profil/')
+def favourites():
+     return render_template('profil.html')
+   
+@app.route('/browse/')
+def browse():
+    return render_template('browse.html')
 
-@app.route('/lists/')
-def lists():
-    lists = db.session.execute(db.select(List).order_by(List.name)).scalars()  # (6.)  # !!
-    return render_template('lists.html', lists=lists)
+@app.route('/register_company', methods=['GET', 'POST'])
+def register_company():
+    form = forms.CompanyregistrationForm()
+    if form.validate_on_submit():
+        # Hier kannst du die Daten verarbeiten, z.B. in der Datenbank speichern
+        flash('Company successfully registered!', 'success')
+        return redirect(url_for('index'))  # Beispiel: Weiterleitung zur Startseite
+    return render_template('company_registration_form.html', form=form)
 
-@app.route('/lists/<int:id>')
-def list(id):
-    list = db.session.get(List, id)  # !!
-    if list is not None:
-        return render_template('list.html', list=list)
-    else:
-        return redirect(url_for('lists'))
+@app.route('/register_customer', methods=['GET', 'POST'])
+def register_customer():
+    form = forms.CustomerregistrationForm()
+    if form.validate_on_submit():
+        # Hier könnten Sie die Daten verarbeiten, z.B. in der Datenbank speichern
+        flash('Customer successfully registered!', 'success')
+        return redirect(url_for('index'))  # Beispiel: Weiterleitung zur Startseite nach erfolgreicher Registrierung
 
-@app.route('/insert/sample')
-def run_insert_sample():
-    insert_sample()
-    return 'Database flushed and populated with some sample data.'
+    return render_template('customer_registration_form.html', form=form)
 
-@app.errorhandler(404)
-def http_not_found(e):
-    return render_template('404.html'), 404
+@app.route('/create_offer', methods=['GET', 'POST'])
+def create_offer():
+    form = forms.OfferForm()
+    if form.validate_on_submit():
+        # Hier könnten Sie die Daten verarbeiten, z.B. in der Datenbank speichern
+        flash('Offer successfully created!', 'success')
+        return redirect(url_for('index'))  # Beispiel: Weiterleitung zur Startseite nach erfolgreicher Erstellung des Angebots
 
-@app.errorhandler(500)
-def http_internal_server_error(e):
-    return render_template('500.html'), 500
+    return render_template('offer_creation_form.html', form=form)
 
-@app.get('/faq/<css>')
-@app.get('/faq/', defaults={'css': 'default'})
-def faq(css):
-    return render_template('faq.html', css=css)
-
-@app.get('/ex/<int:id>')
-@app.get('/ex/', defaults={'id':1})
-def ex(id):
-    if id == 1:
-        return render_template('ex1.html')
-    elif id == 2:
-        return render_template('ex2.html')
-    else:
-        abort(404)
+@app.route('/rate_product', methods=['GET', 'POST'])
+def rate_product():
+    form = forms.RatingForm()
+    if form.validate_on_submit():
+        # Hier könnten Sie die Daten verarbeiten, z.B. in der Datenbank speichern
+        flash('Rating successfully submitted!', 'success')
+        return redirect(url_for('index'))  # Beispiel: Weiterleitung zur Startseite nach erfolgreicher Bewertung
+    return render_template('rating_form.html', form=form)
