@@ -82,7 +82,8 @@ Our decision is to use GitHub. GitHub allows us to work on the same project simu
 
 Also having GitHub repositories, we can access the code from everywhere and clone the project to every device. 
 
-### Regarded options 
+### Regarded options
 
 Other option is Git, but we prefer using GitHub to upload repositories to the cloud and this way, we can use features like pull requests and conduct code reviews directly on the platform. This way we can also review code, leave comments, and establish easier collaboration for us. Furthermore, we're have way more experience with working on projects on GitHub than on Git. 
+
 ---
