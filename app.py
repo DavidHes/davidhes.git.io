@@ -63,3 +63,19 @@ def rate_product():
         flash('Rating successfully submitted!', 'success')
         return redirect(url_for('index'))  # Beispiel: Weiterleitung zur Startseite nach erfolgreicher Bewertung
     return render_template('rating_form.html', form=form)
+
+@app.route('/login_Form', methods=['GET', 'POST'])
+def login():
+    form = forms.LoginForm()
+    if form.validate_on_submit():
+        
+        #SICHER PASSWÖRTE SPEICHERN
+        #from werkzeug.security import generate_password_hash, check_password_hash
+        #Passwort hashen
+        #password = "mypassword123"
+        #hashed_password = generate_password_hash(password, method='sha256')
+
+        # Hier könnten Sie die Daten verarbeiten, z.B. in der Datenbank speichern
+        flash('Logged in successfully', 'success')
+        return redirect(url_for('index'))  # Beispiel: Weiterleitung zur Startseite nach erfolgreicher Bewertung
+    return render_template('login_form.html', form=form)

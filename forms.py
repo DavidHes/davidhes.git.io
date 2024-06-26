@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, PasswordField, EmailField, SubmitField, HiddenField, BooleanField, SelectField, DateTimeField, RadioField, IntegerField
-from wtforms.validators import InputRequired, Length, Email,  NumberRange
+from wtforms.validators import InputRequired, Length, Email, NumberRange
 
 class CompanyregistrationForm(FlaskForm):
     companyname = StringField(validators=[InputRequired(), Length(min=5)])
@@ -14,12 +14,17 @@ class CompanyregistrationForm(FlaskForm):
     terms = BooleanField(validators=[InputRequired()])
     submit = SubmitField('Create')
 
+class LoginForm(FlaskForm):
+    password = PasswordField(validators=[InputRequired(), Length(min=8)])
+    email = EmailField(validators=[InputRequired(), Email()])
+    submit = SubmitField('Login')
+
 class CustomerregistrationForm(FlaskForm):
     customername = StringField(validators=[InputRequired(), Length(min=5)])
     customerfirstname  = StringField(validators=[InputRequired(), Length(min=5)])
     password = PasswordField(validators=[InputRequired(), Length(min=5)])
     email = EmailField(validators=[InputRequired(), Email()])
-    submit = SubmitField('Create')
+    submit = SubmitField('Create Account')
 
 class OfferForm(FlaskForm):
     offerdescription = StringField(validators=[InputRequired(), Length(min=5)])
@@ -31,9 +36,9 @@ class OfferForm(FlaskForm):
     endPickuptime=DateTimeField(validators=[InputRequired()], format='%Y-%m-%dT%H:%M')
     dailynumberofbags = BooleanField(validators=[InputRequired()])
     terms = BooleanField(validators=[InputRequired()])
-    submit = SubmitField('Create')
+    submit = SubmitField('Create Offer')
 
 class RatingForm(FlaskForm):
     rating = RadioField('Rating', choices=[(1, '1 Star'), (2, '2 Stars'), (3, '3 Stars'), (4, '4 Stars'), (5, '5 Stars')], coerce=int, validators=[InputRequired()])
     review = StringField(Length(min=5))
-    submit = SubmitField('Submit')
+    submit = SubmitField('Submit Review')
