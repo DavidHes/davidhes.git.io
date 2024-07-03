@@ -29,7 +29,7 @@ auf unserer Plattform, wodurch sie priorisiert angezeigt werden.
 Hat sich ein Kunde für ein Angebot entschieden, kann er dieses direkt mithilfe verschiedener
 Zahlungsmöglichkeiten erwerben. Ein nun generierter Code dient als Nachweis bei der
 Abholung der Backwaren. Prinzipiell gilt das Prinzip „First come, first serve“. Hat die Bäckerei nur
-X-Rabatte zum Angebot eingestellt und alle wurden gekauft, so gibt es für diesen Tag auch keine
+X-Tüten eines Angebots eingestellt und alle wurden gekauft, so gibt es für diesen Tag auch keine
 weiteren zum Kauf.
 Ein zentrales Feature ist die Möglichkeit für Kunden, Bewertungen für Bäckereien abzugeben.
 Hierbei geben die Kunden zwischen einem und fünf Sternen ab und bewerten diese anhand
