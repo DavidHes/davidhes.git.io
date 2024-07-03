@@ -1,9 +1,54 @@
 {% extends 'base.html' %}
 
-{% block HEADER %}
-    <h2>{% block TITLE %}Browse"{{ }}"{% endblock %}</h2>
+{% block HEADER %}Browse{% endblock %}
+
+{% block EXTRA_BUTTONS %}
+    {% if condition %}
+        <!-- Hier fügen wir zusätzliche Buttons hinzu -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+             <button class="btn btn-dark me-md-4" type="button">Login</button>
+             <button class="btn btn-dark me-md-3" type="button">Registeration</button>
+        </div>
+    {% else %}
+        <!-- Hier fügen wir nur einen Button hinzu -->
+         <button class="btn btn-dark me-md-3" type="button">Log out</button>
+    {% endif %}
 {% endblock %}
 
 {% block CONTENT %}
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Browse Offers</h1>
+            <p class="lead text-muted">Here you can find a collection of amazing offers.</p>
+        </div>
+    </div>
+</section>
+
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for offer in offers %}
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="{{ offer.image_url }}" class="bd-placeholder-img card-img-top" alt="{{ offer.title }}">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ offer.title }}</h5>
+                        <p class="card-text">{{ offer.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button class="btn btn-primary me-md-2" type="button">Button</button>
+                                <button class="btn btn-primary" type="button">Button</button>
+                            </div>
+                            <small class="text-muted">9 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
     
 {% endblock %}

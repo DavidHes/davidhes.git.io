@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, abort, flash
 from flask_bootstrap import Bootstrap5
-import forms
+import forms 
 
 app = Flask(__name__)
 
@@ -9,40 +9,40 @@ app.config.from_mapping(
     BOOTSTRAP_BOOTSWATCH_THEME = 'journal'
 )
 bootstrap = Bootstrap5(app)
+condition = False
 
-@app.route('/')
-def base():
-    return render_template('base.html')
-
-@app.route('/favourites/')
+@app.route('/favourites')
 def favourites():
-     return render_template('favourite.html')
+     return render_template('favourite.html', condition=condition)
 
-@app.route('/profil/')
-def favourites():
-     return render_template('profil.html')
+@app.route('/home')
+def home():
+    return render_template('home.html', condition=condition)
+
+@app.route('/profil')
+def profil():
+     return render_template('profil.html', condition=condition)
    
-@app.route('/browse/')
+@app.route('/browse')
 def browse():
-    return render_template('browse.html')
+    return render_template('browse.html', condition=condition)
 
 @app.route('/register_company', methods=['GET', 'POST'])
 def register_company():
     form = forms.CompanyregistrationForm()
-    if form.validate_on_submit():
-        # Hier kannst du die Daten verarbeiten, z.B. in der Datenbank speichern
-        flash('Company successfully registered!', 'success')
-        return redirect(url_for('index'))  # Beispiel: Weiterleitung zur Startseite
-    return render_template('company_registration_form.html', form=form)
+    if request.method == 'GET':
+        return render_template('company_registration_form.html', form=form)
+    else:  # request.method == 'POST'
+        if form.validate_on_submit():
+            flash('Company has been registered.', 'success')
+            return redirect(url_for('profil'))
+        else:
+            flash('No company registration: validation error.', 'warning')
+            return render_template('company_registration_form.html', form=form)
 
 @app.route('/register_customer', methods=['GET', 'POST'])
 def register_customer():
     form = forms.CustomerregistrationForm()
-    if form.validate_on_submit():
-        # Hier könnten Sie die Daten verarbeiten, z.B. in der Datenbank speichern
-        flash('Customer successfully registered!', 'success')
-        return redirect(url_for('index'))  # Beispiel: Weiterleitung zur Startseite nach erfolgreicher Registrierung
-
     return render_template('customer_registration_form.html', form=form)
 
 @app.route('/create_offer', methods=['GET', 'POST'])

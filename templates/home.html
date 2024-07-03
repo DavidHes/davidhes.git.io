@@ -1,9 +1,24 @@
 {% extends 'base.html' %}
 
-{% block HEADER %}
-    <h2>{% block TITLE %}Browse"{{ }}"{% endblock %}</h2>
+{% block HEADER %}Home{% endblock %}
+
+{% block EXTRA_BUTTONS %}
+    {% if condition %}
+        <!-- Hier fügen wir zusätzliche Buttons hinzu -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+             <button class="btn btn-dark me-md-4" type="button">Login</button>
+             <button class="btn btn-dark me-md-3" type="button">Registeration</button>
+        </div>
+    {% else %}
+        <!-- Hier fügen wir nur einen Button hinzu -->
+         <button class="btn btn-dark me-md-3" type="button">Log out</button>
+    {% endif %}
 {% endblock %}
 
-{% block CONTENT %}
-    
+ {% block CONTENT %}
+        <img src="{{ url_for('static', filename='images/undraw-to-do.png') }}" class="img-fluid" alt="Beschreibung des Bildinhalts">
+        <img src="/Users/uni/Desktop/Webanwendungen/davidhes.github.io/static/images/Banner.jpg" class="img-thumbnail" alt="...">
+        <img src="/static/images/Banner.jpg" class="img-thumbnail" alt="...">
+        <img src="Banner.jpg" class="img-thumbnail" alt="...">
+        <img src="/Banner.jpg" class="img-thumbnail" alt="...">
 {% endblock %}

@@ -4,9 +4,15 @@
     <h2>{% block TITLE %}Customer Registration{% endblock %}</h2>
 {% endblock %}
 
+{% block EXTRA_BUTTONS %}
+        <!-- Hier fügen wir zusätzliche Buttons hinzu -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+             <button class="btn btn-dark me-md-3" type="button">Login</button>
+        </div>
+{% endblock %}
+
 {% block CONTENT %}
     <div class="container mt-5">
-       
        <form method="POST" action="">
     {{ form.hidden_tag() }}  {# CSRF-Schutzfeld hinzufügen #}
 
@@ -22,12 +28,12 @@
 
     <div class="form-group">
         {{ form.password.label(class="form-control-label") }}
-        {{ form.password(class="form-control", placeholder="Enter password") }}
+        {{ form.password(class="form-control", placeholder="Enter your password") }}
     </div>
 
     <div class="form-group">
         {{ form.email.label(class="form-control-label") }}
-        {{ form.email(class="form-control", placeholder="Enter email") }}
+        {{ form.email(class="form-control", placeholder="Enter your email") }}
     </div>
 
     <div class="form-group">

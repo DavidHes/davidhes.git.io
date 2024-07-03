@@ -14,49 +14,59 @@
     {{ bootstrap.load_css() }}
 </head>
 
-<body>
-<!-- Haupt-Container mit Bootstrap-Klassen für Rahmen, Schatten und Polsterung -->
-<div class="container border shadow w-50 pb-3 my-3">
-
+<header class="container-fluid border-bottom mb-3">
     <!-- Navigationsleiste -->
-    <nav class="navbar navbar-expand-xl border-bottom mb-3">
-        <div class="container-fluid px-0">
+    <nav class="navbar navbar-expand-xl">
+        <div class="container-fluid px-1">
             <!-- Logo oder Branding der App -->
-            <a class="navbar-brand" href="{{ url_for('/Home/') }}">Berlins Bakeries</a>
-                <!-- Liste der Navigationselemente -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <a class="navbar-brand display-1 fw-bold">Berlins Bakeries</a>
+            <!-- Liste der Navigationselemente -->
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav me-md-4 mb-lg-0">
                     <!-- Navigationspunkt "Browse" -->
-                    {{ render_nav_item('Browse', 'browse') }}
+                    <li class="nav-item me-4">
+                        {{ render_nav_item('browse', 'Browse') }}
+                    </li>
                     <!-- Navigationspunkt "Favourites" -->
-                    {{ render_nav_item('Favourites', 'favourites') }} 
-                    <!-- Navigationspunkt "Favourites" -->
-                    {{ render_nav_item('Profil', 'profil') }} 
+                    <li class="nav-item me-4">
+                        {{ render_nav_item('favourites', 'Favourites') }}
+                    </li>
+                    <!-- Navigationspunkt "Profil" -->
+                    <li class="nav-item me-4">
+                        {{ render_nav_item('profil', 'Profil') }}
+                    </li>
                 </ul>
+                {% block EXTRA_BUTTONS %}{% endblock %}
             </div>
         </div>
     </nav>
+</header>
+
+
+
 
     <!-- Platzhalter für den Header-Inhalt -->
-    <header>{% block HEADER %} {% endblock %}</header>
+    <header class="text-center fw-bold display-3">{% block HEADER %}{% endblock %}</header>
 
     <!-- Hauptinhalt der Seite -->
     <main>
-        <!-- Hauptinhalt wird hier eingefügt -->
+        
     </main>
 
 <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <!-- Name der Webseite ganz links, Außenabstand (Margin) auf Null -->
-                <p class="m-0">Berlins Bakeries</p>
-                <!-- Links zu Impressum und Datenschutzerklärung -->
-                <div class="footer-links">
-                    <a class="text-decoration-none" href="#">Impressum</a>
-                    <a class="text-decoration-none" href="#">Datenschutzerklärung</a>
-                </div>
+    <div class="container">
+        <div class="footer-content d-flex justify-content-between">
+            <!-- Name der Webseite ganz links, Außenabstand (Margin) auf Null -->
+            <a class="navbar-brand display-1">Berlins Bakeries</a>
+            <!-- Links zu Impressum und Datenschutzerklärung untereinander -->
+            <div class="footer-rechts d-flex flex-column">
+                <a class="text-decoration-none text-dark mb-2" href="#">Impressum</a>
+                <a class="text-decoration-none text-dark mt-2" href="#">Datenschutzerklärung</a>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
+
 
 </div>
 <!-- Bootstrap JS laden -->
