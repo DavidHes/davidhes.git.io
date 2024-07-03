@@ -16,6 +16,31 @@
        <form method="POST" action="">
     {{ form.hidden_tag() }}  {# CSRF-Schutzfeld hinzufügen #}
 
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCNLjo_ISSJlMHlsCwbq8Fznd4hxMaXmnk",
+    authDomain: "plate-saver.firebaseapp.com",
+    databaseURL: "https://plate-saver-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "plate-saver",
+    storageBucket: "plate-saver.appspot.com",
+    messagingSenderId: "128466199298",
+    appId: "1:128466199298:web:2d3307b959d75ce49cd81b",
+    measurementId: "G-S88M06LZR3"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
     <div class="form-group">
         {{ form.customername.label(class="form-control-label") }}
         {{ form.customername(class="form-control", placeholder="Enter customer name") }}
