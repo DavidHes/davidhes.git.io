@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
 
-{% block HEADER %}
-    <h2>{% block TITLE %}Rating Backery{% endblock %}</h2>
+{% block HEADER %}Rating Backery{% endblock %}
+
+{% block EXTRA_BUTTONS %}
+    {% if condition %}
+        <!-- Hier fügen wir zusätzliche Buttons hinzu -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+             <button class="btn btn-dark me-md-4" type="button">Login</button>
+             <button class="btn btn-dark me-md-3" type="button">Registeration</button>
+        </div>
+    {% else %}
+        <!-- Hier fügen wir nur einen Button hinzu -->
+         <button class="btn btn-dark me-md-3" type="button">Log out</button>
+    {% endif %}
 {% endblock %}
 
 {% block CONTENT %}
     <div class="container mt-5">
-   
    <form method="POST" action="">
     {{ form.hidden_tag() }}  {# CSRF-Schutzfeld hinzufügen #}
 
