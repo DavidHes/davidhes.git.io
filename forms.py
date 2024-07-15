@@ -15,8 +15,8 @@ class CompanyregistrationForm(FlaskForm):
     submit = SubmitField('Create')
 
 class LoginForm(FlaskForm):
-    password = PasswordField(validators=[InputRequired(), Length(min=8)])
     email = EmailField(validators=[InputRequired(), Email()])
+    password = PasswordField(validators=[InputRequired(), Length(min=8)])
     submit = SubmitField('Login')
 
 class CustomerregistrationForm(FlaskForm):
