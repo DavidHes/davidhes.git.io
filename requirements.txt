@@ -8,6 +8,8 @@ charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
 cryptography==42.0.8
+dnspython==2.6.1
+email_validator==2.2.0
 firebase-admin==6.5.0
 Flask==3.0.0
 Flask-SQLAlchemy==3.1.1
