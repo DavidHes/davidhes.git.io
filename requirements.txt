@@ -8,9 +8,10 @@ charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
 cryptography==42.0.8
+dnspython==2.6.1
+email_validator==2.2.0
 firebase-admin==6.5.0
 Flask==3.0.0
-Flask-SQLAlchemy==3.1.1
 Flask-WTF==1.2.1
 google-api-core==2.19.1
 google-api-python-client==2.137.0
@@ -40,7 +41,6 @@ PyJWT==2.8.0
 pyparsing==3.1.2
 requests==2.32.3
 rsa==4.9
-SQLAlchemy==2.0.23
 typing_extensions==4.8.0
 uritemplate==4.1.1
 urllib3==2.2.2
