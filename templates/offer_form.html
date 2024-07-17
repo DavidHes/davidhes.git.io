@@ -8,59 +8,58 @@
 {% endblock %}
 
 {% block CONTENT %}
-    <div class="container mt-5">
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="col-md-3 py-3">
      
      <form method="POST" action="">
     {{ form.hidden_tag() }}  {# CSRF-Schutzfeld hinzufügen #}
+<div class="form-group mb-3">
+     {{ form.angebotsbeschreibung.label(class="form-control-label") }}
+     {{ form.angebotsbeschreibung(class="form-control", placeholder="Angebotsbeschreibung eingeben") }}
+</div>
+ 
+ <div class="form-group mb-3">
+     {{ form.titel.label(class="form-control-label") }}
+     {{ form.titel(class="form-control", placeholder="Titel eingeben") }}
+</div>
+               
+<div class="form-group mb-3">
+     {{ form.kategorie.label(class="form-control-label") }}
+     {{ form.kategorie(class="form-control") }}
+</div>
 
-    <div class="form-group">
-        {{ form.offerdescription.label(class="form-control-label") }}
-        {{ form.offerdescription(class="form-control", placeholder="Enter offer description") }}
-    </div>
+<div class="form-group mb-3">
+     {{ form.anzahlTaschen.label(class="form-control-label") }}
+     {{ form.anzahlTaschen(class="form-control", placeholder="Anzahl der Tüten eingeben") }}
+</div>
+            
+<div class="form-group mb-3">
+     {{ form.preis.label(class="form-control-label") }}
+     {{ form.preis(class="form-control", placeholder="Preis eingeben") }}
+</div>
+               
+<div class="form-group mb-3">
+     {{ form.abholStartZeit.label(class="form-control-label") }}
+     {{ form.abholStartZeit(class="form-control", placeholder="Start Abholzeit eingeben", type="time") }}
+</div>
+                
+<div class="form-group mb-3">
+     {{ form.abholEndZeit.label(class="form-control-label") }}
+     {{ form.abholEndZeit(class="form-control", placeholder="End Abholzeit eingeben", type="time") }}
+</div>
+              
+<div class="form-check mb-3">
+     {{ form.agb.label(class="form-check-label") }}
+     {{ form.agb(class="form-check-input") }}
+</div>
+<div class="form-check mb-3">
+     {{ form.täglicheAnzahlTaschen.label(class="form-check-label") }}
+     {{ form.täglicheAnzahlTaschen(class="form-check-input") }}
+</div>
 
-    <div class="form-group">
-        {{ form.titel.label(class="form-control-label") }}
-        {{ form.titel(class="form-control", placeholder="Enter title") }}
-    </div>
-
-    <div class="form-group">
-        {{ form.category.label(class="form-control-label") }}
-        {{ form.category(class="form-control") }}
-    </div>
-
-    <div class="form-group">
-        {{ form.numberofbags.label(class="form-control-label") }}
-        {{ form.numberofbags(class="form-control", placeholder="Enter number of bags") }}
-    </div>
-
-    <div class="form-group">
-        {{ form.price.label(class="form-control-label") }}
-        {{ form.price(class="form-control", placeholder="Enter price") }}
-    </div>
-
-    <div class="form-group">
-        {{ form.startPickuptime.label(class="form-control-label") }}
-        {{ form.startPickuptime(class="form-control") }}
-    </div>
-
-    <div class="form-group">
-        {{ form.endPickuptime.label(class="form-control-label") }}
-        {{ form.endPickuptime(class="form-control") }}
-    </div>
-
-    <div class="form-group form-check">
-        {{ form.dailynumberofbags(class="form-check-input") }}
-        {{ form.dailynumberofbags.label(class="form-check-label") }}
-    </div>
-
-    <div class="form-group form-check">
-        {{ form.terms(class="form-check-input") }}
-        {{ form.terms.label(class="form-check-label") }}
-    </div>
-
-    <div class="form-group">
-        {{ form.submit(class="btn btn-primary") }}
-    </div>
+<div class="form-group mb-3">
+     {{ form.absenden(class="btn btn-primary") }}
+ </div>
 </form>
 
 

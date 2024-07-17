@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_bootstrap import Bootstrap5
-from forms import CompanyregistrationForm, LoginForm, CustomerregistrationForm
+from forms import FirmenRegistrierungsForm, AnmeldeFormular, KundenRegistrierungsForm, AngebotsFormular, BewertungsFormular
 from my_firebase_admin import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -36,7 +36,7 @@ def browse():
 
 @app.route('/register_company', methods=['GET', 'POST'])
 def register_company():
-    form = CompanyregistrationForm()
+    form = FirmenRegistrierungsForm()
     if form.validate_on_submit():
         print('Form validated successfully!')
         
@@ -65,7 +65,7 @@ def register_company():
     
 @app.route('/register_customer', methods=['GET', 'POST'])
 def register_customer():
-    form = CustomerregistrationForm()
+    form = KundenRegistrierungsForm()
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256')
         customer_data = {
@@ -83,17 +83,17 @@ def register_customer():
 
 @app.route('/create_offer', methods=['GET', 'POST'])
 def create_offer():
-    form = forms.OfferForm()
+    form = AngebotsFormular()
     if form.validate_on_submit():
         # Hier könnten Sie die Daten verarbeiten, z.B. in der Datenbank speichern
         flash('Offer successfully created!', 'success')
         return redirect(url_for('index'))  # Beispiel: Weiterleitung zur Startseite nach erfolgreicher Erstellung des Angebots
 
-    return render_template('offer_creation_form.html', form=form)
+    return render_template('offer_form.html', form=form)
 
 @app.route('/rate_product', methods=['GET', 'POST'])
 def rate_product():
-    form = forms.RatingForm()
+    form = BewertungsFormular()
     if form.validate_on_submit():
         # Hier könnten Sie die Daten verarbeiten, z.B. in der Datenbank speichern
         flash('Rating successfully submitted!', 'success')
@@ -102,7 +102,7 @@ def rate_product():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
+    form = AnmeldeFormular()
     if form.validate_on_submit():
         ref = db.reference('customers')
         users = ref.order_by_child('email').equal_to(form.email.data).get()

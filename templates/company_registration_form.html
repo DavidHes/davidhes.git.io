@@ -12,60 +12,73 @@
 {% endblock %}
 
 {% block CONTENT %}
-<p>Debug: Template wird gerendert</p>
-    <div class="container mt-5">
+  <div class="container mt-5 d-flex justify-content-center">
+    <div class="col-md-3 py-3">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
 
-            <div class="form-group">
-                {{ form.companyname.label(class="form-control-label") }}
-                {{ form.companyname(class="form-control", placeholder="Enter company name") }}
-            </div>
+  
+                <div class="form-group mb-3">
+                    {{ form.firmenname.label(class="form-control-label font-weight-bold")}}
+                    {{ form.firmenname(class="form-control", placeholder="Firmenname eingeben") }}
+                </div>
 
-            <div class="form-group">
-                {{ form.street.label(class="form-control-label") }}
-                {{ form.street(class="form-control", placeholder="Enter street") }}
-            </div>
+                <div class="form-group mb-3">
+                    {{ form.strasse.label(class="form-control-label font-weight-bold") }}
+                    {{ form.strasse(class="form-control", placeholder="Straße eingeben") }}
+                </div>
 
-            <div class="form-group">
-                {{ form.city.label(class="form-control-label") }}
-                {{ form.city(class="form-control", placeholder="Enter city") }}
-            </div>
+                <div class="form-group mb-3">
+                    {{ form.stadt.label(class="form-control-label") }}
+                    {{ form.stadt(class="form-control", placeholder="Stadt eingeben") }}
+                </div>
 
-            <div class="form-group">
-                {{ form.postcode.label(class="form-control-label") }}
-                {{ form.postcode(class="form-control", placeholder="Enter postcode") }}
-            </div>
+                <div class="form-group mb-3">
+                    {{ form.postleitzahl.label(class="form-control-label") }}
+                    {{ form.postleitzahl(class="form-control", placeholder="Postleitzahl eingeben") }}
+                </div>
 
-            <div class="form-group">
-                {{ form.password.label(class="form-control-label") }}
-                {{ form.password(class="form-control",  placeholder="Enter your password") }}
-            </div>
+                <div class="form-group mb-3">
+                    {{ form.passwort.label(class="form-control-label")}}
+                    {{ form.passwort(class="form-control", placeholder="Passwort eingeben") }}
+                </div>
 
-            <div class="form-group">
-                {{ form.email.label(class="form-control-label") }}
-                {{ form.email(class="form-control", placeholder="Enter your email") }}
-            </div>
+                <div class="form-group mb-3">
+                    {{ form.email.label(class="form-control-label") }}
+                    {{ form.email(class="form-control", placeholder="E-Mail eingeben") }}
+                </div>
 
-            <div class="form-group">
-                {{ form.openinghour.label(class="form-control-label") }}
-                {{ form.openinghour(class="form-control", placeholder="Enter opening hour") }}
-            </div>
+                <div class="form-group mb-3">
+                    {{ form.öffnungszeit.label(class="form-control-label") }}
+                    {{ form.öffnungszeit(class="form-control", placeholder="Öffnungszeit eingeben", type="time") }}
+                </div>
 
-            <div class="form-group">
-                {{ form.closinghour.label(class="form-control-label") }}
-                {{ form.closinghour(class="form-control", placeholder="Enter closing hour") }}
-            </div>
+                <div class="form-group mb-3">
+                    {{ form.schließzeit.label(class="form-control-label") }}
+                    {{ form.schließzeit(class="form-control", placeholder="Schließzeit eingeben", type="time") }}
+                </div>
 
-            <div class="form-check">
-                {{ form.terms(class="form-check-input") }}
-                {{ form.terms.label(class="form-check-label") }}
-            </div>
+ <!-- 
+                <h3>Öffnungszeiten</h3>
+                {% set weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'] %}
+                {% for idx, day in enumerate(weekdays) %}
+                    <div class="form-group mb-3">
+                        <label class="form-control-label font-weight-bold">{{ day }}</label>
+                        {{ form.opening_hours[idx].openinghour(class="form-control", type="time") }}
+                        {{ form.opening_hours[idx].closinghour(class="form-control", type="time") }}
+                    </div>
+                {% endfor %}
+--> 
+                <div class="form-check mb-3">
+                    {{ form.agb(class="form-check-input") }}
+                    {{ form.agb.label(class="form-check-label")}}
+                </div>
 
-            <div class="form-group">
-                {{ form.submit(class="btn btn-primary") }}
-            </div>
-        </form>
+                <div class="form-group mb-3">
+                    {{ form.absenden(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock %}
 
