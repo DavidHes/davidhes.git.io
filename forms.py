@@ -19,6 +19,13 @@ class AnmeldeFormular(FlaskForm):
     passwort = PasswordField('Passwort', validators=[InputRequired(), Length(min=8)])
     absenden = SubmitField('Anmelden')
 
+class Angebotkaufen(FlaskForm):
+    JetztKaufen = SubmitField('Jetzt Kaufen!')
+
+class Needforregistration(FlaskForm):
+    BäckereiRegistierung = SubmitField('Bäckerei Registierung')
+    Kundenregistierung = SubmitField('Kundenregistierung')
+
 class KundenRegistrierungsForm(FlaskForm):
     kundenname = StringField('Nachname', validators=[InputRequired(), Length(min=5)])
     kundenVorname = StringField('Vorname', validators=[InputRequired(), Length(min=5)])

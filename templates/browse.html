@@ -16,39 +16,23 @@
 {% endblock %}
 
 {% block CONTENT %}
-<section class="py-5 text-center container">
-    <div class="row py-lg-5">
-        <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light">Browse Offers</h1>
-            <p class="lead text-muted">Here you can find a collection of amazing offers.</p>
-        </div>
-    </div>
-</section>
-
-<div class="album py-5 bg-light">
-    <div class="container">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for offer in offers %}
-            <div class="col">
-                <div class="card shadow-sm">
-                    <img src="{{ offer.image_url }}" class="bd-placeholder-img card-img-top" alt="{{ offer.title }}">
-
-                    <div class="card-body">
-                        <h5 class="card-title">{{ offer.title }}</h5>
-                        <p class="card-text">{{ offer.description }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button class="btn btn-primary me-md-2" type="button">Button</button>
-                                <button class="btn btn-primary" type="button">Button</button>
-                            </div>
-                            <small class="text-muted">9 mins</small>
+<div class="container mt-5">
+    <div class="row">
+        {% for key, offer in offers.items() %}
+            <div class="col-md-4 mb-4">
+                <a href="{{ url_for('angebot_details', key=key) }}" class="card-link">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Preis:</strong> {{ offer['preis'] }} €</p>
+                            <p class="card-text"><strong>Kategorie:</strong> {{ offer['kategorie'] }}</p>
+                            <p class="card-text"><strong>Verfügbare Taschen:</strong> {{ offer['anzahlTaschen'] }}</p>
+                            <p class="card-text"><strong>Abholbeginn:</strong> {{ offer['abholStartZeit'] }}</p>
+                            <p class="card-text"><strong>Abholende:</strong> {{ offer['abholEndZeit'] }}</p>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
 </div>
-    
 {% endblock %}

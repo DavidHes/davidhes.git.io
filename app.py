@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_bootstrap import Bootstrap5
-from forms import FirmenRegistrierungsForm, AnmeldeFormular, KundenRegistrierungsForm, AngebotsFormular, BewertungsFormular
+from forms import FirmenRegistrierungsForm, AnmeldeFormular, KundenRegistrierungsForm, Angebotkaufen, AngebotsFormular, BewertungsFormular, Needforregistration
 from my_firebase_admin import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -17,6 +17,11 @@ condition = False
 def favourites():
      return render_template('favourite.html', condition=condition)
 
+@app.route('/ratenow')
+def ratenow():
+     form = BewertungsFormular()
+     return render_template('rating_form.html', condition=condition, form=form)
+
 @app.route('/home')
 def home():
     return render_template('home.html', condition=condition)
@@ -24,16 +29,74 @@ def home():
 @app.route('/profil')
 def profil():
      return render_template('profil.html', condition=condition)
-   
+
+#wenn der kunde bei angebot details auf jetztkaufen klickt.
+@app.route('/Jetztkaufen')
+def checkregistration(key):
+     
+     if condition:
+          return redirect(url_for('buyoffernow', key=key))
+     else:
+         return redirect(url_for('needforregistration'))
+     
+#3abed screen mit registrierungsmöglichkeiten
+@app.route('/Registernow', methods=['GET', 'POST'])
+def needforregistration():
+     form = Needforregistration()
+
+     if request.method == 'POST' and form.validate_on_submit():
+        if form.BäckereiRegistierung.data:
+            return redirect(url_for('register_company'))
+        elif form.Kundenregistierung.data:
+            return redirect(url_for('register_customer'))
+     else:
+        return render_template('Needforregistration.html', form=form)
+
+
 @app.route('/browse')
 def browse():
     # Text "Hallo" in Firebase speichern
-    ref = db.reference('messages')
-    ref.push('was')
 
-    flash('Text "Hallo" gespeichert!', 'success')
-    return render_template('browse.html')
+    ref = db.reference('offers')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
+    offers = ref.get()  # Holen der Angebote
 
+    if not offers:
+        offers = []
+
+    print(offers)
+    return render_template('browse.html', offers=offers)
+
+   # ref = db.reference('messages')
+   # ref.push('was')
+    #flash('Text "Hallo" gespeichert!', 'success')
+    #return render_template('browse.html')
+
+@app.route('/angebot/<key>')
+def angebot_details(key):
+
+    ref = db.reference('offers')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
+    offers = ref.get()  # Holen der Angebote
+
+    if key in offers:
+        offer = offers[key]
+        return render_template('angebot_details.html', offer=offer)
+    else:
+        return "Angebot nicht gefunden", 404
+
+#screen mit angebot und paypal, form vllt nicht nötig.   
+@app.route('/angebot/<key>/<int:id>')
+def buyoffernow(key, id):
+    form= Angebotkaufen()
+    key = request.args.get('key')
+    ref = db.reference('offers')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
+    offers = ref.get()  # Holen der Angebote
+
+    if key in offers:
+        offer = offers[key]
+        return render_template('buyoffernow.html', offer=offer, form=form)
+    else:
+        return "Angebot nicht gefunden", 404
+    
 @app.route('/register_company', methods=['GET', 'POST'])
 def register_company():
     form = FirmenRegistrierungsForm()
