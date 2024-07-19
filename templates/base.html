@@ -3,52 +3,47 @@
 
 <!doctype html>
 <html lang="en">
-<!-- Das HTML-Dokument beginnt und die Sprache wird auf Englisch gesetzt -->
 <head>
-    <!-- Meta-Daten des Dokuments -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Seitentitel mit Platzhalter für den Block "TITLE" -->
-    <title>{% block TITLE %}{% endblock %} </title>
-    <!-- Bootstrap CSS laden -->
+    <title>{% block TITLE %}{% endblock %}</title>
     {{ bootstrap.load_css() }}
 </head>
 
 <header class="container-fluid border-bottom mb-3">
-    <!-- Navigationsleiste -->
     <nav class="navbar navbar-expand-xl">
         <div class="container-fluid px-1">
-            <!-- Logo oder Branding der App -->
             <a class="navbar-brand display-1 fw-bold">Berlins Bakeries</a>
-            <!-- Liste der Navigationselemente -->
             <div class="collapse navbar-collapse justify-content-end">
                 <ul class="navbar-nav me-md-4 mb-lg-0">
-                    <!-- Navigationspunkt "Browse" -->
                     <li class="nav-item me-4">
                         {{ render_nav_item('browse', 'Browse') }}
                     </li>
-                    <!-- Navigationspunkt "Favourites" -->
                     <li class="nav-item me-4">
                         {{ render_nav_item('favourites', 'Favourites') }}
                     </li>
-                    <!-- Navigationspunkt "Profil" -->
                     <li class="nav-item me-4">
                         {{ render_nav_item('profil', 'Profil') }}
                     </li>
                 </ul>
-                {% block EXTRA_BUTTONS %}{% endblock %}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {% if session.get('user_id') %}
+                        <form action="{{ url_for('logout') }}" method="POST">
+                            <button class="btn btn-dark me-md-3" type="submit">Log out</button>
+                        </form>
+                    {% else %}
+                        <button class="btn btn-dark me-md-4" type="button" onclick="location.href='{{ url_for('login') }}'">Login</button>
+                        <button class="btn btn-dark me-md-3" type="button" onclick="location.href='{{ url_for('register') }}'">Registration</button>
+
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
 </header>
 
+<header class="text-center fw-bold display-3">{% block HEADER %}{% endblock %}</header>
 
-
-
-    <!-- Platzhalter für den Header-Inhalt -->
-    <header class="text-center fw-bold display-3">{% block HEADER %}{% endblock %}</header>
-
-    <!-- Hauptinhalt der Seite -->
 <main class="container">
     {% block CONTENT %}{% endblock %}
 </main>
@@ -56,9 +51,7 @@
 <footer class="footer">
     <div class="container">
         <div class="footer-content d-flex justify-content-between">
-            <!-- Name der Webseite ganz links, Außenabstand (Margin) auf Null -->
             <a class="navbar-brand display-1">Berlins Bakeries</a>
-            <!-- Links zu Impressum und Datenschutzerklärung untereinander -->
             <div class="footer-rechts d-flex flex-column">
                 <a class="text-decoration-none text-dark mb-2" href="#">Impressum</a>
                 <a class="text-decoration-none text-dark mt-2" href="#">Datenschutzerklärung</a>
@@ -67,10 +60,6 @@
     </div>
 </footer>
 
-
-</div>
-<!-- Bootstrap JS laden -->
 {{ bootstrap.load_js() }}
 </body>
-
 </html>

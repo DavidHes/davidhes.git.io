@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="module">
+        // Firebase SDK imports (unchanged)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+
+        // Firebase configuration (unchanged)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCNLjo_ISSJlMHlsCwbq8Fznd4hxMaXmnk",
+            authDomain: "plate-saver.firebaseapp.com",
+            databaseURL: "https://plate-saver-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "plate-saver",
+            storageBucket: "plate-saver.appspot.com",
+            messagingSenderId: "128466199298",
+            appId: "1:128466199298:web:2d3307b959d75ce49cd81b",
+            measurementId: "G-S88M06LZR3"
+        };
+
+        // Initialize Firebase (unchanged)
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('googleSignIn').addEventListener('click', function() {
+                const provider = new GoogleAuthProvider();
+                signInWithPopup(auth, provider).then((result) => {
+                    const user = result.user;
+                    user.getIdToken().then((idToken) => {
+                        const userData = {
+                            name: user.displayName,
+                            email: user.email,
+                            idToken: idToken
+                        };
+                        fetch('/firebase_auth_and_register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(userData)
+                        }).then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        }).then(data => {
+                            if (data.success) {
+                                window.location.assign('/home');
+                            } else {
+                                console.log('Login failed:', data.error);
+                            }
+                        }).catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+                    });
+                }).catch((error) => {
+                    console.log(error);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+{% extends 'base.html' %}
+
+{% block HEADER %}
+    <h1>Registration</h1>
+{% endblock %}
+
+{% block EXTRA_BUTTONS %}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-dark me-md-3" type="button">Login</button>
+    </div>
+{% endblock %}
+
+{% block CONTENT %}
+<div class="container mt-5">
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs" id="myTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer" type="button" role="tab" aria-controls="customer" aria-selected="true">Customer Registration</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="company-tab" data-bs-toggle="tab" data-bs-target="#company" type="button" role="tab" aria-controls="company" aria-selected="false">Company Registration</button>
+        </li>
+    </ul>
+
+    <!-- Tabs Content -->
+    <div class="tab-content mt-3" id="myTabsContent">
+        <!-- Customer Registration Tab -->
+        <div class="tab-pane fade show active" id="customer" role="tabpanel" aria-labelledby="customer-tab">
+            <div class="row justify-content-center">
+                <div class="col-md-6 py-3">
+                    <form method="POST" action="">
+                        {{ customer_form.hidden_tag() }}
+
+                        <div class="form-group mb-3">
+                            {{ customer_form.kundenVorname.label(class="form-control-label") }}
+                            {{ customer_form.kundenVorname(class="form-control", placeholder="Vornamen eingeben") }}
+                            {% for error in customer_form.kundenVorname.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ customer_form.kundenname.label(class="form-control-label") }}
+                            {{ customer_form.kundenname(class="form-control", placeholder="Kundennamen eingeben") }}
+                            {% for error in customer_form.kundenname.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ customer_form.email.label(class="form-control-label") }}
+                            {{ customer_form.email(class="form-control", placeholder="E-Mail eingeben") }}
+                            {% for error in customer_form.email.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ customer_form.passwort.label(class="form-control-label") }}
+                            {{ customer_form.passwort(class="form-control", placeholder="Passwort eingeben") }}
+                            {% for error in customer_form.passwort.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3 text-start">
+                            {{ customer_form.absenden(class="btn btn-primary") }}
+                        </div>
+                        
+                        <div class="form-group mt-3 text-center">
+                            <button id="googleSignIn" class="btn btn-light border border-dark">
+                                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="height: 20px; margin-right: 10px;">
+                                Sign in with Google
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Registration Tab -->
+        <div class="tab-pane fade" id="company" role="tabpanel" aria-labelledby="company-tab">
+            <div class="row justify-content-center">
+                <div class="col-md-6 py-3">
+                    <form method="POST" action="">
+                        {{ company_form.hidden_tag() }}
+
+                        <div class="form-group mb-3">
+                            {{ company_form.firmenname.label(class="form-control-label font-weight-bold") }}
+                            {{ company_form.firmenname(class="form-control", placeholder="Firmenname eingeben") }}
+                            {% for error in company_form.firmenname.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ company_form.strasse.label(class="form-control-label") }}
+                            {{ company_form.strasse(class="form-control", placeholder="Straße eingeben") }}
+                            {% for error in company_form.strasse.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ company_form.hausnummer.label(class="form-control-label") }}
+                            {{ company_form.hausnummer(class="form-control", placeholder="Hausnummer eingeben") }}
+                            {% for error in company_form.hausnummer.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ company_form.stadt.label(class="form-control-label") }}
+                            {{ company_form.stadt(class="form-control", placeholder="Stadt eingeben") }}
+                            {% for error in company_form.stadt.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ company_form.postleitzahl.label(class="form-control-label") }}
+                            {{ company_form.postleitzahl(class="form-control", placeholder="Postleitzahl eingeben") }}
+                            {% for error in company_form.postleitzahl.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ company_form.passwort.label(class="form-control-label") }}
+                            {{ company_form.passwort(class="form-control", placeholder="Passwort eingeben") }}
+                            {% for error in company_form.passwort.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ company_form.email.label(class="form-control-label") }}
+                            {{ company_form.email(class="form-control", placeholder="E-Mail eingeben") }}
+                            {% for error in company_form.email.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ company_form.öffnungszeit.label(class="form-control-label") }}
+                            {{ company_form.öffnungszeit(class="form-control", placeholder="Öffnungszeit eingeben") }}
+                            {% for error in company_form.öffnungszeit.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ company_form.schließzeit.label(class="form-control-label") }}
+                            {{ company_form.schließzeit(class="form-control", placeholder="Schließzeit eingeben") }}
+                            {% for error in company_form.schließzeit.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-check mb-3">
+                            {{ company_form.agb(class="form-check-input") }}
+                            {{ company_form.agb.label(class="form-check-label") }}
+                            {% for error in company_form.agb.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ company_form.absenden(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

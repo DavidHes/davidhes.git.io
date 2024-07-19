@@ -1,35 +1,136 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="module">
+        // Firebase SDK imports (unchanged)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
 
-{% block HEADER %}Login{% endblock %}
+        // Firebase configuration (unchanged)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCNLjo_ISSJlMHlsCwbq8Fznd4hxMaXmnk",
+            authDomain: "plate-saver.firebaseapp.com",
+            databaseURL: "https://plate-saver-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "plate-saver",
+            storageBucket: "plate-saver.appspot.com",
+            messagingSenderId: "128466199298",
+            appId: "1:128466199298:web:2d3307b959d75ce49cd81b",
+            measurementId: "G-S88M06LZR3"
+        };
 
-{% block EXTRA_BUTTONS %}
-        <!-- Hier fügen wir zusätzliche Buttons hinzu -->
+        // Initialize Firebase (unchanged)
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('googleSignIn').addEventListener('click', function() {
+                const provider = new GoogleAuthProvider();
+                signInWithPopup(auth, provider).then((result) => {
+                    const user = result.user;
+                    user.getIdToken().then((idToken) => {
+                        const userData = {
+                            name: user.displayName,
+                            email: user.email,
+                            idToken: idToken
+                        };
+                        fetch('/firebase_auth_and_register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(userData)
+                        }).then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        }).then(data => {
+                            if (data.success) {
+                                window.location.assign('/home');
+                            } else {
+                                console.log('Login failed:', data.error);
+                            }
+                        }).catch(error => {
+                            console.error('Fetch error:', error);
+                        });
+                    });
+                }).catch((error) => {
+                    console.log(error);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    {% extends 'base.html' %}
+
+    {% block HEADER %}
+        <h1>Login</h1>
+    {% endblock %}
+
+    {% block EXTRA_BUTTONS %}
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-             <button class="btn btn-dark me-md-3" type="button">Registeration</button>
+            <button class="btn btn-dark me-md-3" type="button" onclick="window.location.href='/register_customer'">Registration</button>
         </div>
-{% endblock %}
+    {% endblock %}
 
-{% block CONTENT %}
-
-<div class="container mt-5 d-flex justify-content-center">
-    <div class="col-md-3 py-3">
-        <form method="POST" action="">
-            {{ form.hidden_tag() }}
-
-              <div class="form-group mb-3">
-                    {{ form.email.label(class="form-control-label") }}
-                    {{ form.email(class="form-control", placeholder="E-Mail eingeben") }}
+    {% block CONTENT %}
+    <div class="container mt-5">
+        <ul class="nav nav-tabs" id="loginTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer" type="button" role="tab" aria-controls="customer" aria-selected="true">Customer Login</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="company-tab" data-bs-toggle="tab" data-bs-target="#company" type="button" role="tab" aria-controls="company" aria-selected="false">Company Login</button>
+            </li>
+        </ul>
+        <div class="tab-content mt-3" id="loginTabsContent">
+            <div class="tab-pane fade show active" id="customer" role="tabpanel" aria-labelledby="customer-tab">
+                <div class="col-md-6 offset-md-3 py-3">
+                    <form method="POST" action="{{ url_for('login') }}">
+                        {{ customer_form.hidden_tag() }}
+                        <div class="form-group mb-3">
+                            {{ customer_form.email.label(class="form-control-label") }}
+                            {{ customer_form.email(class="form-control", placeholder="E-Mail eingeben") }}
+                        </div>
+                        <div class="form-group mb-3">
+                            {{ customer_form.passwort.label(class="form-control-label") }}
+                            {{ customer_form.passwort(class="form-control", placeholder="Passwort eingeben") }}
+                        </div>
+                        <div class="form-group mb-3">
+                            {{ customer_form.absenden(class="btn btn-primary") }}
+                        </div>
+                        <div class="form-group mt-3 text-center">
+                            <button id="googleSignIn" class="btn btn-light border border-dark">
+                                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="height: 20px; margin-right: 10px;">
+                                Sign in with Google
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="form-group mb-3">
-                    {{ form.passwort.label(class="form-control-label") }}
-                    {{ form.passwort(class="form-control", placeholder="Passwort eingeben") }}
+            </div>
+            <div class="tab-pane fade" id="company" role="tabpanel" aria-labelledby="company-tab">
+                <div class="col-md-6 offset-md-3 py-3">
+                    <form method="POST" action="{{ url_for('login') }}">
+                        {{ company_form.hidden_tag() }}
+                        <div class="form-group mb-3">
+                            {{ company_form.email.label(class="form-control-label") }}
+                            {{ company_form.email(class="form-control", placeholder="E-Mail eingeben") }}
+                        </div>
+                        <div class="form-group mb-3">
+                            {{ company_form.passwort.label(class="form-control-label") }}
+                            {{ company_form.passwort(class="form-control", placeholder="Passwort eingeben") }}
+                        </div>
+                        <div class="form-group mb-3">
+                            {{ company_form.absenden(class="btn btn-primary") }}
+                        </div>
+                    </form>
                 </div>
-                
-                <div class="form-group mb-3">
-                    {{ form.absenden(class="btn btn-primary") }}
-                </div>
-        </form>
+            </div>
+        </div>
     </div>
-    
-{% endblock %}
+    {% endblock %}
+</body>
+</html>

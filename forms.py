@@ -5,12 +5,13 @@ from wtforms.validators import InputRequired, Length, Email, NumberRange
 class FirmenRegistrierungsForm(FlaskForm):
     firmenname = StringField('Firmenname', validators=[InputRequired(), Length(min=5)])
     strasse = StringField('Straße', validators=[InputRequired(), Length(min=5)])
+    hausnummer = StringField('Hausnummer', validators=[InputRequired(), Length(min=1)])
     stadt = StringField('Stadt', validators=[InputRequired(), Length(min=5)])
     postleitzahl = StringField('Postleitzahl', validators=[InputRequired(), Length(min=5)])
     passwort = PasswordField('Passwort', validators=[InputRequired(), Length(min=8)])
     email = EmailField('E-Mail', validators=[InputRequired(), Email()])
-    öffnungszeit = DateTimeLocalField('Öffnungszeit', validators=[InputRequired()], format='%H:%M')
-    schließzeit = DateTimeLocalField('Schließzeit', validators=[InputRequired()], format='%H:%M')
+    öffnungszeit = DateTimeLocalField('Öffnungszeit', validators=[InputRequired()], format='%Y-%m-%dT%H:%M')
+    schließzeit = DateTimeLocalField('Schließzeit', validators=[InputRequired()], format='%Y-%m-%dT%H:%M')
     agb = BooleanField('AGB akzeptieren', validators=[InputRequired()])
     absenden = SubmitField('Erstellen')
 
@@ -37,6 +38,9 @@ class AngebotsFormular(FlaskForm):
     täglicheAnzahlTaschen = BooleanField('Standart tägliche Anzahl von Taschen', validators=[InputRequired()])
     agb = BooleanField('AGB akzeptieren', validators=[InputRequired()])
     absenden = SubmitField('Angebot erstellen')
+
+class Angebotkaufen(FlaskForm):
+    JetztKaufen = SubmitField('Jetzt Kaufen!')
 
 class BewertungsFormular(FlaskForm):
     bewertung = RadioField('Bewertung', choices=[(1, '1 Stern'), (2, '2 Sterne'), (3, '3 Sterne'), (4, '4 Sterne'), (5, '5 Sterne')], coerce=int, validators=[InputRequired()])
