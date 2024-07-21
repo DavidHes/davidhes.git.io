@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block HEADER %}Orders{% endblock %}
+
+{% block EXTRA_BUTTONS %}
+    {% if condition %}
+        <!-- Hier fügen wir zusätzliche Buttons hinzu -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+             <button class="btn btn-dark me-md-3" type="button">Log out</button>
+        </div>
+    {% else %}
+        <!-- Hier fügen wir nur einen Button hinzu -->
+        <button class="btn btn-dark me-md-4" type="button">Login</button>
+        <button class="btn btn-dark me-md-3" type="button">Registeration</button>
+    {% endif %}
+{% endblock %}
+
+{% block CONTENT %}
+<div class="container mt-5">
+    <h1>Meine Bestellungen</h1>
+    <div class="row">
+        {% if orders %}
+            {% for key, order in orders.items() %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Preis:</strong> {{ order['preis'] }} €</p>
+                            <p class="card-text"><strong>Anzahl:</strong> {{ order['anzahl'] }}</p>
+                            <p class="card-text"><strong>Datum:</strong> {{ order['datum'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Sie haben noch keine Bestellungen aufgegeben.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
