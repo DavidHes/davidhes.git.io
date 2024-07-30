@@ -2,6 +2,10 @@
 
 {% block HEADER %}Favourites{% endblock %}
 
+{% block BACK_BUTTON %}
+    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+{% endblock %}
+
 {% block EXTRA_BUTTONS %}
     {% if condition %}
         <!-- Hier fügen wir zusätzliche Buttons hinzu -->
