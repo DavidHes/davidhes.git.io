@@ -20,4 +20,38 @@
 {% endblock %}
 
 {% block CONTENT %}
+<div class="container mt-5">
+    <div class="row">
+        {% if favs %}
+            {% for key, offer in offers.items() %}
+              {% for keyfav, fav in favs.items() %}
+                {% if key == fav['offerid'] %}
+                  <div class="col-md-4 mb-4">
+                  <form method="post" action="{{ url_for('update_favourite', favid=fav['offerid']) }}">
+                            <input type="hidden" name="offer_id" value="{{ offer['offerid'] }}">
+                            <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
+                            <button type="submit" class="btn btn-link heart {% if key in fav['offerid'] %}liked{% else %}not-liked{% endif %}">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </form>
+                        <a href="{{ url_for('angebot_details', key=key) }}" class="card-link">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text"><strong>Preis:</strong> {{ offer['preis'] }} €</p>
+                                        <p class="card-text"><strong>Kategorie:</strong> {{ offer['kategorie'] }}</p>
+                                        <p class="card-text"><strong>Verfügbare Taschen:</strong> {{ offer['anzahlTaschen'] }}</p>
+                                        <p class="card-text"><strong>Abholbeginn:</strong> {{ offer['abholStartZeit'] }}</p>
+                                        <p class="card-text"><strong>Abholende:</strong> {{ offer['abholEndZeit'] }}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                {% endif %}
+             {% endfor %}
+            {% endfor %}
+        {% else %}
+            <p>Sie haben noch keine Favoriten.</p>
+    {% endif %}
+    </div>
+</div>
 {% endblock %}

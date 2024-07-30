@@ -6,6 +6,77 @@
     <title>{% block TITLE %}{% endblock %}</title>
     {{ bootstrap.load_css() }}
     <style>
+                .carousel-control-prev-icon,
+            .carousel-control-next-icon {
+                border-radius: 50%; /* Rundung der Schaltflächen */
+                height: 50px; /* Höhe der Schaltflächen */
+                width: 50px; /* Breite der Schaltflächen */
+            }
+
+            .carousel-control-prev-icon {
+                background-image: none; /* Entfernt das standardmäßige Pfeilsymbol */
+                position: relative;
+            }
+
+            .carousel-control-prev-icon::after {
+                content: '◀'; /* Pfeilsymbol für die vorherige Steuerung */
+                font-size: 16px; /* Größe des Pfeils */
+                color: #b0742f; /* Farbe des Pfeils */
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .carousel-control-next-icon {
+                background-image: none; /* Entfernt das standardmäßige Pfeilsymbol */
+                position: relative;
+            }
+
+            .carousel-control-next-icon::after {
+                content: '▶'; /* Pfeilsymbol für die nächste Steuerung */
+                font-size: 16px; /* Größe des Pfeils */
+                color: rgb(176, 116, 47); /* Farbe des Pfeils */
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .btn-custom {
+                background-color: #b0742f; /* Hintergrundfarbe des Buttons */
+                color: #ffffff; /* Textfarbe des Buttons */
+            }
+            /* Kleinere Buttons und Anpassung der Farbe */
+        .btn-group-toggle .btn {
+            margin: 5px;
+            background-color: #b0742f;
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 5px;
+        }
+
+        .btn-group-toggle .btn.active {
+            background-color: #8a5623;
+            color: white;
+        }
+
+        /* Abstände zwischen den Buttons und Ränder für bessere Anordnung */
+        .btn-group-toggle {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .btn-group-toggle .btn {
+            flex: 1 0 21%; /* 4 Buttons pro Zeile mit Abstand */
+            margin: 2px;
+        }
+
+        .btn-group-toggle .btn:hover {
+            background-color: #99682e;
+        }
+    
         .header-logo {
             max-height: 40px; /* Setzt die maximale Höhe der Glockenbilder */
             width: auto;      /* Automatische Breite basierend auf der Höhe */

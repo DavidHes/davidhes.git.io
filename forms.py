@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, PasswordField, EmailField, SubmitField, HiddenField, BooleanField, SelectField, DateTimeField, RadioField, IntegerField, DateTimeLocalField
-from wtforms.validators import InputRequired, Length, Email, NumberRange
+from wtforms.fields import StringField, PasswordField,EmailField,SelectMultipleField, SubmitField, HiddenField, BooleanField, SelectField, DateTimeField, RadioField, IntegerField, DateTimeLocalField
+from wtforms.validators import InputRequired, Length, Email, NumberRange, Optional
+from wtforms import SelectMultipleField, widgets
 
 class FirmenRegistrierungsForm(FlaskForm):
     firmenname = StringField('Firmenname', validators=[InputRequired(), Length(min=5)])
@@ -12,6 +13,15 @@ class FirmenRegistrierungsForm(FlaskForm):
     email = EmailField('E-Mail', validators=[InputRequired(), Email()])
     öffnungszeit = DateTimeLocalField('Öffnungszeit', validators=[InputRequired()], format='%Y-%m-%dT%H:%M')
     schließzeit = DateTimeLocalField('Schließzeit', validators=[InputRequired()], format='%Y-%m-%dT%H:%M')
+    öffnungstage = SelectMultipleField(
+        'Öffnungstage',
+        choices=[('Montag', 'Montag'), ('Dienstag', 'Dienstag'), ('Mittwoch', 'Mittwoch'), 
+                 ('Donnerstag', 'Donnerstag'), ('Freitag', 'Freitag'), 
+                 ('Samstag', 'Samstag'), ('Sonntag', 'Sonntag')],
+        widget=widgets.ListWidget(prefix_label=False),
+        option_widget=widgets.CheckboxInput(),
+        default=[]
+    )
     agb = BooleanField('AGB akzeptieren', validators=[InputRequired()])
     absenden = SubmitField('Erstellen')
 
@@ -37,6 +47,7 @@ class KundenRegistrierungsForm(FlaskForm):
 class AngebotsFormular(FlaskForm):
     angebotsbeschreibung = StringField('Angebotsbeschreibung', validators=[InputRequired(), Length(min=5)])
     titel = StringField('Titel', validators=[InputRequired(), Length(min=5)])
+
     kategorie = SelectField('Kategorie', choices=[('Brot & Brötchen', 'Brot & Brötchen'), ('Belegte Backwaren', 'Belegte Backwaren'), ('Gebäck', 'Gebäck')])
     anzahlTaschen = IntegerField('Anzahl der Taschen', validators=[InputRequired(), NumberRange(min=1)])
     preis = IntegerField('Preis', validators=[InputRequired(), NumberRange(min=1)])
@@ -47,10 +58,25 @@ class AngebotsFormular(FlaskForm):
     absenden = SubmitField('Angebot erstellen')
     absenden = SubmitField('Änderungen speichern')
 
+class FiltersFormular(FlaskForm):
+    preis = IntegerField('Max Preis', validators=[Optional(), NumberRange(min=0)])
+    kategorie = SelectField('Kategorie', choices=[
+        ('Alle Kategorien', 'Alle Kategorien'),
+        ('Brot & Brötchen', 'Brot & Brötchen'),
+        ('Gebäck', 'Gebäck'),
+        ('Süß', 'Süß')
+    ])
+    submit = SubmitField('Filtern')
+    suche = StringField('Suche', validators=[Optional()])
+    reset = SubmitField('Filter zurücksetzen')    
+
 class Angebotkaufen(FlaskForm):
     JetztKaufen = SubmitField('Jetzt Kaufen!')
 
 class BewertungsFormular(FlaskForm):
     bewertung = RadioField('Bewertung', choices=[(1, '1 Stern'), (2, '2 Sterne'), (3, '3 Sterne'), (4, '4 Sterne'), (5, '5 Sterne')], coerce=int, validators=[InputRequired()])
-    rezension = StringField('Rezension', validators=[Length(min=5)])
+    rezension = StringField('Rezension', validators=[Optional()])
     absenden = SubmitField('Bewertung abgeben')
+
+class FavoriteForm(FlaskForm):
+    csrf_token = HiddenField()

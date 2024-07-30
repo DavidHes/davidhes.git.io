@@ -227,6 +227,23 @@
                             {% endfor %}
                         </div>
 
+                        <div class="form-group mb-3">
+    {{ company_form.öffnungstage.label(class="form-control-label") }}
+    <div class="btn-group-toggle" data-toggle="buttons">
+        {% set öffnungstage_data = company_form.öffnungstage.data or [] %}
+        {% for value, label in company_form.öffnungstage.choices %}
+            <label class="btn btn-secondary btn-sm" style="margin: 2px;">
+                <input type="checkbox" name="company-öffnungstage" value="{{ value }}" {% if value in öffnungstage_data %} checked {% endif %}> {{ label }}
+            </label>
+        {% endfor %}
+    </div>
+    {% for error in company_form.öffnungstage.errors %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endfor %}
+</div>
+
+
+
                         <div class="form-check mb-3">
                             {{ company_form.agb(class="form-check-input") }}
                             {{ company_form.agb.label(class="form-check-label") }}
