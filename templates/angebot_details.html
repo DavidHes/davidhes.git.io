@@ -4,13 +4,11 @@
 
 {% block EXTRA_BUTTONS %}
     {% if condition %}
-        <!-- Hier fügen wir zusätzliche Buttons hinzu -->
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
              <button class="btn btn-dark me-md-4" type="button">Login</button>
              <button class="btn btn-dark me-md-3" type="button">Registeration</button>
         </div>
     {% else %}
-        <!-- Hier fügen wir nur einen Button hinzu -->
          <button class="btn btn-dark me-md-3" type="button">Log out</button>
     {% endif %}
 {% endblock %}
@@ -37,12 +35,11 @@
                     <p class="card-text"><strong>Abholende:</strong> {{ offer['abholEndZeit'] }}</p>
                 </div>
                 <div class="col-md-12 text-center">
-                    <form action="{{ url_for('payment') }}" method="post">
+                    <form action="{{ url_for('payment', offer_id=key) }}" method="post">
                         <div class="form-group">
                             <label for="anzahl"><strong>Anzahl der Taschen:</strong></label>
                             <input type="number" class="form-control d-inline w-25" id="anzahl" name="anzahl" min="1" max="{{ offer['anzahlTaschen'] }}" required>
                             <input type="hidden" name="preis" value="{{ offer['preis'] }}">
-                            <input type="hidden" name="offer_id" value="{{ offer['id'] }}">
                         </div>
                         <button type="submit" class="btn btn-warning btn-lg mt-3">
                             <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_200x51.png" alt="PayPal">

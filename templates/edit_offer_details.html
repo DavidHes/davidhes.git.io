@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block HEADER %}Edit Offer{% endblock %}
+
+{% block BACK_BUTTON %}
+    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+{% endblock %}
+
+{% block EXTRA_BUTTONS %}
+    <!-- Hier fügen wir nur einen Button hinzu -->
+    <button class="btn btn-dark me-md-3" type="button">Log out</button>
+{% endblock %}
+
+{% block CONTENT %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="col-md-3 py-3">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}  {# CSRF-Schutzfeld hinzufügen #}
+            <div class="form-group mb-3">
+                {{ form.angebotsbeschreibung.label(class="form-control-label") }}
+                {{ form.angebotsbeschreibung(class="form-control", placeholder="Angebotsbeschreibung eingeben") }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.titel.label(class="form-control-label") }}
+                {{ form.titel(class="form-control", placeholder="Titel eingeben") }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.kategorie.label(class="form-control-label") }}
+                {{ form.kategorie(class="form-control") }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.anzahlTaschen.label(class="form-control-label") }}
+                {{ form.anzahlTaschen(class="form-control", placeholder="Anzahl der Tüten eingeben") }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.preis.label(class="form-control-label") }}
+                {{ form.preis(class="form-control", placeholder="Preis eingeben") }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.abholStartZeit.label(class="form-control-label") }}
+                {{ form.abholStartZeit(class="form-control", placeholder="Start Abholzeit eingeben", type="time") }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.abholEndZeit.label(class="form-control-label") }}
+                {{ form.abholEndZeit(class="form-control", placeholder="End Abholzeit eingeben", type="time") }}
+            </div>
+            <div class="form-check mb-3">
+                {{ form.agb.label(class="form-check-label") }}
+                {{ form.agb(class="form-check-input") }}
+            </div>
+            <div class="form-check mb-3">
+                {{ form.täglicheAnzahlTaschen.label(class="form-check-label") }}
+                {{ form.täglicheAnzahlTaschen(class="form-check-input") }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.absenden(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

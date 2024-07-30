@@ -2,19 +2,91 @@
 
 {% block HEADER %}Profil{% endblock %}
 
+{% block BACK_BUTTON %}
+    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+{% endblock %}
+
 {% block EXTRA_BUTTONS %}
-    {% if condition %}
-        <!-- Hier fügen wir zusätzliche Buttons hinzu -->
+    {% if user_id %}
+        <!-- Benutzer ist angemeldet -->
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-             <button class="btn btn-dark me-md-4" type="button">Login</button>
-             <button class="btn btn-dark me-md-3" type="button">Registeration</button>
+            <button class="btn btn-dark me-md-4" type="button">Log out</button>
         </div>
     {% else %}
-        <!-- Hier fügen wir nur einen Button hinzu -->
-         <button class="btn btn-dark me-md-3" type="button">Log out</button>
+        <!-- Benutzer ist nicht angemeldet -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-dark me-md-4" type="button">Login</button>
+            <button class="btn btn-dark me-md-3" type="button">Registeration</button>
+        </div>
     {% endif %}
 {% endblock %}
 
 {% block CONTENT %}
-    
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        {% if user_id %}
+            <!-- Benutzer ist angemeldet -->
+            {% if user_type %}
+                <!-- Company -->
+                <!-- Dritter Kasten -->
+                <div class="col-md-4 mb-4 d-flex justify-content-center">
+                    <div class="card" style="width: 400px; height: 200px;">
+                        <div style="height: 50%; overflow: hidden;">
+                            <img src="{{ url_for('static', filename='images/brot.jpeg') }}" class="card-img-top" alt="Bild 3" style="height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center bg-white" style="height: 50%;">
+                            <a href="{{ url_for('edit_offer') }}" class="btn btn-primary">Offers</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <!-- Erster Kasten -->
+            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                <div class="card" style="width: 400px; height: 200px;">
+                    <div style="height: 50%; overflow: hidden;">
+                        <img src="{{ url_for('static', filename='images/brot.jpeg') }}" class="card-img-top" alt="Bild 1" style="height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center bg-white" style="height: 50%;">
+                        <a href="{{ url_for('orders') }}" class="btn btn-primary">Orders</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Zweiter Kasten -->
+            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                <div class="card" style="width: 400px; height: 200px;">
+                    <div style="height: 50%; overflow: hidden;">
+                        <img src="{{ url_for('static', filename='images/brot.jpeg') }}" class="card-img-top" alt="Bild 2" style="height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center bg-white" style="height: 50%;">
+                        <a href="{{ url_for('home') }}" class="btn btn-primary">Help</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <!-- Benutzer ist nicht angemeldet -->
+            <!-- Erster Kasten -->
+            <div class="col-md-5 mb-4 d-flex justify-content-center">
+                <div class="card" style="width: 400px; height: 200px;">
+                    <div style="height: 50%; overflow: hidden;">
+                        <img src="{{ url_for('static', filename='images/brot.jpeg') }}" class="card-img-top" alt="Bild 1" style="height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center bg-white" style="height: 50%;">
+                        <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Zweiter Kasten -->
+            <div class="col-md-5 mb-4 d-flex justify-content-center">
+                <div class="card" style="width: 400px; height: 200px;">
+                    <div style="height: 50%; overflow: hidden;">
+                        <img src="{{ url_for('static', filename='images/brot.jpeg') }}" class="card-img-top" alt="Bild 2" style="height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center bg-white" style="height: 50%;">
+                        <a href="{{ url_for('home') }}" class="btn btn-primary">Help</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

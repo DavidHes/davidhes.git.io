@@ -2,6 +2,10 @@
 
 {% block HEADER %}Your Offer{% endblock %}
 
+{% block BACK_BUTTON %}
+    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+{% endblock %}
+
 {% block EXTRA_BUTTONS %}
         <!-- Hier fügen wir nur einen Button hinzu -->
          <button class="btn btn-dark me-md-3" type="button">Log out</button>

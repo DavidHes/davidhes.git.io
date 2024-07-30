@@ -37,7 +37,7 @@ class KundenRegistrierungsForm(FlaskForm):
 class AngebotsFormular(FlaskForm):
     angebotsbeschreibung = StringField('Angebotsbeschreibung', validators=[InputRequired(), Length(min=5)])
     titel = StringField('Titel', validators=[InputRequired(), Length(min=5)])
-    kategorie = SelectField('Kategorie', choices=[('tech', 'Technologie'), ('finance', 'Finanzen'), ('health', 'Gesundheitswesen')])
+    kategorie = SelectField('Kategorie', choices=[('Brot & Brötchen', 'Brot & Brötchen'), ('Belegte Backwaren', 'Belegte Backwaren'), ('Gebäck', 'Gebäck')])
     anzahlTaschen = IntegerField('Anzahl der Taschen', validators=[InputRequired(), NumberRange(min=1)])
     preis = IntegerField('Preis', validators=[InputRequired(), NumberRange(min=1)])
     abholStartZeit = DateTimeLocalField('Abholbeginn', validators=[InputRequired()], format='%H:%M')
@@ -45,6 +45,7 @@ class AngebotsFormular(FlaskForm):
     täglicheAnzahlTaschen = BooleanField('Standart tägliche Anzahl von Taschen', validators=[InputRequired()])
     agb = BooleanField('AGB akzeptieren', validators=[InputRequired()])
     absenden = SubmitField('Angebot erstellen')
+    absenden = SubmitField('Änderungen speichern')
 
 class Angebotkaufen(FlaskForm):
     JetztKaufen = SubmitField('Jetzt Kaufen!')
