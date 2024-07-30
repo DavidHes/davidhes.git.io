@@ -70,6 +70,10 @@
     <h1>Registration</h1>
 {% endblock %}
 
+{% block BACK_BUTTON %}
+    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+    {% endblock %}
+
 {% block EXTRA_BUTTONS %}
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <button class="btn btn-dark me-md-3" type="button">Login</button>

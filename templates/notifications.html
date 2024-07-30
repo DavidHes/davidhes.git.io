@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block HEADER %}Notifications{% endblock %}
+
+{% block BACK_BUTTON %}
+    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+{% endblock %}
+
+{% block EXTRA_BUTTONS %}
+    {% if session.get('is_company') %}
+    <a href="{{ url_for('notifications') }}">
+         {% if session['has_notification'] == True %}
+            <img src="{{ url_for('static', filename='images/notification-glocke.png') }}" alt="Notifications" class="header-logo" />
+        {% else %}
+            <img src="{{ url_for('static', filename='images/glocke.png') }}" alt="No Notifications" class="header-logo" />
+        {% endif %}
+    </a>
+{% endif %}
+{% endblock %}
+
+{% block CONTENT %}
+<div class="container mt-5">
+    <h1>Notifications</h1>
+    <div class="row">
+        {% if notifications_by_date %}
+            <!-- Zeige die Benachrichtigungen für heute zuerst an -->
+            {% if today in notifications_by_date %}
+                <div class="col-12 mt-4 mb-2">
+                    <h3>Today</h3>
+                </div>
+                <div class="row">
+                    {% for notification in notifications_by_date[today] %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Order ID:</strong> {{ notification['order_id'] }}</p>
+                                    <p class="card-text"><strong>Date:</strong> {{ notification['date'] }}</p>
+                                    <p class="card-text"><strong>Status:</strong> {{ notification['status'] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- Zeige Benachrichtigungen für andere Tage an -->
+            {% for date, notifications_list in notifications_by_date.items() %}
+                {% if date != today %}
+                    <div class="col-12 mt-4 mb-2">
+                        <h3>{{ date }}</h3>
+                    </div>
+                    <div class="row">
+                        {% for notification in notifications_list %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text"><strong>Order ID:</strong> {{ notification['order_id'] }}</p>
+                                        <p class="card-text"><strong>Date:</strong> {{ notification['date'] }}</p>
+                                        <p class="card-text"><strong>Status:</strong> {{ notification['status'] }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>There are no notifications.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
