@@ -22,13 +22,17 @@
         {% if orders %}
             {% for key, order in orders.items() %}
                 <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text"><strong>Preis:</strong> {{ order['preis'] }} €</p>
-                            <p class="card-text"><strong>Anzahl:</strong> {{ order['anzahl'] }}</p>
-                            <p class="card-text"><strong>Datum:</strong> {{ order['datum'] }}</p>
+                    <a href="{{ url_for('certain_order', key=key) }}" class="card-link">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text"><strong>Preis:</strong> {{ order['preis'] }} €</p>
+                                <p class="card-text"><strong>Anzahl:</strong> {{ order['anzahl'] }}</p>
+                                <p class="card-text"><strong>Datum:</strong> {{ order['datum'] }}</p>
+                                <p class="card-text"><strong>Bestell ID:</strong> {{ order['payment_id'] }}</p>
+                                <p class="card-text"><strong>Status:</strong> {{ order['status'] }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             {% endfor %}
         {% else %}

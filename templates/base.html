@@ -8,8 +8,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block TITLE %}{% endblock %}</title>
     {{ bootstrap.load_css() }}
-</head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
+<style>
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        border-radius: 50%; /* Rundung der Schaltflächen */
+        height: 50px; /* Höhe der Schaltflächen */
+        width: 50px; /* Breite der Schaltflächen */
+    }
+
+    .carousel-control-prev-icon {
+        background-image: none; /* Entfernt das standardmäßige Pfeilsymbol */
+        position: relative;
+    }
+
+    .carousel-control-prev-icon::after {
+        content: '◀'; /* Pfeilsymbol für die vorherige Steuerung */
+        font-size: 16px; /* Größe des Pfeils */
+        color: #b0742f; /* Farbe des Pfeils */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .carousel-control-next-icon {
+        background-image: none; /* Entfernt das standardmäßige Pfeilsymbol */
+        position: relative;
+    }
+
+    .carousel-control-next-icon::after {
+        content: '▶'; /* Pfeilsymbol für die nächste Steuerung */
+        font-size: 16px; /* Größe des Pfeils */
+        color: rgb(176, 116, 47); /* Farbe des Pfeils */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .btn-custom {
+        background-color: #b0742f; /* Hintergrundfarbe des Buttons */
+        color: #ffffff; /* Textfarbe des Buttons */
+    }
+    /* Kleinere Buttons und Anpassung der Farbe */
+.btn-group-toggle .btn {
+    margin: 5px;
+    background-color: #b0742f;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+.btn-group-toggle .btn.active {
+    background-color: #8a5623;
+    color: white;
+}
+
+/* Abstände zwischen den Buttons und Ränder für bessere Anordnung */
+.btn-group-toggle {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.btn-group-toggle .btn {
+    flex: 1 0 21%; /* 4 Buttons pro Zeile mit Abstand */
+    margin: 2px;
+}
+
+.btn-group-toggle .btn:hover {
+    background-color: #99682e;
+}
+
+    
+
+
+
+</style>
+
+</head>
 <header class="container-fluid border-bottom mb-3">
     <nav class="navbar navbar-expand-xl">
         <div class="container-fluid px-1">
@@ -42,6 +122,7 @@
     </nav>
 </header>
 
+
 <header class="text-center fw-bold display-3">{% block HEADER %}{% endblock %}</header>
 
 <main class="container">
@@ -60,6 +141,9 @@
     </div>
 </footer>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {{ bootstrap.load_js() }}
 </body>
 </html>

@@ -13,41 +13,14 @@ nav_order: 0
 - [Zeitplan](time-schedule.md)
 
 ### Projektbeschreibung:
-Kernidee unserer Webanwendung ist es, eine Plattform für Bäckereien zu schaffen, um ihre
-überschüssigen Backwaren anzubieten. Über ein Verkäufer-Hub können sich die Bäckereien
-registrieren und dort ihr Angebot einstellen. Kunden können sich ebenso registrieren und haben
-dann die Möglichkeit, in einer übersichtlichen Ansicht, zwischen den Angeboten zu wählen.
-Einmalig erstellen die Bäckereien ein oder mehrere Angebote.
-Hierbei geben sie die Backwarenart, die Menge und den Preis an. Täglich aktualisieren die Bäckereien 
-daraufhin nur noch die Anzahl der "Tüten", je nachdem wie viele Backwaren noch übrig sind.
-Mittels einer Suchleiste kann der Kunde direkt nach dem Namen einer Bäckerei suchen.
-Ebenfalls hat er die Möglichkeit, nach gewissen Kategorien (Backwarenart, Entfernung,
-Bewertungen etc.) zu filtern. Mithilfe einer eingebetteten Karte kann der Kunde auch die
-Standorte der Bäckereien sehen.
-Um die Sichtbarkeit einer Bäckerei zu erhöhen, bieten wir diesen die Möglichkeit zur Werbung
-auf unserer Plattform, wodurch sie priorisiert angezeigt werden.
-Hat sich ein Kunde für ein Angebot entschieden, kann er dieses direkt mithilfe verschiedener
-Zahlungsmöglichkeiten erwerben. Ein nun generierter Code dient als Nachweis bei der
-Abholung der Backwaren. Prinzipiell gilt das Prinzip „First come, first serve“. Hat die Bäckerei nur
-X-Tüten eines Angebots eingestellt und alle wurden gekauft, so gibt es für diesen Tag auch keine
-weiteren zum Kauf.
-Ein zentrales Feature ist die Möglichkeit für Kunden, Bewertungen für Bäckereien abzugeben.
-Hierbei geben die Kunden zwischen einem und fünf Sternen ab und bewerten diese anhand
-verschiedener Kriterien, wodurch es letztlich zu einer Durchschnittsbewerbung kommt.
-Um das Schreiben von Bewertungen zu fördern, werden wir ein Coupon-System einführen. Bei
-diesem System erhält der Kunde nach fünf Bewertungen einen 10%-Rabattgutschein, den er bei
-jeder beliebigen Bäckerei einlösen kann. Die Kosteneinbußen der Bäckerei tragen wir als
-Plattformanbieter.
-Um den Betrieb der Plattform finanzieren zu können, behalten wir jedoch 5% des Erlöses der
-Bäckerei ein.
-Ebenso werden wir eine Rankingseite schaffen, die die am bestbewerteten Bäckereien anzeigt.
+
+Die Kernidee unserer Webanwendung besteht darin, eine Plattform für Bäckereien zu schaffen, auf der sie ihre überschüssigen Backwaren anbieten können. Über ein Verkäufer-Hub können sich die Bäckereien registrieren und ihr Angebot einstellen. Kunden können sich ebenfalls registrieren und dann in einer übersichtlichen Ansicht (Browser) zwischen den Angeboten wählen. 
+Bäckereien erstellen ein oder mehrere Angebote. Pro Kategorie kann eine Bäckerei nur ein Angebot erstellen, um zu verhindern, dass die Angebotsfunktion ausgenutzt wird. Dabei geben sie die Art der Backwaren, die Menge, den Preis und weiteres an. Sie können eine Standardanzahl an zu verkaufenden Tüten auswählen; falls nicht, müssen sie die Anzahl täglich neu angeben. 
+Eine Suchleiste ermöglicht es dem Kunden, direkt nach dem Namen einer Bäckerei zu suchen. Zudem kann er nach verschiedenen Kategorien (Backwarenart, Preis, Bewertungen etc.) filtern. Mithilfe einer eingebetteten Karte kann der Kunde auch die Standorte der Bäckereien sehen. Hat sich ein Kunde für ein Angebot entschieden, kann er dieses direkt mit PayPal erwerben. Ein generierter Code dient als Nachweis bei der Abholung der Backwaren. Prinzipiell gilt das „First come, first serve“-Prinzip. Wenn eine Bäckerei nur eine bestimmte Anzahl Tüten eines Angebots eingestellt hat und alle verkauft sind, gibt es für diesen Tag keine weiteren Tüten mehr zum Kauf. 
+Ein zentrales Feature ist die Möglichkeit für Kunden, Bewertungen für Bäckereien abzugeben. Die Kunden können zwischen einem und fünf Sternen vergeben und einen Kommentar hinterlassen, wodurch eine Durchschnittsbewertung entsteht. Um das Schreiben von Bewertungen zu fördern, werden wir ein Coupon-System einführen. Bei diesem System erhält der Kunde nach fünf Bewertungen einen 10%-Rabattgutschein, den er bei jeder beliebigen Bäckerei einlösen kann. Die Kosteneinbußen der Bäckerei tragen wir als Plattformanbieter. Um den Betrieb der Plattform zu finanzieren, behalten wir jedoch 5% des Erlöses der Bäckereien ein. 
 
 ### Unsere Ziele:
-Unser Ziel als Gruppe ist es, eine vollfunktionsfähige und benutzerfreundliche Webanwendung
-zu entwickeln, welche man auch so in Realität anbieten könnte. Konkret möchten wir eine
-reibungslose Funktionalität bei der Datenbankanbindung haben. Hiermit beschäftigt sich Majd
-insbesondere. Um die Nutzung und Einbindung verschiedener APIs möchte sich David
-kümmern.
+Unser Ziel als Gruppe ist es, eine voll funktionsfähige und benutzerfreundliche Webanwendung zu entwickeln, die auch in der Realität angeboten werden könnte. Konkret möchten wir eine reibungslose Funktionalität sowohl bei der Datenbankanbindung als auch bei den Hauptfunktionen der Anwendung erreichen. 
 
 ## Team members
 

@@ -1,10 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_bootstrap import Bootstrap5
-from forms import FirmenRegistrierungsForm, AnmeldeFormular, KundenRegistrierungsForm, AngebotsFormular, BewertungsFormular, Angebotkaufen
+import requests
+from forms import FirmenRegistrierungsForm, AnmeldeFormular,FiltersFormular, FavoriteForm, KundenRegistrierungsForm, AngebotsFormular, BewertungsFormular, Angebotkaufen
 from my_firebase_admin import db, auth
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta, datetime
 import paypalrestsdk
+from flask_apscheduler import APScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
+import pytz
+import json
+
 
 
 app = Flask(__name__)
@@ -65,10 +71,6 @@ def firebase_auth_and_register():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 401
 
-@app.route('/favourites')
-def favourites():
-    return render_template('favourite.html', condition=condition)
-
 @app.route('/home')
 def home():
     user_id = session.get('user_id')
@@ -86,29 +88,188 @@ def home():
         if user_data:
             user_name = user_data.get('customername' if not user_type else 'companyname', "Gast")
 
-    return render_template('home.html', user_name=user_name, user_id=user_id)
+    reviews = [
+    {'name': 'Anoynm', 'review': 'Tolle Produkte, für einen Hammerpreis! sehr empfehlenswert!'},
+    {'name': 'Bob', 'review': 'Ausgezeichnete Produkte und schneller Versand.'},
+    {'name': 'Charlie', 'review': 'Kundendienst war sehr hilfreich und freundlich.'}
+]   
+
+    return render_template('home.html', user_name=user_name, user_id=user_id, reviews=reviews, enumerate=enumerate)
 
 @app.route('/profil')
 def profil():
     return render_template('profil.html', condition=condition)
 
-@app.route('/browse')
+@app.route('/browse', methods=['GET', 'POST'])
 def browse():
-    # Text "Hallo" in Firebase speichern
+    form = FiltersFormular()
+    # References to the collections
+    offers_ref = db.reference('offers')
+    companies_ref = db.reference('companies')
+    ratings_ref = db.reference('ratings')
 
-    ref = db.reference('offers')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
-    offers = ref.get()  # Holen der Angebote
+    # Fetch data
+    offers = offers_ref.get()
+    companies = companies_ref.get()
+    ratings = ratings_ref.get()
 
-    if not offers:
-        offers = []
+    max_price = None
+    category = 'Alle Kategorien'
+    search_term = None
+    current_day = datetime.now(pytz.timezone('Europe/Berlin')).strftime('%A')
 
-    print(offers)
-    return render_template('browse.html', offers=offers)
+    wochentage_deutsch = {
+    'Monday': 'Montag',
+    'Tuesday': 'Dienstag',
+    'Wednesday': 'Mittwoch',
+    'Thursday': 'Donnerstag',
+    'Friday': 'Freitag',
+    'Saturday': 'Samstag',
+    'Sunday': 'Sonntag'
+}
+# Den aktuellen Wochentag auf Deutsch anzeigen
+    aktueller_wochentag = wochentage_deutsch.get(current_day, 'Unbekannter Tag')
+    print(aktueller_wochentag)
 
-   # ref = db.reference('messages')
-   # ref.push('was')
-    #flash('Text "Hallo" gespeichert!', 'success')
-    #return render_template('browse.html')
+    # Check if the form is submitted
+    if form.validate_on_submit():
+        if form.reset.data:  # Check if the reset button was pressed
+            return redirect(url_for('browse'))
+
+        # Get filter values from the form
+        max_price = form.preis.data if form.preis.data else None
+        category = form.kategorie.data if form.kategorie.data else 'Alle Kategorien'
+        search_term = form.suche.data
+
+    # Apply filters based on form input
+    if category != 'Alle Kategorien' and max_price is not None:
+        offers = {key: offer for key, offer in offers.items() if offer['kategorie'] == category and offer['preis'] <= max_price}
+    elif category != 'Alle Kategorien':
+        offers = {key: offer for key, offer in offers.items() if offer['kategorie'] == category}
+    elif max_price is not None:
+        offers = {key: offer for key, offer in offers.items() if offer['preis'] <= max_price}
+    
+    if search_term:
+            offers = {key: offer for key, offer in offers.items() if search_term.lower() in offer['titel'].lower() or search_term.lower() in offer['angebotsbeschreibung'].lower()}    
+
+                
+    for offer_key, offer in offers.items():
+        company_id = offer['unternehmensID']
+        company = companies.get(company_id, {})
+
+        print("Infos der Unternehmen")
+        print(company)
+        print(current_day)
+
+        if aktueller_wochentag not in company.get('öffnungstage', []):
+            print(company.get('öffnungstage', []))
+            offers[offer_key]['is_available'] = False
+        else:
+            offers[offer_key]['is_available'] = True          
+
+    # Pagination logic
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    total = len(offers)
+    start = (page - 1) * per_page
+    end = start + per_page
+
+    # Calculate total pages
+    total_pages = (total + per_page - 1) // per_page
+    print(ratings)
+
+    offer_ratings = {}
+
+    for offer_id, offer in offers.items():
+             total_rating = 0
+             rating_count = 0
+             for rating in ratings.values():
+                 if rating['offerid'] == offer_id:
+                      total_rating += rating['bewertung']
+                      rating_count += 1
+                 if rating_count > 0:
+                     average_rating = total_rating / rating_count
+                 else:
+                     average_rating = 0
+        
+             offer_ratings[offer_id] = {
+            'average_rating': average_rating,
+            'total_rating': total_rating,
+            'rating_count': rating_count,
+            'offerid': offer_id
+        }
+         
+                 
+
+
+    offers = dict(list(offers.items())[start:end])
+    return render_template('browse.html', offers=offers, offer_ratings=offer_ratings, page=page, total_pages=total_pages, form=form)
+
+
+@app.route('/add_to_favourites/<key>', methods=['POST'])
+def add_to_favourites(key):
+    
+     user_id = session.get('user_id')  
+
+     if user_id:
+        fav_data = {
+            'user': user_id,
+            'offerid': key,
+        }
+        # Bewertung in die Firebase-Datenbank einfügen
+        ref = db.reference('favourites')
+        ref.push(fav_data)
+        return redirect(url_for('browse'))
+     else:
+        return redirect(url_for('register'))
+     
+@app.route('/favourites')
+def favourites():
+    user_id = session.get('user_id') 
+
+    refoffers = db.reference('offers')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
+    offers = refoffers.get()    
+
+    ref = db.reference('favourites')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
+    favs = ref.order_by_child('user').equal_to(user_id).get() 
+    
+    if not favs:
+        favs = []
+
+    print(f"favs: {favs}")
+    print(f"Type of favs: {type(favs)}")    
+
+    form = FavoriteForm()
+
+    return render_template('favourite.html', favs=favs, offers=offers, form=form) 
+
+@app.route('/update_favourite/<favid>', methods=['POST'])
+def update_favourite(favid):
+    user_id = session.get('user_id')
+    offer_id = favid
+
+    if not user_id:
+        return redirect(url_for('register'))  # oder eine andere Fehlerseite
+
+    ref = db.reference('favourites')
+    favs = ref.order_by_child('user').equal_to(user_id).get()
+    
+    for key, fav in favs.items():
+        if fav['offerid'] == offer_id:
+         already_favourited = True
+
+    if already_favourited:
+            for key, fav in favs.items():
+                if fav['offerid'] == favid:
+                    ref.child(key).delete()
+                    break
+    else:
+            ref.push({
+                'user': user_id,
+                'offerid': offer_id
+            })
+
+    return redirect(url_for('favourites'))
 
 @app.route('/angebot/<key>')
 def angebot_details(key):
@@ -176,8 +337,9 @@ def register():
                 'postcode': company_form.postleitzahl.data,
                 'password': generate_password_hash(company_form.passwort.data),
                 'email': company_form.email.data,
-                'openinghour': company_form.öffnungszeit.data.strftime('%Y-%m-%dT%H:%M'),
-                'closinghour': company_form.schließzeit.data.strftime('%Y-%m-%dT%H:%M'),
+                'openinghour': company_form.öffnungszeit.data.strftime('%H:%M'),
+                'closinghour': company_form.schließzeit.data.strftime('%H:%M'),
+                'öffnungstage': company_form.öffnungstage.data,
                 'terms': company_form.agb.data
             }
 
@@ -196,11 +358,14 @@ def create_offer():
             'titel': form.titel.data,
             'kategorie': form.kategorie.data,
             'anzahlTaschen': form.anzahlTaschen.data,
+            'StandartanzahlTaschen': form.anzahlTaschen.data,
             'preis': form.preis.data,
-            'abholStartZeit': form.abholStartZeit.data.strftime('%Y-%m-%dT%H:%M'),
-            'abholEndZeit': form.abholEndZeit.data.strftime('%Y-%m-%dT%H:%M'),
+            'abholStartZeit': form.abholStartZeit.data.strftime('%H:%M'),
+            'abholEndZeit': form.abholEndZeit.data.strftime('%H:%M'),
             'täglicheAnzahlTaschen': form.täglicheAnzahlTaschen.data,
-            'agb': form.agb.data
+            'agb': form.agb.data,
+            'unternehmensID': session.get('user_id'),
+        
         }
 
         ref = db.reference('offers')
@@ -227,9 +392,10 @@ def edit_offer(offer_id):
             'titel': form.titel.data,
             'kategorie': form.kategorie.data,
             'anzahlTaschen': form.anzahlTaschen.data,
+            'StandartanzahlTaschen': form.anzahlTaschen.data,
             'preis': form.preis.data,
-            'abholStartZeit': form.abholStartZeit.data.strftime('%Y-%m-%dT%H:%M'),
-            'abholEndZeit': form.abholEndZeit.data.strftime('%Y-%m-%dT%H:%M'),
+            'abholStartZeit': form.abholStartZeit.data.strftime('%H:%M'),
+            'abholEndZeit': form.abholEndZeit.data.strftime('%H:%M'),
             'täglicheAnzahlTaschen': form.täglicheAnzahlTaschen.data,
             'agb': form.agb.data
         }
@@ -239,14 +405,6 @@ def edit_offer(offer_id):
         return redirect(url_for('home'))
 
     return render_template('offer_form.html', form=form)
-
-@app.route('/rate_product', methods=['GET', 'POST'])
-def rate_product():
-    form = BewertungsFormular()
-    if form.validate_on_submit():
-        flash('Rating successfully submitted!', 'success')
-        return redirect(url_for('index'))
-    return render_template('rating_form.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -298,16 +456,14 @@ def logout():
     flash('Du hast dich erfolgreich abgemeldet.', 'success')
     return redirect(url_for('login'))
 
-@app.route('/payment', methods=['POST'])
-def payment():
+@app.route('/payment/<key>', methods=['POST'])
+def payment(key):
     try:
         anzahl = int(request.form['anzahl'])
         preis_pro_tasche = float(request.form['preis'])
         total_preis = anzahl * preis_pro_tasche
-        offer_id = request.form['offer_id']
 
         # Speichern der Parameter in der Sitzung
-        session['offer_id'] = offer_id
         session['anzahl'] = anzahl
 
         payment = paypalrestsdk.Payment({
@@ -315,7 +471,7 @@ def payment():
             "payer": {
                 "payment_method": "paypal"},
             "redirect_urls": {
-                "return_url": url_for('payment_execute', _external=True),
+                "return_url": url_for('payment_execute', _external=True, key=key),
                 "cancel_url": url_for('payment_cancel', _external=True)},
             "transactions": [{
                 "item_list": {
@@ -339,8 +495,8 @@ def payment():
     except Exception as e:
         return f"Error in payment route: {str(e)}"
 
-@app.route('/payment/execute', methods=['GET'])
-def payment_execute():
+@app.route('/payment/execute/<key>', methods=['GET'])
+def payment_execute(key):
     try:
         payment_id = request.args.get('paymentId')
         payer_id = request.args.get('PayerID')
@@ -358,6 +514,8 @@ def payment_execute():
                 'preis': float(payment.transactions[0].amount.total),
                 'anzahl': anzahl,
                 'datum': datetime.utcnow().isoformat(),
+                'offer_id': key,
+                'status' : "ausstehend",
                 #Company ID MUSS NOCH ZWINGEND ERGÄNZT WERDEN
             }
 
@@ -388,6 +546,104 @@ def orders():
         return render_template('orders.html', orders=orders)
     else:
         return redirect(url_for('register'))
+    
+@app.route('/order/<key>', methods=['GET', 'POST'])
+def certain_order(key):
+    user_id = session.get('user_id')
+
+    if not user_id:
+        flash("You must be logged in to view orders", "danger")
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+
+    ref = db.reference('orders')
+    orders = ref.get()
+
+    if key not in orders:
+        flash("Order not found", "danger")
+        return redirect(url_for('orders'))  # Redirect to orders page if order not found
+
+    order = orders[key]
+
+    refrating = db.reference('ratings')
+    ratings = refrating.order_by_child('orderid').equal_to(key).get()
+
+    if ratings:
+        unrated = False
+    else:
+        unrated = True
+
+    if request.method == 'POST':
+        if 'mark_as_completed' in request.form:
+            # Status auf abgeschlossen setzen und in der Datenbank speichern
+            ref.child(key).update({'status': 'abgeschlossen'})
+            flash("Order marked as completed", "success")
+            return redirect(url_for('certain_order', key=key, unrated=unrated))
+
+    # Render the template for both GET and POST requests
+    return render_template('certain_order.html', order=order, key=key, unrated=unrated)
+
+
+@app.route('/ratenow/<key>',  methods=['GET', 'POST'])
+def ratenow(key):
+    form = BewertungsFormular()
+    user_id = session.get('user_id')  
+
+    if user_id:
+        ref = db.reference('orders')
+        orders = ref.get()
+        if key in orders:
+         order = orders[key]
+        
+    # Wenn das Formular abgeschickt wurde
+    if form.validate_on_submit():
+        # Daten für die Bewertung vorbereiten
+        rating_data = {
+            'bewertung': form.bewertung.data,
+            'rezension': form.rezension.data,
+            'user': user_id,
+            'orderid': key,
+            'offerid': order['offer_id']
+            ##offerid ist falsch
+        }
+        # Bewertung in die Firebase-Datenbank einfügen
+        ref = db.reference('ratings')
+        ref.push(rating_data)
+        
+        # Nach dem Speichern der Bewertung umleiten
+        flash("Vielen Dank für ihre Bewertung", "success")
+        return redirect(url_for('profil'))
+    
+    # Das Formular anzeigen
+    return render_template('rating_form.html', form=form, condition=condition)
+
+##if __name__ == "__main__":
+  ##  app.run(debug=True)
+
+def reset_taschen():
+    offers_ref = db.reference('offers')
+    offers = offers_ref.get()
+
+    if not offers:
+        return "No offers found"
+    
+    for key, offer in offers.items():
+        if offer['täglicheAnzahlTaschen'] == False:
+            offers_ref.child(key).update({'anzahlTaschen': 0})
+        else:
+            offers_ref.child(key).update({'anzahlTaschen': 10})
+
+        print(offer['anzahlTaschen']) 
+
+class Config:
+    SCHEDULER_API_ENABLED = True
+
+app.config.from_object(Config)
+
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
+
+scheduler.add_job(id='Daily Task', func=reset_taschen, trigger='cron', hour=0, minute=0)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+        app.run()
