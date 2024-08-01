@@ -47,7 +47,6 @@ class KundenRegistrierungsForm(FlaskForm):
 class AngebotsFormular(FlaskForm):
     angebotsbeschreibung = StringField('Angebotsbeschreibung', validators=[InputRequired(), Length(min=5)])
     titel = StringField('Titel', validators=[InputRequired(), Length(min=5)])
-
     kategorie = SelectField('Kategorie', choices=[('Brot & Brötchen', 'Brot & Brötchen'), ('Belegte Backwaren', 'Belegte Backwaren'), ('Gebäck', 'Gebäck')])
     anzahlTaschen = IntegerField('Anzahl der Taschen', validators=[InputRequired(), NumberRange(min=1)])
     preis = IntegerField('Preis', validators=[InputRequired(), NumberRange(min=1)])

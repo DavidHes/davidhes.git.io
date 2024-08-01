@@ -13,143 +13,181 @@ nav_order: 3
 {: toc }
 </details>
 
-## 01: [CSS Style] 
+Natürlich, hier ist die Übersetzung im Markdown-Format:
 
-### Meta 
+## 01: [CSS Stil]
 
-Status: **Decided**  
+### Meta
 
-Updated: 03-Jul-2024 
+Status: **Entschieden**
 
-### Problem statement 
+Aktualisiert: 03-Jul-2024
 
-For the web application, we need CSS, HTML and probably JavaScript to style the web application. The problem is that writing custom CSS and JavaScript code for the entire site is very time-consuming, and since we don't have much time, we need to find a quick solution that allows us to style the website according to our preferences. 
+### Problemstellung
 
-### Decision 
+Für die Webanwendung benötigen wir CSS, HTML und wahrscheinlich JavaScript, um die Webanwendung zu gestalten. Das Problem ist, dass das Schreiben von individuellem CSS und JavaScript-Code für die gesamte Seite sehr zeitaufwändig ist, und da wir nicht viel Zeit haben, müssen wir eine schnelle Lösung finden, die es uns ermöglicht, die Website nach unseren Vorlieben zu gestalten.
 
-We (Majd) have decided to use Bootstrap as a framework to create the User Interface design of the website for the following reasons. Firstly, using Bootstrap offers a significantly faster development process compared to writing our own files, which is crucial for us as we don't have a lot of time and want to focus on the database and the functionality of the web application. Secondly, Bootstrap includes a built-in responsive grid system that makes it easier to adapt to different screen sizes. 
+### Entscheidung
 
-### Regarded options 
+Wir (Majd) haben beschlossen, Bootstrap als Framework zu verwenden, um das Benutzeroberflächendesign der Website aus den folgenden Gründen zu erstellen. Erstens bietet die Verwendung von Bootstrap einen deutlich schnelleren Entwicklungsprozess im Vergleich zum Schreiben eigener Dateien, was für uns entscheidend ist, da wir nicht viel Zeit haben und uns auf die Datenbank und die Funktionalität der Webanwendung konzentrieren möchten. Zweitens beinhaltet Bootstrap ein integriertes responsives Gittersystem, das die Anpassung an verschiedene Bildschirmgrößen erleichtert. Zusätzlich haben wir minimal dazu einige CSS Styles erstellt, um im Design einige Akzente zu haben und die Farbe der Webseite anzupassen.
 
-|  | Pro | Contra |
-| --- | --- | --- |
-| **Custom CSS File** | ✔️ Full control over the styling <br> ✔️ Unique, custom design | ❌ Time-consuming |
-| **Bootstrap** | ✔️ Fast development <br> ✔️ Low effort <br> ✔️ Suitable for CSS beginners | ❌ High load time due to the many Bootstrap libraries <br> ❌ Less design flexibility |
-
----
-
-## 02: [Database] 
-
-### Meta 
-
-Status: **Decided**  
-
-Updated: 03-Juli-2024 
-
-### Problem statement 
-
-Our goal is to set up a database for our web application where we can manage our data. We want to be able to upload, change and delete values easily, without writing extensive code. Additionally, we need the capability to upload pictures for the bakery's offers. 
-
-### Decision 
-
-Our decision is to use Google Firebase. We chose this platform because it is fast and easy to use, thanks to its well-defined methods. This simplifies our programming process, eliminating the need for lengthy SQL queries that can often lead to small, hard-to-detect mistakes. Also, we already have some experience with Firebase's Realtime Database and Storage for uploading pictures, which will be beneficial for our project. 
-
-### Regarded options 
+### Betrachtete Optionen
 
 |  | Pro | Contra |
 | --- | --- | --- |
-| **Google Firebase** | ✔️ We know how to write <br> ✔️ Fast and easy to use, because of well-defined methods  | ❌ SQLAlchemy not possible |
-| **Plain Sql** | ✔️ We know how to write | ❌ Need for lengthy SQL queries |
-| **SQLAlchemy** | ✔️ No need for lengthy SQL queries | ❌ We must learn ORM concept & SQLAlchemy |
+| **Eigenes CSS** | ✔️ Volle Kontrolle über das Styling <br> ✔️ Einzigartiges, individuelles Design | ❌ Zeitaufwändig |
+| **Bootstrap** | ✔️ Schnelle Entwicklung <br> ✔️ Wenig Aufwand <br> ✔️ Geeignet für CSS-Anfänger | ❌ Hohe Ladezeit aufgrund der vielen Bootstrap-Bibliotheken <br> ❌ Weniger Designflexibilität |
 
 ---
 
-## 03: [Collaboration] 
+## 02: [Datenbank]
 
-### Meta 
+### Meta
 
-Status: **Decided**  
+Status: **Entschieden**
 
-Updated: 03-Juli-2024
+Aktualisiert: 03-Jul-2024
 
-### Problem statement 
+### Problemstellung
 
-Our goal is to enable to work simultaneously on the same project, therefore we need a platform or tools to enable collaboration among the team. This is important to avoid Unorganized Project Management, Code Conflicts and more. 
+Unser Ziel ist es, eine Datenbank für unsere Webanwendung einzurichten, in der wir unsere Daten verwalten können. Wir möchten in der Lage sein, Werte einfach hochzuladen, zu ändern und zu löschen, ohne umfangreichen Code schreiben zu müssen. Zusätzlich benötigen wir die Möglichkeit, Bilder für die Angebote der Bäckerei hochzuladen.
 
-### Decision 
+### Entscheidung
 
-Our decision is to use GitHub. GitHub allows us to work on the same project simultaneously. With Features like pull requests, code reviews, and more GitHub helps us discuss changes, improvements, and manage tasks.  
+Unsere Entscheidung ist, Google Firebase zu verwenden. Wir haben diese Plattform gewählt, weil sie schnell und einfach zu verwenden ist, dank ihrer gut definierten Methoden. Dies vereinfacht unseren Programmierprozess, da keine langen SQL-Abfragen erforderlich sind, die oft zu kleinen, schwer erkennbaren Fehlern führen können. Außerdem haben wir bereits Erfahrung mit der Firebase Realtime Database und Storage zum Hochladen von Bildern, was für unser Projekt von Vorteil sein wird.
 
-Also having GitHub repositories, we can access the code from everywhere and clone the project to every device. 
+### Betrachtete Optionen
 
-### Regarded options
-
-Other option is Git, but we prefer using GitHub to upload repositories to the cloud and this way, we can use features like pull requests and conduct code reviews directly on the platform. This way we can also review code, leave comments, and establish easier collaboration for us. Furthermore, we're have way more experience with working on projects on GitHub than on Git. 
+|  | Pro | Contra |
+| --- | --- | --- |
+| **Google Firebase** | ✔️ Wir wissen, wie man damit arbeitet <br> ✔️ Schnell und einfach zu verwenden, aufgrund gut definierter Methoden | ❌ SQLAlchemy nicht möglich |
+| **Einfaches SQL** | ✔️ Wir wissen, wie man damit arbeitet | ❌ Bedarf an langen SQL-Abfragen |
+| **SQLAlchemy** | ✔️ Keine Notwendigkeit für lange SQL-Abfragen | ❌ Wir müssen das ORM-Konzept und SQLAlchemy lernen |
 
 ---
 
-### 04: [Managing Forms in Web App with Python and Flask] 
+## 03: [Zusammenarbeit]
+
+### Meta
+
+Status: **Entschieden**
+
+Aktualisiert: 03-Jul-2024
+
+### Problemstellung
+
+Unser Ziel ist es, gleichzeitig am selben Projekt arbeiten zu können. Daher benötigen wir eine Plattform oder Werkzeuge, die die Zusammenarbeit im Team ermöglichen. Dies ist wichtig, um unorganisiertes Projektmanagement, Codekonflikte und mehr zu vermeiden.
+
+### Entscheidung
+
+Unsere Entscheidung ist, GitHub zu verwenden. GitHub ermöglicht es uns, gleichzeitig am selben Projekt zu arbeiten. Mit Funktionen wie Pull Requests, Code Reviews und mehr hilft uns GitHub, Änderungen zu diskutieren, Verbesserungen zu verwalten und Aufgaben zu organisieren.
+
+Außerdem können wir mit GitHub-Repositories von überall auf den Code zugreifen und das Projekt auf jedes Gerät klonen.
+
+### Betrachtete Optionen
+
+Eine andere Option ist Git, aber wir bevorzugen die Verwendung von GitHub, um Repositories in die Cloud hochzuladen. So können wir Funktionen wie Pull Requests nutzen und Code Reviews direkt auf der Plattform durchführen. Auf diese Weise können wir auch Code überprüfen, Kommentare hinterlassen und die Zusammenarbeit für uns erleichtern. Außerdem haben wir viel mehr Erfahrung mit der Arbeit an Projekten auf GitHub als mit Git.
+
+---
+
+## 04: [Verwaltung von Formularen in der Webanwendung mit Python und Flask]
+
+### Meta
+
+Status: **Entschieden**
+
+Aktualisiert: 03-Jul-2024
+
+### Problemstellung
+
+Wir benötigen eine Lösung, die es uns ermöglicht, einfach Formulare in unserer Webanwendung zu erstellen, zu validieren und zu verarbeiten, während wir eine sichere und hervorragende Benutzererfahrung gewährleisten. Ein entscheidender Aspekt ist die Einsparung von Entwicklungszeit, daher benötigen wir eine Lösung, die mehrere Aufgaben übernehmen kann, wie die Übertragung von Daten, deren Validierung, das Setzen von Bedingungen für die Formulare und mehr. Da die Funktionalität unserer Webanwendung stark von verschiedenen Formularen abhängt, ist die Wahl einer geeigneten Lösung entscheidend.
+
+### Entscheidung
+
+Wir werden Flask-WTF für die Formularverwaltung in unserer Flask-Anwendung verwenden, aus mehreren Gründen. Erstens vereinfacht Flask-WTF die Erstellung und Verwaltung von Formularen mit seiner einfach zu verwendenden Syntax und Integration mit Flask, wodurch zusätzliche Einrichtung entfällt und wir Zeit und Aufwand sparen. Darüber hinaus bietet Flask-WTF eine Vielzahl integrierter Validatoren für Benutzereingaben, die sicherstellen, dass die Eingaben korrekt und konsistent sind. Zudem ist der CSRF-Schutz standardmäßig integriert, wodurch wir Entwicklungszeit sparen und, was am wichtigsten ist, Sicherheitsrisiken reduzieren.
+
+### Betrachtete Optionen
+
+Wir haben drei Alternativen betrachtet:
+
+Flask-WTF, reine WTForms oder manuell mit HTML
+
+| Kriterium | Flask-WTF | Reine WTForms | Manuell mit HTML |
+|------------------|-------------------------------------------------|----------------------------------------|-------------------------------------------|
+| Benutzerfreundlichkeit | ✔️ Hoch: Integriert mit Flask. Keine Einrichtung erforderlich | ❌ Mittel: Einrichtung erforderlich | ❌ Niedrig: Manuelle Einrichtung erforderlich |
+| Validierung | ✔️ Eingebaute Validatoren, CSRF-Schutz | ✔️ Validatoren sind integriert | ❌ Manuelle Validierung erforderlich |
+| Sicherheit | ✔️ CSRF-Schutz standardmäßig integriert | ❌ Kein CSRF-Schutz. Einrichtung erforderlich | ❌ Manueller CSRF-Schutz erforderlich |
+| Flexibilität | ✔️ Hoch: Sehr flexibel und anpassbar | ✔️ Hoch: Anpassbar | ✔️ Hoch: Volle Kontrolle |
+| Lernkurve | ✔️ Niedrig: Gute Dokumentation, Flask-Integration | ❌ Mittel: Einrichtung erforderlich | ❌ Hoch: Kenntnisse von HTML und Validierungslogik erforderlich |
+
+### 05: [Funktionen mit Flask_apscheduler verwalten] 
 
 ### Meta 
 
 Status 
 
-: **Decided**  
+: **Entschieden**  
 
-Updated : 03-Juli-2024 
+Aktualisiert : 28-Juli-2024 
 
-### Problem statement 
+### Problemstellung
 
-We need a solution that allows us to easily create, validate, and process forms in our web application while ensuring a secure and excellent user experience. A crucial aspect is saving development time, so we require a solution that can handle multiple tasks, such as transferring data, validating it, setting conditions for the forms, and more. Given that our web app's functionality heavily depends on various forms, choosing a suitable solution is essential. 
+Wir benötigen eine Lösung, die es uns ermöglicht, täglich einfach die Anzahl der Taschen in jedem Angebot in unserer Webanwendung zu aktualisieren. In diesem Fall müssen wir die Angebote, die eine Standardanzahl an Taschen haben, auf die Hauptanzahl zurücksetzen. Darüber hinaus soll dies in unserer Flask-Anwendung implementiert werden, ohne hohe Ressourcenbelastung. Daher sollte die Lösung nicht ständig laufen, sondern zu einem bestimmten Zeitpunkt und einfach zu konfigurieren und einzurichten sein, da uns Entwicklungszeit fehlt. Außerdem soll diese Funktion direkt in der Webanwendung integriert werden, um die Verwaltung zu vereinfachen.
 
-### Decision 
+### Entscheidung 
 
-We will use Flask-WTF for form handling in our Flask application for several reasons. Firstly, Flask-WTF simplifies the creation and management of forms with its easy-to-use syntax and integration with Flask, eliminating the need for additional setup and saving us time and effort. Additionally, Flask-WTF provides a wide range of built-in validators for user input, ensuring that input is correct and consistent. Moreover, CSRF protection is built-in by default, allowing us to save development time and, most importantly, reduce security risks. 
+Wir haben uns für Cron-Trigger in Kombination mit flask_apscheduler entschieden, aus folgenden Gründen:
 
-### Regarded options 
+Präzise und komplexe Zeitpläne: Cron-Trigger ermöglichen es uns, genau festzulegen, wann die Aktualisierungen ausgeführt werden sollen, ohne dass der Code ständig im Hintergrund laufen muss.
 
-We regarded three alternative options: 
+Nahtlose Integration in unsere Flask-Webanwendung: Durch die Verwendung von flask_apscheduler können wir die Aufgaben direkt innerhalb unserer Flask-Anwendung planen und verwalten, ohne separate Cron-Dateien erstellen zu müssen.
 
-Flask-WTF,Pure WTForms or Manually with HTML 
+Geringer Ressourcenverbrauch: Da der Trigger nur zu festgelegten Zeiten aktiviert wird, verbraucht er nur minimal Ressourcen und wird nicht ständig im Hintergrund ausgeführt.
 
-| Criterion        | Flask-WTF                                       | Pure WTForms                           | Manually with HTML                        |
-|------------------|-------------------------------------------------|----------------------------------------|-------------------------------------------|
-| Ease of use      | ✔️ High: Integrated with Flask. No need for setup | ❌ Medium: setup required               | ❌ Low: manual setup                       |
-| Validation       | ✔️ Built-in validators, CSRF protection         | ✔️ validators are built-in              | ❌ Manual validation required              |
-| Security         | ✔️ CSRF protection Integrated by default        | ❌ No CSRF protection. Setup required   | ❌ Manual CSRF protection required         |
-| Flexibility      | ✔️ High: very flexible and customizable         | ✔️ High: customizable                   | ✔️ High: Full control                     |
-| Learning curve   | ✔️ Low: Good documentation, Flask integration   | ❌ Medium: Setup needed                 | ❌ High: Knowledge of HTML required and validation logic |
+Einfache Implementierung: Trotz der allgemeinen Komplexität von Cron-Syntax haben wir festgestellt, dass die Implementierung der Cron-Trigger mit flask_apscheduler sehr einfach und klar war. Wir mussten keine Cron-Dateien schreiben, sondern konnten alles in Python konfigurieren, was die Entwicklung vereinfacht hat.
+
+### Betrachtete Optionen
+
+Wir haben drei Alternativen betrachtet:
+
+| Methode                        | Vorteile                                                        | Nachteile                                                |
+|-------------------------------|-----------------------------------------------------------------|----------------------------------------------------------|
+| flask_apscheduler             | Integration in Flask, einfache Konfiguration, Flexibilität      | Abhängigkeit von der App
+ Anwendungen |
+| Cron-Jobs auf dem Server      | Unabhängig von der Anwendung, stabil, systemintegriert          | Keine direkte Integration in Flask, komplexe Verwaltung, zeitaufwändig|
+| Cloud-basierter Task-Scheduler| Skalierbarkeit, Verfügbarkeit, gute Integration                 | Kosten, Komplexität, Latenz, erfordert zusätzliche Infrastruktur, schwere Konfiguration |
 
 ---
 
-### 05: [Managing  with Flask_apscheduler] 
+### 06: [Paypal als Kaufabwicklung API] 
 
 ### Meta 
 
 Status 
 
-: **Decided**  
+: **Entschieden**
 
-Updated : 28-Juli-2024 
+Aktualisiert : 03-Juli-2024 
 
-### Problem statement 
+### Problemstellung
 
-We need a solution that allows us to easily update the number of bags in every offer in our web application. In this case we need to update the offers that have a standart number of bags to the main number and Furthermore we want to implement that in our flask App without a high resources usage.
+Um Bäckereien eine großartige Plattform zu bieten, auf der Funktionen wie Bestellungen, Gutscheine und Bewertungen implementiert werden können, müssen wir beim Bestellvorgang der Kunden involviert sein. Dies ermöglicht uns nicht nur die Implementierung unserer Funktionen, sondern auch zukünftige Gewinne aus den Verkäufen zu erzielen. Daher benötigen wir eine nachverfolgbare und digitale Zahlungsmethode. Angesichts unserer jungen Zielgruppe, vor allem Studenten, müssen wir diesen Aspekt in unsere Entscheidung einbeziehen.
 
-### Decision 
+### Entscheidung
 
-We will use Flask-WTF for form handling in our Flask application for several reasons. Firstly, Flask-WTF simplifies the creation and management of forms with its easy-to-use syntax and integration with Flask, eliminating the need for additional setup and saving us time and effort. Additionally, Flask-WTF provides a wide range of built-in validators for user input, ensuring that input is correct and consistent. Moreover, CSRF protection is built-in by default, allowing us to save development time and, most importantly, reduce security risks. 
+Wir haben uns entschieden, PayPal als unsere Zahlungs-API zu verwenden, aus verschiedenen Gründen. Zum einen haben junge Nutzer selten eine Kreditkarte, daher ist die Verwendung von Kreditkarten als Zahlungsmethode für unsere Zielgruppe nicht geeignet. Da wir die Webanwendung zunächst in Deutschland starten, müssen wir eine in Deutschland beliebte Methode verwenden, weshalb wir uns für PayPal entschieden haben. Weitere Gründe sind:
 
-### Regarded options 
+Vertrauenswürdigkeit: PayPal ist eine weithin anerkannte und vertrauenswürdige Zahlungsmethode.
+Einfache Integration: Es gibt umfangreiche APIs und SDKs, die die Integration in die meisten Webanwendungen erleichtern.
+Sicherheit: PayPal bietet robuste Sicherheitsmaßnahmen und Betrugsschutz.
 
-We regarded three alternative options: 
+### Betrachtete Optionen
 
-Flask-WTF,Pure WTForms or Manually with HTML 
+Wir haben weitere Alternativen betrachtet: Kredit-/Debitkarten, Apple Pay/Google Pay und Klarna.
 
-| Criterion        | Flask-WTF                                       | Pure WTForms                           | Manually with HTML                        |
-|------------------|-------------------------------------------------|----------------------------------------|-------------------------------------------|
-| Ease of use      | ✔️ High: Integrated with Flask. No need for setup | ❌ Medium: setup required               | ❌ Low: manual setup                       |
-| Validation       | ✔️ Built-in validators, CSRF protection         | ✔️ validators are built-in              | ❌ Manual validation required              |
-| Security         | ✔️ CSRF protection Integrated by default        | ❌ No CSRF protection. Setup required   | ❌ Manual CSRF protection required         |
-| Flexibility      | ✔️ High: very flexible and customizable         | ✔️ High: customizable                   | ✔️ High: Full control                     |
-| Learning curve   | ✔️ Low: Good documentation, Flask integration   | ❌ Medium: Setup needed                 | ❌ High: Knowledge of HTML required and validation logic |
+| Kriterium                    | PayPal                                             | Kredit-/Debitkarten                                 | Apple Pay/Google Pay                               | Klarna                                              |
+|------------------------------|----------------------------------------------------|----------------------------------------------------|---------------------------------------------------|----------------------------------------------------|
+| **Benutzerfreundlichkeit**   | ✔️ Hoch: Weit verbreitet und einfach zu nutzen     | ✔️ Hoch: Sehr verbreitet und sofort nutzbar        | ✔️ Hoch: Einfache und schnelle Nutzung             | ✔️ Hoch: Bequem, besonders mit Rechnungskauf       |
+| **Sicherheit**               | ✔️ Hoch: Robuste Sicherheitsmaßnahmen und Betrugsschutz | ❌ Mittel: Risiko von Datenmissbrauch               | ✔️ Hoch: Token-basierte Sicherheit                 | ✔️ Hoch: Klarna übernimmt das Zahlungsausfallrisiko |
+| **Einfachheit der Integration** | ✔️ Hoch: Umfangreiche APIs und SDKs verfügbar   | ✔️ Hoch: Direkte Abwicklung, einfache Integration  | ✔️ Hoch: Unterstützung durch viele Payment-Gateways | ❌ Mittel: Komplexere Integration erforderlich       |
+| **Studentenfreundlichkeit**  | ✔️ Hoch: Viele Studenten haben PayPal-Konten      | ❌ Mittel: Nicht alle Studenten haben Kreditkarten | ✔️ Hoch: Viele Studenten haben Apple/Android Geräte | ✔️ Hoch: Besonders attraktiv durch Rechnungskauf    |

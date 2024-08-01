@@ -35,9 +35,7 @@ def firebase_auth_and_register():
     name = data.get('name')
     email = data.get('email')
 
-    try:
-        time.sleep(2)  # 2 Sekunden Verzögerung hinzufügen
-        
+    try:        
         decoded_token = auth.verify_id_token(id_token)
         firebase_uid = decoded_token['uid']
 
@@ -69,7 +67,7 @@ def firebase_auth_and_register():
 
         return jsonify({'success': True}), 200
     except Exception as e:
-        print(f"Error during token verification: {e}")  # Fehlerprotokollierung
+        print(f"Fehler bei der token verification: {e}")  # Fehlerprotokollierung
         return jsonify({'success': False, 'error': str(e)}), 401
 
 @app.route('/home')
@@ -222,12 +220,8 @@ def browse():
             'offerid': offer_id
         }
          
-                 
-
-
     offers = dict(list(offers.items())[start:end])
     return render_template('browse.html', offers=offers, offer_ratings=offer_ratings, page=page, total_pages=total_pages, form=form)
-
 
 @app.route('/add_to_favourites/<key>', methods=['POST'])
 def add_to_favourites(key):
@@ -252,6 +246,10 @@ def favourites():
     check_orders()
 
     user_id = session.get('user_id') 
+
+    if not user_id:
+        flash("Du musst dich anmelden, um deine Favoriten sehen zu können!", "danger")
+        return redirect(url_for('login'))  
 
     refoffers = db.reference('offers')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
     offers = refoffers.get()    
@@ -330,12 +328,11 @@ def register():
 
     if request.method == 'POST':
         if customer_form.validate_on_submit():
-            print("Handling customer registration...")
             ref = db.reference('customers')
             existing_users = ref.order_by_child('email').equal_to(customer_form.email.data).get()
 
             if existing_users:
-                flash('Email already registered. Please log in.', 'danger')
+                flash('Diese E-Mail existiert bereits! Bitte logge dich ein!', 'danger')
                 return redirect(url_for('login'))
 
             customer_data = {
@@ -346,16 +343,15 @@ def register():
             }
 
             ref.push(customer_data)
-            flash('Customer registration successful!', 'success')
+            flash('Kunden-Registrierung erfolgreich!', 'success')
             return redirect(url_for('login'))
 
         elif company_form.validate_on_submit():
-            print("Handling company registration...")
             ref = db.reference('companies')
             existing_users = ref.order_by_child('email').equal_to(company_form.email.data).get()
 
             if existing_users:
-                flash('Email already registered. Please log in.', 'danger')
+                flash('Diese E-Mail existiert bereits! Bitte logge dich ein!', 'danger')
                 return redirect(url_for('login'))
 
             company_data = {
@@ -366,14 +362,12 @@ def register():
                 'postcode': company_form.postleitzahl.data,
                 'password': generate_password_hash(company_form.passwort.data),
                 'email': company_form.email.data,
-                'openinghour': company_form.öffnungszeit.data.strftime('%H:%M'),
-                'closinghour': company_form.schließzeit.data.strftime('%H:%M'),
                 'öffnungstage': company_form.öffnungstage.data,
                 'terms': company_form.agb.data
             }
 
             ref.push(company_data)
-            flash('Company registration successful!', 'success')
+            flash('Unternehmens-Registrierung erfolreich!', 'success')
             return redirect(url_for('login'))
 
     return render_template('registration_form.html', customer_form=customer_form, company_form=company_form)
@@ -393,7 +387,7 @@ def create_offer():
             
             for key, offer in existing_offers.items():
                 if offer['kategorie'] == kategorie:
-                    flash('Es darf nur ein Angebot pro Kategorie erstellt werden.', 'danger')
+                    flash('Es darf nur ein Angebot pro Kategorie erstellt werden!', 'danger')
                     return redirect(url_for('create_offer'))
 
             # Wenn kein Angebot in der Kategorie existiert, Angebot erstellen
@@ -404,10 +398,12 @@ def create_offer():
                 'titel': form.titel.data,
                 'kategorie': kategorie,
                 'anzahlTaschen': form.anzahlTaschen.data,
+                'anzahlTaschenToday': form.anzahlTaschen.data,
                 'standartanzahlTaschen': form.anzahlTaschen.data,
                 'preis': form.preis.data,
-                'abholStartZeit': form.abholStartZeit.data.strftime('%Y-%m-%dT%H:%M'),
-                'abholEndZeit': form.abholEndZeit.data.strftime('%Y-%m-%dT%H:%M'),
+                'altPreis': form.altPreis.data,
+                'abholStartZeit': form.abholStartZeit.data.strftime('%H:%M'),
+                'abholEndZeit': form.abholEndZeit.data.strftime('%H:%M'),
                 'täglicheAnzahlTaschen': form.täglicheAnzahlTaschen.data,
                 'agb': form.agb.data
             }
@@ -439,14 +435,14 @@ def edit_offer():
 def edit_offer_details(offer_id):
     check_orders()
     if not session.get('is_company'):
-        flash('Access denied. Only companies can edit offers.', 'danger')
+        flash('Du hast keine Berechtigungen!', 'danger')
         return redirect(url_for('home'))
 
     ref = db.reference(f'offers/{offer_id}')
     offer = ref.get()
 
     if not offer:
-        flash('Offer not found.', 'danger')
+        flash('Dieses Angebot wurde nicht gefunden!', 'danger')
         return redirect(url_for('edit_offer'))
 
     form = AngebotsFormular()
@@ -470,6 +466,7 @@ def edit_offer_details(offer_id):
             'anzahlTaschen': form.anzahlTaschen.data,
             'StandartanzahlTaschen': form.anzahlTaschen.data,
             'preis': form.preis.data,
+            'altPreis': form.altPreis.data,
             'abholStartZeit': form.abholStartZeit.data.strftime('%H:%M'),
             'abholEndZeit': form.abholEndZeit.data.strftime('%H:%M'),
             'täglicheAnzahlTaschen': form.täglicheAnzahlTaschen.data,
@@ -487,8 +484,9 @@ def edit_offer_details(offer_id):
         form.kategorie.data = offer.get('kategorie', '')
         form.anzahlTaschen.data = offer.get('anzahlTaschen', 0)
         form.preis.data = offer.get('preis', 0)
-        form.abholStartZeit.data = datetime.strptime(offer.get('abholStartZeit', '1900-01-01T00:00'), '%Y-%m-%dT%H:%M')
-        form.abholEndZeit.data = datetime.strptime(offer.get('abholEndZeit', '1900-01-01T00:00'), '%Y-%m-%dT%H:%M')
+        form.altPreis.data = offer.get('altPreis', 0)
+        form.abholStartZeit.data = datetime.strptime(offer.get('abholStartZeit', '00:00'), '%H:%M').time()
+        form.abholEndZeit.data = datetime.strptime(offer.get('abholEndZeit', '00:00'), '%H:%M').time()
         form.täglicheAnzahlTaschen.data = offer.get('täglicheAnzahlTaschen', False)
         form.agb.data = offer.get('agb', False)
 
@@ -532,13 +530,12 @@ def login():
             session['user_id'] = user['id']
             session['user_name'] = user.get('companyname', "Unknown User")
             session['is_company'] = True  # Setzen des Booleans für Company
-            flash('Company logged in successfully', 'success')
+            flash('Erfolgreich angemeldet.', 'success')
             return redirect(url_for('home'))
         else:
-            flash('Invalid email or password', 'danger')
+            flash('Die E-Mail oder das Passwort ist falsch!', 'danger')
     
     return render_template('login_form.html', customer_form=customer_form, company_form=company_form)
-
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -546,8 +543,8 @@ def logout():
     flash('Du hast dich erfolgreich abgemeldet.', 'success')
     return redirect(url_for('login'))
 
-@app.route('/payment/<offer_id>', methods=['POST'])
-def payment(offer_id):
+@app.route('/payment/<key>', methods=['POST'])
+def payment(key):
     check_orders()
     if not 'user_id' in session:
         return redirect(url_for('register'))
@@ -561,7 +558,7 @@ def payment(offer_id):
         session['anzahl'] = anzahl
 
         # Abrufen der CompanyID aus der Offer-Tabelle
-        ref = db.reference(f'offers/{offer_id}')
+        ref = db.reference(f'offers/{key}')
         offer = ref.get()
         company_id = offer.get('unternehmensID')
         session['company_id'] = company_id
@@ -591,9 +588,9 @@ def payment(offer_id):
                 if link.rel == "approval_url":
                     return redirect(link.href)
         else:
-            return "Error while creating payment"
+            return "Fehler bei der Paymentgenerierung"
     except Exception as e:
-        return f"Error in payment route: {str(e)}"
+        return f"Fehler: {str(e)}"
 
 
 @app.route('/payment/execute/<key>', methods=['GET'])
@@ -603,6 +600,23 @@ def payment_execute(key):
         payer_id = request.args.get('PayerID')
         anzahl = session.get('anzahl')
         unternehmensID = session.get('company_id')
+        user_id = session['user_id']
+
+        customer_ref = db.reference(f'customers/{user_id}')
+        customer_data = customer_ref.get()
+        if customer_data:
+            firstname = customer_data.get('customerfirstname', '')
+            lastname = customer_data.get('customername', '')
+            full_name = f"{firstname} {lastname}"
+        else:
+            full_name = "Unternehmensbestellung"
+
+        company_ref = db.reference(f'companies/{unternehmensID}')
+        company_data = company_ref.get()
+        if company_data:
+            unternehmen = company_data.get('companyname', '')
+        else:
+            unternehmen = "Unternehmensbestellung"
 
         if not payment_id or not payer_id or not anzahl:
             return "Fehlende Parameter", 400
@@ -610,41 +624,54 @@ def payment_execute(key):
         payment = paypalrestsdk.Payment.find(payment_id)
         if payment.execute({"payer_id": payer_id}):
             order_data = {
-                'user_id': session['user_id'],
+                'user_id': user_id,
+                'full_name': full_name,
                 'payer_id': payer_id,
                 'payment_id': payment_id,
                 'preis': float(payment.transactions[0].amount.total),
                 'anzahl': anzahl,
                 'datum': datetime.utcnow().isoformat(),
                 'offer_id': key,
-                'status' : "ausstehend",
-                'company_id': unternehmensID
+                'status': "ausstehend",
+                'company_id': unternehmensID,
+                'unternehmen': unternehmen
             }
 
             # Speichern der Bestellung
             orders_ref = db.reference('orders')
-            orders_ref.push(order_data)
+            new_order_ref = orders_ref.push(order_data)
+            order_id = new_order_ref.key  # Die generierte order_id
+
+            # Aktualisieren der anzahlTaschenToday für das Angebot
+            offer_ref = db.reference(f'offers/{key}')
+            offer_data = offer_ref.get()
+            if offer_data:
+                aktuelle_anzahl = offer_data.get('anzahlTaschenToday', 0)
+                neue_anzahl = aktuelle_anzahl - int(anzahl)
+                offer_ref.update({'anzahlTaschenToday': neue_anzahl})
 
             # Erstellen der Benachrichtigung
             notification_ref = db.reference('notifications')
             notification_ref.push({
-                'order_id': payment_id,
+                'payment_id': payment_id,
+                'user_id': user_id,
+                'full_name': full_name,
+                'preis': float(payment.transactions[0].amount.total),
+                'anzahl': anzahl,
                 'date': datetime.utcnow().isoformat(),
                 'status': 'unread',
-                'company_id' : unternehmensID
+                'company_id': unternehmensID,
+                'order_id': order_id  # Die generierte order_id hinzufügen
             })
 
-            # Setze die Session-Variable für Benachrichtigungen
-            #session['has_notification'] = True
-
-    
             print(session)
 
             return redirect(url_for('orders'))
         else:
             return "Zahlungsabwicklung fehlgeschlagen!"
     except Exception as e:
-        return f"Error in payment_execute route: {str(e)}"
+        return f"Fehler: {str(e)}"
+
 
 from datetime import datetime
 
@@ -660,16 +687,31 @@ def notifications():
             notifications = notification_ref.order_by_child('company_id').equal_to(user_id).get()
 
             if notifications:
+                notifications_list = list(notifications.items())
+
                 # Gruppiere Benachrichtigungen nach Datum
                 notifications_by_date = {}
-                for key, notification in notifications.items():
+                for key, notification in notifications_list:
                     date = notification['date'][:10]
                     if date not in notifications_by_date:
                         notifications_by_date[date] = []
                     notifications_by_date[date].append(notification)
 
+                # Paginierung logik
+                page = request.args.get('page', 1, type=int)
+                per_page = 4  # Anzahl der Tage pro Seite
+                total_days = len(notifications_by_date)
+                start = (page - 1) * per_page
+                end = start + per_page
+
+                # Gesamtanzahl der Seiten berechnen
+                total_pages = (total_days + per_page - 1) // per_page
+
+                # Benachrichtigungen für die aktuelle Seite auswählen
+                paginated_notifications_by_date = dict(list(notifications_by_date.items())[start:end])
+
                 # Setze den Status der Benachrichtigungen auf 'read'
-                for key, notification in notifications.items():
+                for key, notification in notifications_list:
                     notification_ref.child(key).update({'status': 'read'})
 
                 # Setze die Session-Variable zurück, nachdem die Benachrichtigungen gelesen wurden
@@ -679,15 +721,16 @@ def notifications():
                 today = datetime.utcnow().strftime('%Y-%m-%d')
 
                 # Übergabe der Benachrichtigungen nach Datum sortiert
-                return render_template('notifications.html', notifications_by_date=notifications_by_date, today=today)
+                return render_template('notifications.html', notifications_by_date=paginated_notifications_by_date, today=today, page=page, total_pages=total_pages)
             else:
                 # Berechne das aktuelle Datum
                 today = datetime.utcnow().strftime('%Y-%m-%d')
-                return render_template('notifications.html', notifications_by_date={}, today=today)
+                return render_template('notifications.html', notifications_by_date={}, today=today, page=1, total_pages=1)
         except Exception as e:
-            return f"Error in notifications route: {str(e)}"
+            return f"Fehler: {str(e)}"
     else:
         return redirect(url_for('home'))
+
 
 @app.route('/payment/cancel', methods=['GET'])
 def payment_cancel():
@@ -717,7 +760,33 @@ def orders():
         if not orders:
             orders = {}
 
-        return render_template('orders.html', orders=orders)
+        # Bestellungen in umgekehrter Reihenfolge sortieren (neueste zuerst)
+        orders = dict(sorted(orders.items(), key=lambda item: item[1]['datum'], reverse=True))
+
+        # Formatieren des Datums und Hinzufügen des Unternehmensnamens
+        for key, order in orders.items():
+            try:
+                # Datum von String zu datetime konvertieren
+                date = datetime.strptime(order['datum'], '%Y-%m-%dT%H:%M:%S.%f')
+                # Datum in das Format 'TT.MM.JJJJ' bringen
+                order['datum'] = date.strftime('%d.%m.%Y')
+            except ValueError:
+                order['datum'] = order['datum']  # Falls Datum nicht konvertiert werden kann, belasse es als String
+                
+        # Paginierung
+        page = request.args.get('page', 1, type=int)  # Aktuelle Seite aus den Abfrageparametern erhalten
+        per_page = 9  # Anzahl der Bestellungen pro Seite
+        total = len(orders)  # Gesamtanzahl der Bestellungen
+        start = (page - 1) * per_page  # Startindex für die aktuelle Seite
+        end = start + per_page  # Endindex für die aktuelle Seite
+
+        # Gesamtanzahl der Seiten berechnen
+        total_pages = (total + per_page - 1) // per_page
+
+        # Bestellungen für die aktuelle Seite auswählen
+        orders = dict(list(orders.items())[start:end])
+
+        return render_template('orders.html', orders=orders, page=page, total_pages=total_pages)
     else:
         return redirect(url_for('register'))
     
@@ -726,7 +795,7 @@ def certain_order(key):
     user_id = session.get('user_id')
 
     if not user_id:
-        flash("You must be logged in to view orders", "danger")
+        flash("Du musst dich anmelden, um deine Bestellungen sehen zu können!", "danger")
         return redirect(url_for('login'))  # Redirect to login if not logged in
 
     ref = db.reference('orders')
@@ -750,12 +819,11 @@ def certain_order(key):
         if 'mark_as_completed' in request.form:
             # Status auf abgeschlossen setzen und in der Datenbank speichern
             ref.child(key).update({'status': 'abgeschlossen'})
-            flash("Order marked as completed", "success")
+            flash("Deine Bestellung wurde als abgeholt vermerkt.", "success")
             return redirect(url_for('certain_order', key=key, unrated=unrated))
 
     # Render the template for both GET and POST requests
     return render_template('certain_order.html', order=order, key=key, unrated=unrated)
-
 
 @app.route('/ratenow/<key>',  methods=['GET', 'POST'])
 def ratenow(key):
@@ -784,14 +852,11 @@ def ratenow(key):
         ref.push(rating_data)
         
         # Nach dem Speichern der Bewertung umleiten
-        flash("Vielen Dank für ihre Bewertung", "success")
+        flash("Vielen Dank für Ihre Bewertung!", "success")
         return redirect(url_for('profil'))
     
     # Das Formular anzeigen
     return render_template('rating_form.html', form=form, condition=condition)
-
-##if __name__ == "__main__":
-  ##  app.run(debug=True)
 
 def reset_taschen():
     offers_ref = db.reference('offers')
