@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
-{% block HEADER %}Notifications{% endblock %}
+{% block HEADER %}
+    <h1 style="font-weight: bold;">Benachrichtigungen</h1>
+{% endblock %}
 
 {% block BACK_BUTTON %}
-    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+    <button class="btn btn-secondary mt-2" style="margin-left: 10px;" onclick="window.history.back();">Zurück</button>
 {% endblock %}
 
 {% block EXTRA_BUTTONS %}
@@ -20,7 +22,7 @@
 
 {% block CONTENT %}
 <div class="container mt-5">
-    <h1>Notifications</h1>
+    <h1>Benachrichtigungen</h1>
     <div class="row">
         {% if notifications_by_date %}
             <!-- Zeige die Benachrichtigungen für heute zuerst an -->
@@ -31,11 +33,14 @@
                 <div class="row">
                     {% for notification in notifications_by_date[today] %}
                         <div class="col-md-4 mb-4">
-                            <div class="card">
+                            <div class="card" style="border: 3px solid #EFC864; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
                                 <div class="card-body">
-                                    <p class="card-text"><strong>Order ID:</strong> {{ notification['order_id'] }}</p>
-                                    <p class="card-text"><strong>Date:</strong> {{ notification['date'] }}</p>
-                                    <p class="card-text"><strong>Status:</strong> {{ notification['status'] }}</p>
+                                    <p class="card-text"><strong>Bestell-ID:</strong> {{ notification['order_id'] }}</p>
+                                    <p class="card-text"><strong>Besteller*in:</strong> {{ notification['full_name'] }}</p>
+                                    <p class="card-text"><strong>Abholzeitraum:</strong> {{ notification['abholzeitraum'] }}</p>
+                                    <p class="card-text"><strong>Datum:</strong> {{ notification['date'] }}</p>
+                                    <p class="card-text"><strong>Preis:</strong> {{ notification['preis'] }} €</p>
+                                    <p class="card-text"><strong>Anzahl:</strong> {{ notification['anzahl'] }}</p>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +57,7 @@
                     <div class="row">
                         {% for notification in notifications_list %}
                             <div class="col-md-4 mb-4">
-                                <div class="card">
+                                <div class="card" style="border: 3px solid #EFC864; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
                                     <div class="card-body">
                                         <p class="card-text"><strong>Order ID:</strong> {{ notification['order_id'] }}</p>
                                         <p class="card-text"><strong>Date:</strong> {{ notification['date'] }}</p>
@@ -68,5 +73,30 @@
             <p>There are no notifications.</p>
         {% endif %}
     </div>
+
+    <!-- Paginierungslinks -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('notifications', page=page-1) }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            {% for p in range(1, total_pages + 1) %}
+            <li class="page-item {% if p == page %}active{% endif %}">
+                <a class="page-link" href="{{ url_for('notifications', page=p) }}">{{ p }}</a>
+            </li>
+            {% endfor %}
+            {% if page < total_pages %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('notifications', page=page+1) }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
 </div>
 {% endblock %}

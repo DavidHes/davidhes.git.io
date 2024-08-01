@@ -1,55 +1,92 @@
-# Contents of this repository
+# Inhalt dieses Repositorys
 
-This repository complements the [online notebooks](https://hwrberlin.github.io/fswd/) to the Full-Stack Web Development course at HWR Berlin.
+Dieses Repository ergänzt das [online notebook](https://davidhes.github.io/) 
 
-The commit history on the `main` branch has been enriched with [tags](https://git-scm.com/book/en/v2/Git-Basics-Tagging) that match the individual notebooks. Think of these tags as progressing "releases" of the app: as the semester unfolds, more features will be built in, with the occasional refactoring here and there.
+# Setup der Web-Anwendung
 
-I recommend you `git checkout` the repository at the tagged location of a particular notebook:
+**Step 1:** Richten Sie eine [Python Virtual Umgebung](https://hwrberlin.github.io/fswd/python-vscode.html#32-use-the-python-virtual-environment-as-default-for-this-workspace) ein.
 
-+ `git checkout docs`: basic structure for your own documentation
-+ `git checkout intro`: "[Intro to full-stack web development with Flask](https://hwrberlin.github.io/fswd/fswd-intro.html)"
-+ `git checkout flask`: "[Flask framework: URL path routing deep dive](https://hwrberlin.github.io/fswd/flask.html)"
-+ `git checkout html+css`: "[Introduction to HTML an CSS](https://hwrberlin.github.io/fswd/html-css.html)"
-+ `git checkout ui`: "[User interfaces with WTForms and Bootstrap](https://hwrberlin.github.io/fswd/user-interfaces.html)"
-+ `git checkout sqlalchemy`: "[Relational databases with Flask-SQLAlchemy](https://hwrberlin.github.io/fswd/sqlalchemy.html)"
-
-> By checking out a particular tag, git will throw you a "detached HEAD" warning. This is a feature not a bug :) Consult the [git manual](https://git-scm.com/book/en/v2/Git-Basics-Tagging) for how to work around this warning, if you are so inclined.
-> 
-> Alternatively, you may revert to the latest commit with `git reset --hard`: this is a destructive command, deleting any local changes you may have done. Be sure to preserve them at some other location if you need them later.
-
-In addition to exemplary code, this repository contains a basic structure for your documentation page in the `📁/docs` folder, as a source to GitHub Pages. For setup instructions, see [this notebook](https://hwrberlin.github.io/fswd/git.html#5-github-pages).
-
-# Steps to execute the app
-
-**Step 1:** set up and activate a [Python Virtual Environment](https://hwrberlin.github.io/fswd/python-vscode.html#32-use-the-python-virtual-environment-as-default-for-this-workspace).
-
-**Step 2:** install the required Python packages from the terminal with the command `pip install -r requirements.txt`:
+**Step 2:** Installieren Sie sich bitte alle Python-Pakete mittels dem Befehl "pip install -r requirements.txt" im Terminal.
 
 ```console
 (venv) C:\Users\me\projects\webapp> pip install -r requirements.txt
 ```
 
-> I created the file `📄requirements.txt` with this command: `pip freeze > requirements.txt`
-
-**Step 3** *(optional at tag location `sqlalchemy`)*: initialize the app's SQLite database via `flask init-db`:
+**Step 3:** Nach der Installation aller notwendigen Pakete, können Sie die Anwendung mit "flask run" starten.
 
 ```console
-(venv) PS C:\Users\me\projects\webapp> flask init-db
-Database has been initialized.
+(venv) C:\Users\me\projects\webapp> flask run
 ```
 
-**Step 4:** start the web server via `flask run --reload`:
+**Step 4:** Besuche [http://127.0.0.1:5000/home](http://127.0.0.1:5000/home) um zur Startseite zu gelangen.
 
-```console
-(venv) PS C:\Users\me\projects\webapp> flask run --reload
- * Debug mode: off
-WARNING: This is a development server. Do not use it in a production deployment.
-Use a production WSGI server instead.
- * Running on http://127.0.0.1:5000
-Press CTRL+C to quit
- * Restarting with stat
+
+# Anmeldung / Registration
+
+**Step 1:** Sie haben die Möglichkeit, sich ein eigenes Kundenkonto bzw. Unternehmenskonto zu erstellen. Zudem können Sie sich auch optional als Kunde mit Ihrem Google-Konto anmelden.
+
+**Step 2:** Alternativ können Sie sich aber auch mit folgenden Unternehmenskonten anmelden:
+
+```markdown
+E-Mail: baecker@mueller.de
+Passwort: neuesPw!
 ```
 
-**Step 5:** visit [http://127.0.0.1:5000/insert/sample](http://127.0.0.1:5000/insert/sample) to populate the app's database with some sample data.
+```markdown
+E-Mail: backshop@berlin.de
+Passwort: starkesPw
+```
 
-**Step 6:** visit [http://127.0.0.1:5000/](http://127.0.0.1:5000/) to view the landing page
+```markdown
+E-Mail: backmeister@potsdam.com
+Passwort: superPw!
+```
+
+```markdown
+E-Mail: kiez@baeckerei.de
+Passwort: gutesPw!
+```
+
+```markdown
+E-Mail: cafe@baeckerei.de
+Passwort: megaPw!!
+```
+
+```markdown
+E-Mail: vegan@backery.com
+Passwort: neustesPw!
+```
+
+```markdown
+E-Mail: konditorei@ella.de
+Passwort: starkesPw!
+```
+
+Um sich mit einem Kundenkonto anzumelden, können Sie dieses nutzen:
+
+```markdown
+E-Mail: max@mustermann.de
+Passwort: starkesPasswort
+```
+
+**Step 3:** Um ein Angebot kaufen zu können, haben wir die PayPal-API integriert und nutzen dabei die Sandbox-Version. 
+Dafür stehen Ihnen zwei Demo-Konten zur Verfügung, die Sie für die Bezahlung verwenden können:
+
+```markdown
+E-Mail: petersilie@personal.example.com
+Passwort: 1;El$p>G
+```
+
+```markdown
+E-Mail: alexplatz@personal.example.com
+Passwort: ;-Ju/u0Z
+```
+
+# Eventuelle Fehlerbearbeitung - Service Account Key
+
+**Option 1:** Falls die Verbindung zur Firebase-Datenbank nicht aufgebaut werden kann, könnte dies an der "serviceAccountKey.json"-Datei liegen.
+Hierfür haben wir Ihnen mehrere solcher Keys zur Verfügung gestellt, die sie alternativ nutzen können, um den aktuellen Key damit zu ersetzen. 
+
+**Option 2:** Falls dies auch zu keiner Problemlösung führt, können Sie versuchen den Key in den Überordner zu schieben. Hier hatten wir die gesamte Projektzeit über den Key abgelegt.
+
+**Option 3:** Kontaktieren Sie uns sehr gerne per Mail oder telefonisch, falls keiner der beiden Optionen zu einer Lösung führt.

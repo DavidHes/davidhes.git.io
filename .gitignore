@@ -6,8 +6,3 @@ venv/
 
 # Ignore instance folder (used by Flask web app, e.g., for SQLite database)
 instance/
-
-# Ignore private Key
-serviceAccountKey.json
-
-my_firebase_admin.py
