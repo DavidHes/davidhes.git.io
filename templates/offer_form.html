@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
-{% block HEADER %}Your Offer{% endblock %}
+{% block HEADER %}
+    <h1 style="font-weight: bold;">Deine Angebote</h1>
+{% endblock %}
 
 {% block BACK_BUTTON %}
-    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+    <button class="btn btn-secondary mt-2" style="margin-left: 10px;" onclick="window.history.back();">Zurück</button>
 {% endblock %}
+
 
 {% block EXTRA_BUTTONS %}
         <!-- Hier fügen wir nur einen Button hinzu -->
@@ -41,6 +44,11 @@
      {{ form.preis.label(class="form-control-label") }}
      {{ form.preis(class="form-control", placeholder="Preis eingeben") }}
 </div>
+
+<div class="form-group mb-3">
+     {{ form.altPreis.label(class="form-control-label") }}
+     {{ form.altPreis(class="form-control", placeholder="Alten Preis eingeben") }}
+</div>
                
 <div class="form-group mb-3">
      {{ form.abholStartZeit.label(class="form-control-label") }}
@@ -62,7 +70,7 @@
 </div>
 
 <div class="form-group mb-3">
-     {{ form.absenden(class="btn btn-primary") }}
+     {{ form.absenden(class="btn btn-custom") }}
  </div>
 </form>
 

@@ -1,43 +1,42 @@
 {% extends 'base.html' %}
 
 {% block HEADER %}
-    Home
+    <h1 style="font-weight: bold; margin-bottom: 100px;">Save the planet</h1>
 {% endblock %}
 
+{% block BACK_BUTTON %}
+    <button class="btn btn-secondary mt-2" style="margin-left: 10px;" onclick="window.history.back();">Zurück</button>
+{% endblock %}
 
 {% block CONTENT %}
-    <h1>Willkommen, {{ user_name if user_name else "Gast" }}!</h1>
-    <p>Deine Benutzer-ID: {{ user_id if user_id else "Gast" }}</p>
-    <img src="{{ url_for('static', filename='images/undraw-to-do.png') }}" class="img-fluid" alt="Beschreibung des Bildinhalts">
-
     <div class="row mb-4">
         <div class="col-md-6">
-            <div class="card mb-3" style="max-width: none; margin: 0 auto; border: 3px solid #b0742f; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); padding: 10px;">
+            <div class="card mb-3" style="max-width: none; margin: 0 auto; border: 3px solid #EFC864; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); padding: 10px;">
                 <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="{{ url_for('static', filename='images/undraw-to-do.png') }}" class="img-fluid rounded-start" alt="...">
+                    <div class="col-md-4 d-flex align-items-center">
+                        <img src="{{ url_for('static', filename='images/backwaren-unternehmen.jpg') }}" class="img-fluid rounded-start" style="object-fit: cover; height: 100%;" alt="...">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">Start saving the world</h5>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <a href="{{ url_for('register') }}" class="btn btn-custom">Register als Bäckerei</a>
+                            <p class="card-text">Verkaufen Sie überschüssige Backwaren umweltfreundlich. Registrieren Sie sich jetzt und helfen Sie, Lebensmittel- verschwendung zu reduzieren.</p>
+                            <a href="{{ url_for('register') }}" class="btn btn-custom">Registrieren als Bäckerei</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card mb-3" style="max-width: none; margin: 0 auto; border: 3px solid #b0742f; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); padding: 10px;">
+            <div class="card mb-3" style="max-width: none; margin: 0 auto; border: 3px solid #EFC864; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); padding: 10px;">
                 <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="{{ url_for('static', filename='images/undraw-to-do.png') }}" class="img-fluid rounded-start" alt="...">
+                    <div class="col-md-4 d-flex align-items-center">
+                        <img src="{{ url_for('static', filename='images/backwaren-kunden.jpg') }}" class="img-fluid rounded-start" style="object-fit: cover; height: 100%;" alt="...">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">Start saving the world</h5>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <a href="{{ url_for('register') }}" class="btn btn-custom">Register als Kunde</a>
+                            <p class="card-text">Kaufen Sie überschüssige Backwaren umweltfreundlich ein. Registrieren Sie sich jetzt und helfen Sie, Lebensmittel- verschwendung zu reduzieren.</p>
+                            <a href="{{ url_for('register') }}" class="btn btn-custom">Registrieren als Kunde</a>
                         </div>
                     </div>
                 </div>
@@ -47,7 +46,7 @@
 
     <div class="my-5 text-center">
         <h1 class="mb-4">Kundenbewertungen</h1>
-        <div id="customerReviewsCarousel" class="carousel slide d-inline-block" data-ride="carousel" data-interval="3000" style="max-width: 800px; margin: 0 auto; border: 3px solid #b0742f; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); padding: 20px;">
+        <div id="customerReviewsCarousel" class="carousel slide d-inline-block" data-ride="carousel" data-interval="3000" style="max-width: 800px; margin: 0 auto; border: 3px solid #EFC864; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); padding: 20px;">
             <div class="carousel-inner">
                 {% for i, review in enumerate(reviews) %}
                     <div class="carousel-item {% if i == 0 %}active{% endif %}">

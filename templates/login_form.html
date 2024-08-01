@@ -67,11 +67,11 @@
     {% extends 'base.html' %}
 
     {% block HEADER %}
-        <h1>Login</h1>
+        <h1 style="font-weight: bold;">Login</h1>
     {% endblock %}
 
     {% block BACK_BUTTON %}
-    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+    <button class="btn btn-secondary mt-2" style="margin-left: 10px;" onclick="window.history.back();">Zurück</button>
     {% endblock %}
 
     {% block EXTRA_BUTTONS %}
@@ -84,10 +84,10 @@
     <div class="container mt-5">
         <ul class="nav nav-tabs" id="loginTabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer" type="button" role="tab" aria-controls="customer" aria-selected="true">Customer Login</button>
+                <button class="nav-link active" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer" type="button" role="tab" aria-controls="customer" aria-selected="true">Kunden-Login</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="company-tab" data-bs-toggle="tab" data-bs-target="#company" type="button" role="tab" aria-controls="company" aria-selected="false">Company Login</button>
+                <button class="nav-link" id="company-tab" data-bs-toggle="tab" data-bs-target="#company" type="button" role="tab" aria-controls="company" aria-selected="false">Unternehmen-Login</button>
             </li>
         </ul>
         <div class="tab-content mt-3" id="loginTabsContent">
@@ -104,7 +104,7 @@
                             {{ customer_form.passwort(class="form-control", placeholder="Passwort eingeben") }}
                         </div>
                         <div class="form-group mb-3">
-                            {{ customer_form.absenden(class="btn btn-primary") }}
+                            {{ customer_form.absenden(class="btn btn-custom") }}
                         </div>
                         <div class="form-group mt-3 text-center">
                             <button id="googleSignIn" class="btn btn-light border border-dark">
@@ -128,7 +128,7 @@
                             {{ company_form.passwort(class="form-control", placeholder="Passwort eingeben") }}
                         </div>
                         <div class="form-group mb-3">
-                            {{ company_form.absenden(class="btn btn-primary") }}
+                            {{ company_form.absenden(class="btn btn-custom") }}
                         </div>
                     </form>
                 </div>

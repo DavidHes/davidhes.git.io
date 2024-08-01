@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block HEADER %}
+    <h1 style="font-weight: bold;">Hilfe</h1>
+{% endblock %}
+
+{% block BACK_BUTTON %}
+    <button class="btn btn-secondary mt-2" style="margin-left: 10px;" onclick="window.history.back();">Zurück</button>
+{% endblock %}
+
+{% block EXTRA_BUTTONS %}
+    {% if condition %}
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-dark me-md-4" type="button">Login</button>
+            <button class="btn btn-dark me-md-3" type="button">Registration</button>
+        </div>
+    {% else %}
+        <button class="btn btn-dark me-md-3" type="button">Log out</button>
+    {% endif %}
+{% endblock %}
+
+{% block CONTENT %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Häufig gestellte Fragen</h2>
+        <div class="accordion" id="helpAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Frage 1: Wie kann ich ein Konto erstellen?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#helpAccordion">
+                    <div class="accordion-body">
+                        Antwort: Um ein Konto zu erstellen, klicken Sie auf "Registeration" und füllen Sie das Formular aus.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Frage 2: Wie kann ich meine Bestellungen ansehen?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#helpAccordion">
+                    <div class="accordion-body">
+                        Antwort: Klicken Sie auf "Profil" und dann auf Bestellungen.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Frage 3: Wie kann ich meinen Einkauf bewerten?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#helpAccordion">
+                    <div class="accordion-body">
+                        Antwort: Klicken Sie auf Ihre Bestellungen und dann auf eine konkrete Bestellung. Hier können Sie auf den Button "Jetzt bewerten" klicken.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        Frage 4: Welche Zahlungsmethoden gibt es?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#helpAccordion">
+                    <div class="accordion-body">
+                        Antwort: Aufgrund des großen Nutzerkreises in Deutschland, bieten wir PayPal an.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block EXTRA_SCRIPTS %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+{% endblock %}
