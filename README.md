@@ -96,4 +96,4 @@ Hierfür haben wir Ihnen mehrere solcher Keys zur Verfügung gestellt, die sie a
 
 **Option 2:** Falls dies auch zu keiner Problemlösung führt, können Sie versuchen den Key in den Überordner zu schieben. Hier hatten wir die gesamte Projektzeit über den Key abgelegt.
 
-**Option 3:** Kontaktieren Sie uns sehr gerne per Mail oder telefonisch, falls keiner der beiden Optionen zu einer Lösung führt.
+**Option 3:** Kontaktieren Sie uns sehr gerne per Mail oder telefonisch (01522 7869234 oder 0160 96489215), falls keiner der beiden Optionen zu einer Lösung führt.
