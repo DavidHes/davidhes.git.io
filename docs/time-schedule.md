@@ -3,7 +3,7 @@ title: Zeitplan
 nav_order: 1
 ---
 
-# Time Schedule
+# Zeitplan
 
 <details open markdown="block">
 {: .text-delta }

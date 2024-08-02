@@ -4,18 +4,8 @@ parent: Technical Docs
 nav_order: 3
 ---
 
-{: .label }
-[Jane Dane]
-
 {: .no_toc }
-# Reference documentation
-
-{: .attention }
-> This page collects internal functions, routes with their functions, and APIs (if any).
-> 
-> See [Uber](https://developer.uber.com/docs/drivers/references/api) or [PayPal](https://developer.paypal.com/api/rest/) for exemplary high-quality API reference documentation.
->
-> You may delete this `attention` box.
+# Reference dokumentation
 
 <details open markdown="block">
 {: .text-delta }
@@ -26,60 +16,113 @@ nav_order: 3
 
 ## [Section / module]
 
-### `function_definition()`
+## 01: favourites Route
 
-**Route:** `/route/`
+## Abschnitt / Modul: Favoritenverwaltung
 
-**Methods:** `POST` `GET` `PATCH` `PUT` `DELETE`
+### favourites()
 
-**Purpose:** [Short explanation of what the function does and why]
+#### Route: /favourites
 
-**Sample output:**
+**Methoden:** GET
 
-[Show an image, string output, or similar illustration -- or write NONE if function generates no output]
+**Zweck:** Ruft die Favoritenangebote für den angemeldeten Benutzer ab und zeigt sie an. Wenn der Benutzer nicht angemeldet ist, wird er auf die Anmeldeseite weitergeleitet.
 
----
+**Beispielausgabe:**
 
-## [Example, delete this section] Show to-do lists
+- **GET /favourites**: Gibt die Favoritenangebote des angemeldeten Benutzers zurück. Wenn der Benutzer nicht angemeldet ist, wird er auf die Anmeldeseite weitergeleitet.
 
-### `get_lists()`
+![get_list_todos_sample](assets/images/Bild 11.png)
 
-**Route:** `/lists/`
-
-**Methods:** `GET`
-
-**Purpose:** Show all to-do lists.
-
-**Sample output:**
-
-![get_lists() sample](../assets/images/fswd-intro_00.png)
 
 ---
 
-### `get_list_todos(list_id)`
+## Abschnitt / Modul: Bewertungsverwaltung
 
-**Route:** `/lists/<int:list_id>`
+### ratenow(key)
 
-**Methods:** `GET`
+#### Route: /ratenow/<key>
 
-**Purpose:** Retrieve all to-do items of to-do list with ID `list_id` from database and present to user.
+**Methoden:** GET, POST
 
-**Sample output:**
+**Zweck:** Diese Funktion ermöglicht es Benutzern, Bewertungen für spezifische Bestellungen abzugeben. Wenn das Formular abgesendet wird, werden die Bewertung und die Rezension in der Firebase-Datenbank (mit dem Key des Offers) gespeichert.
 
-![get_list_todos() sample](../assets/images/fswd-intro_02.png)
+**Beispielausgabe:**
+
+- **GET /ratenow/<key>**: Zeigt ein Formular an, in dem der Benutzer eine Bewertung und eine Rezension für eine bestimmte Bestellung abgeben kann.
+  
+![get_list_todos_sample](assets/images/Bild 22.png)
+
+- **POST /ratenow/<key>**:  Speichert die Bewertung und Rezension des Benutzers in der Datenbank und leitet den Benutzer zu seinem Profil weiter.
+    ```json
+    {
+        "bewertung": 4,
+        "rezension": "Guter Service, aber könnte schneller sein.",
+        "user": "user_id_123",
+        "orderid": "order_id_456",
+        "offerid": "offer_id_789"
+    }
+    ```
+![get_list_todos_sample](assets/images/Bild 33.png)
+
+
 
 ---
 
-## [Example, delete this section] Insert sample data
 
-### `run_insert_sample()`
+## Abschnitt / Modul: Bestellverwaltung
 
-**Route:** `/insert/sample`
+### orders()
 
-**Methods:** `GET`
+#### Route: /orders
 
-**Purpose:** Flush the database and insert sample data set
+**Methoden:** GET (Standardmethode hier)
 
-**Sample output:**
+**Zweck:** Zeigt eine Liste der Bestellungen eines angemeldeten Benutzers an. Die Bestellungen werden nach Datum sortiert und in Seiten aufgeteilt. Die Route überprüft auch, ob der Benutzer angemeldet ist und leitet nicht angemeldete Benutzer zur Registrierung weiter.
 
-Browser shows: `Database flushed and populated with some sample data.`
+**Beispielausgabe:**
+
+- **GET /orders**: Gibt eine HTML-Seite zurück, die eine paginierte Liste der Bestellungen eines Benutzers zeigt.
+   
+   **Benutzer angemeldet**
+
+   ![get_list_todos_sample](assets/images/Bild 44.png)
+
+   **Benutzer NICHT angemeldet**
+
+    ![get_list_todos_sample](assets/images/Bild 55.png)
+
+---
+
+## Abschnitt / Modul: Durchsuchen (Browse)
+
+### browse()
+
+#### Route: /browse
+
+**Methoden:** GET, POST
+
+**Zweck:** Zeigt eine durchsuchbare Liste von Angeboten an und ermöglicht es, diese nach Preis, Kategorie und Suchbegriff zu filtern. Implementiert auch die Paginierung der Ergebnisse. Das Formular auf der Seite `/browse` wird sowohl bei `GET` als auch bei `POST`-Anfragen angezeigt. Bei einer `POST`-Anfrage wird das Formular verarbeitet und die Ergebnisse entsprechend den Filterkriterien aktualisiert.
+
+**Beispielausgabe:**
+
+- **GET /browse**: Zeigt die durchsuchbaren Angebote mit Paginierung und Filtermöglichkeiten an.
+ 
+ **Bild von Angeboten**
+
+  ![get_list_todos_sample](assets/images/Bild 66.png)
+
+- **POST /browse**: Verarbeitet das abgesendete Filterformular, um Angebote basierend auf den vom Benutzer eingegebenen Kriterien zu filtern.
+  - **Filterlogik:**
+    - **Kategorie**: Filtert nach der ausgewählten Kategorie.
+    - **Preis**: Filtert nach dem maximalen Preis.
+    - **Suchbegriff**: Filtert nach dem Suchbegriff in Titel oder Beschreibung.
+  - **Ergebnisse**: Zeigt die gefilterten Angebote an, einschließlich deren Details wie Preis, Kategorie, verfügbare Taschen, Abholzeiten und Bewertungen.
+  - **Paginierung**: Ermöglicht die Navigation durch die Ergebnisseiten.
+
+ **Bild von gefilterten Angeboten**
+
+  ![get_list_todos_sample](assets/images/Bild 77.png)
+
+
+

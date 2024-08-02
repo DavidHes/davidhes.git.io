@@ -141,6 +141,7 @@ def profil():
 @app.route('/help')
 def help():
     return render_template('help.html')
+
 @app.route('/browse', methods=['GET', 'POST'])
 def browse():
     check_orders()
@@ -673,13 +674,6 @@ def payment_execute(key):
         anzahl = session.get('anzahl')
         unternehmensID = session.get('company_id')
         user_id = session['user_id']
-
-        # Debug-Ausgaben
-        print("Payment ID:", payment_id)
-        print("Payer ID:", payer_id)
-        print("Anzahl:", anzahl)
-        print("UnternehmensID:", unternehmensID)
-        print("User ID:", user_id)
 
         if not payment_id or not payer_id or not anzahl:
             return "Fehlende Parameter", 400
