@@ -32,7 +32,7 @@ nav_order: 3
 
 - **GET /favourites**: Gibt die Favoritenangebote des angemeldeten Benutzers zurück. Wenn der Benutzer nicht angemeldet ist, wird er auf die Anmeldeseite weitergeleitet.
 
-![get_list_todos_sample](docs/assets/images/Bild11.png)
+![get_list_todos_sample](../assets/images/Bild11.png)
 
 
 ---
