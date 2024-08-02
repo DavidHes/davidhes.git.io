@@ -25,7 +25,6 @@
     <h1>Benachrichtigungen</h1>
     <div class="row">
         {% if notifications_by_date %}
-            <!-- Zeige die Benachrichtigungen für heute zuerst an -->
             {% if today in notifications_by_date %}
                 <div class="col-12 mt-4 mb-2">
                     <h3>Today</h3>
@@ -48,7 +47,6 @@
                 </div>
             {% endif %}
             
-            <!-- Zeige Benachrichtigungen für andere Tage an -->
             {% for date, notifications_list in notifications_by_date.items() %}
                 {% if date != today %}
                     <div class="col-12 mt-4 mb-2">
@@ -74,7 +72,6 @@
         {% endif %}
     </div>
 
-    <!-- Paginierungslinks -->
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             {% if page > 1 %}
