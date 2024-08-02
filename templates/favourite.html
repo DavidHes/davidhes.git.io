@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 
-{% block HEADER %}Favourites{% endblock %}
+{% block HEADER %}
+    <h1 style="font-weight: bold;">Favoriten</h1>
+{% endblock %}
 
 {% block BACK_BUTTON %}
-    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+    <button class="btn btn-secondary mt-2" style="margin-left: 10px;" onclick="window.history.back();">Zurück</button>
 {% endblock %}
 
 {% block EXTRA_BUTTONS %}
     {% if condition %}
-        <!-- Hier fügen wir zusätzliche Buttons hinzu -->
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-             <button class="btn btn-dark me-md-4" type="button">Login</button>
-             <button class="btn btn-dark me-md-3" type="button">Registeration</button>
+            <button class="btn btn-dark me-md-4" type="button">Login</button>
+            <button class="btn btn-dark me-md-3" type="button">Registration</button>
         </div>
     {% else %}
-        <!-- Hier fügen wir nur einen Button hinzu -->
-         <button class="btn btn-dark me-md-3" type="button">Log out</button>
+        <button class="btn btn-dark me-md-3" type="button">Log out</button>
     {% endif %}
 {% endblock %}
 
@@ -24,34 +24,68 @@
     <div class="row">
         {% if favs %}
             {% for key, offer in offers.items() %}
-              {% for keyfav, fav in favs.items() %}
-                {% if key == fav['offerid'] %}
-                  <div class="col-md-4 mb-4">
-                  <form method="post" action="{{ url_for('update_favourite', favid=fav['offerid']) }}">
-                            <input type="hidden" name="offer_id" value="{{ offer['offerid'] }}">
-                            <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
-                            <button type="submit" class="btn btn-link heart {% if key in fav['offerid'] %}liked{% else %}not-liked{% endif %}">
-                                <i class="fas fa-heart"></i>
-                            </button>
-                        </form>
-                        <a href="{{ url_for('angebot_details', key=key) }}" class="card-link">
-                                <div class="card">
+                {% for keyfav, fav in favs.items() %}
+                    {% if key == fav['offerid'] %}
+                        <div class="col-md-4 mb-4">
+                            {% set is_available = offer['anzahlTaschenToday'] > 0 %}
+                            {% if is_available %}
+                                <a href="{{ url_for('angebot_details', key=key) }}" class="card-link">
+                            {% else %}
+                                <div class="card-link text-muted" style="pointer-events: none; opacity: 0.7;">
+                            {% endif %}
+                                <div class="card" style="border: 3px solid #EFC864; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); opacity: {% if not is_available %}0.5{% else %}1{% endif %};">
+                                    {% set image_file = 'images/' %}
+                                    {% if offer['kategorie'] == 'Brot & Brötchen' %}
+                                        {% set image_file = image_file + 'brot.jpeg' %}
+                                    {% elif offer['kategorie'] == 'Gebäck' %}
+                                        {% set image_file = image_file + 'gebaeck.jpg' %}
+                                    {% elif offer['kategorie'] == 'Belegte Backwaren' %}
+                                        {% set image_file = image_file + 'belegte_broetchen.jpg' %}
+                                    {% else %}
+                                        {% set image_file = image_file + 'brot.jpeg' %}
+                                    {% endif %}
+                                    
+                                    <img src="{{ url_for('static', filename=image_file) }}" class="card-img-top" alt="{{ offer['kategorie'] }}">
                                     <div class="card-body">
-                                        <p class="card-text"><strong>Preis:</strong> {{ offer['preis'] }} €</p>
+                                        <h5 class="card-text mb-2"><strong>{{ offer['unternehmen'] }}</strong></h5>
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <p class="card-title">{{ offer['titel'] }}</p>
+                                            <form action="{{ url_for('update_favourite', favid=fav['offerid']) }}" method="POST" class="mt-2">
+                                                <input type="hidden" name="offer_id" value="{{ offer['offerid'] }}">
+                                                <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
+                                                <button type="submit" class="btn btn-link p-0 heart" {% if not is_available %}disabled{% endif %}>
+                                                    <i class="fas fa-heart" style="cursor: pointer; margin-top: -2px;"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                         <p class="card-text"><strong>Kategorie:</strong> {{ offer['kategorie'] }}</p>
-                                        <p class="card-text"><strong>Verfügbare Taschen:</strong> {{ offer['anzahlTaschen'] }}</p>
-                                        <p class="card-text"><strong>Abholbeginn:</strong> {{ offer['abholStartZeit'] }}</p>
-                                        <p class="card-text"><strong>Abholende:</strong> {{ offer['abholEndZeit'] }}</p>
+                                        <p class="card-text"><strong>Adresse:</strong> {{ offer['adresse'] }}</p>
+                                        <p class="card-text"><strong>Abholzeit:</strong> {{ offer['abholStartZeit'] }} - {{ offer['abholEndZeit'] }}</p>
+                                        <p class="card-text"><strong>Anzahl Taschen:</strong> {{ offer['anzahlTaschenToday'] }}</p>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <p class="card-text mb-0"><strong>Bewertung:</strong> {{ offer['bewertung'] }}</p>
+                                            <div class="d-flex align-items-center">
+                                                <p class="card-text mb-0 me-2" style="text-decoration: line-through; font-weight: 300;">{{ offer['altPreis'] }} €</p>
+                                                <p class="card-text mb-0"><strong>{{ offer['preis'] }} €</strong></p>
+                                            </div>
+                                        </div>
+                                        {% if not is_available %}
+                                            <p class="card-text text-danger"><strong>Heute nicht verfügbar</strong></p>
+                                        {% endif %}
                                     </div>
                                 </div>
-                            </a>
+                            {% if is_available %}
+                                </a>
+                            {% else %}
+                                </div>
+                            {% endif %}
                         </div>
-                {% endif %}
-             {% endfor %}
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
         {% else %}
-            <p>Sie haben noch keine Favoriten.</p>
-    {% endif %}
+            <p>Du hast noch keine Favoriten.</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

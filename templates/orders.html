@@ -1,39 +1,43 @@
 {% extends 'base.html' %}
 
-{% block HEADER %}Orders{% endblock %}
+{% block HEADER %}
+    <h1 style="font-weight: bold;">Bestellungen</h1>
+{% endblock %}
 
 {% block BACK_BUTTON %}
-    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+    <button class="btn btn-secondary mt-2" style="margin-left: 10px;" onclick="window.history.back();">Zurück</button>
 {% endblock %}
 
 {% block EXTRA_BUTTONS %}
     {% if condition %}
-        <!-- Hier fügen wir zusätzliche Buttons hinzu -->
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-             <button class="btn btn-dark me-md-3" type="button">Log out</button>
+            <button class="btn btn-dark me-md-3" type="button">Log out</button>
         </div>
     {% else %}
-        <!-- Hier fügen wir nur einen Button hinzu -->
         <button class="btn btn-dark me-md-4" type="button">Login</button>
-        <button class="btn btn-dark me-md-3" type="button">Registeration</button>
+        <button class="btn btn-dark me-md-3" type="button">Registration</button>
     {% endif %}
 {% endblock %}
 
 {% block CONTENT %}
 <div class="container mt-5">
-    <h1>Meine Bestellungen</h1>
     <div class="row">
         {% if orders %}
             {% for key, order in orders.items() %}
                 <div class="col-md-4 mb-4">
-                    <a href="{{ url_for('certain_order', key=key) }}" class="card-link">
-                        <div class="card">
+                    <a href="{{ url_for('certain_order', key=key) }}" style="text-decoration: none; color: inherit;">
+                        <div class="card" style="border: 3px solid #EFC864; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
                             <div class="card-body">
+                                <p class="card-text"><strong>Unternehmen:</strong> {{ order['unternehmen'] }}</p>
+                                <p class="card-text"><strong>Adresse:</strong> {{ order['adresse'] }}</p>
+                                <p class="card-text"><strong>Abholzeitraum:</strong> {{ order['abholzeitraum'] }}</p>
                                 <p class="card-text"><strong>Preis:</strong> {{ order['preis'] }} €</p>
                                 <p class="card-text"><strong>Anzahl:</strong> {{ order['anzahl'] }}</p>
                                 <p class="card-text"><strong>Datum:</strong> {{ order['datum'] }}</p>
-                                <p class="card-text"><strong>Bestell ID:</strong> {{ order['payment_id'] }}</p>
                                 <p class="card-text"><strong>Status:</strong> {{ order['status'] }}</p>
+                                {% if order['status'] == 'abgeschlossen' and unrated %}
+                                    <a href="{{ url_for('ratenow', key=key) }}" class="btn btn-success">Jetzt bewerten</a>
+                                {% endif %}
                             </div>
                         </div>
                     </a>

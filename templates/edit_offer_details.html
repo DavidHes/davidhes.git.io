@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
-{% block HEADER %}Edit Offer{% endblock %}
+{% block HEADER %}
+    <h1 style="font-weight: bold;">Angebotsbearbeitung</h1>
+{% endblock %}
 
 {% block BACK_BUTTON %}
-    <button class="btn btn-secondary mt-2" onclick="window.history.back();">Back</button>
+    <button class="btn btn-secondary mt-2" style="margin-left: 10px;" onclick="window.history.back();">Zurück</button>
 {% endblock %}
 
 {% block EXTRA_BUTTONS %}
@@ -53,7 +55,7 @@
                 {{ form.täglicheAnzahlTaschen(class="form-check-input") }}
             </div>
             <div class="form-group mb-3">
-                {{ form.absenden(class="btn btn-primary") }}
+                {{ form.absenden(class="btn btn-custom") }}
             </div>
         </form>
     </div>

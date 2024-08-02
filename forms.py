@@ -11,8 +11,6 @@ class FirmenRegistrierungsForm(FlaskForm):
     postleitzahl = StringField('Postleitzahl', validators=[InputRequired(), Length(min=5)])
     passwort = PasswordField('Passwort', validators=[InputRequired(), Length(min=8)])
     email = EmailField('E-Mail', validators=[InputRequired(), Email()])
-    öffnungszeit = DateTimeLocalField('Öffnungszeit', validators=[InputRequired()], format='%Y-%m-%dT%H:%M')
-    schließzeit = DateTimeLocalField('Schließzeit', validators=[InputRequired()], format='%Y-%m-%dT%H:%M')
     öffnungstage = SelectMultipleField(
         'Öffnungstage',
         choices=[('Montag', 'Montag'), ('Dienstag', 'Dienstag'), ('Mittwoch', 'Mittwoch'), 
@@ -23,7 +21,7 @@ class FirmenRegistrierungsForm(FlaskForm):
         default=[]
     )
     agb = BooleanField('AGB akzeptieren', validators=[InputRequired()])
-    absenden = SubmitField('Erstellen')
+    absenden = SubmitField('Konto erstellen')
 
 class AnmeldeFormular(FlaskForm):
     email = EmailField('E-Mail', validators=[InputRequired(), Email()])
@@ -38,18 +36,19 @@ class Needforregistration(FlaskForm):
     Kundenregistierung = SubmitField('Kundenregistierung')
 
 class KundenRegistrierungsForm(FlaskForm):
-    kundenname = StringField('Nachname', validators=[InputRequired(), Length(min=5)])
-    kundenVorname = StringField('Vorname', validators=[InputRequired(), Length(min=5)])
+    kundenname = StringField('Nachname', validators=[InputRequired(), Length(min=1)])
+    kundenVorname = StringField('Vorname', validators=[InputRequired(), Length(min=1)])
     passwort = PasswordField('Passwort', validators=[InputRequired(), Length(min=5)])
     email = EmailField('E-Mail', validators=[InputRequired(), Email()])
     absenden = SubmitField('Konto erstellen')
 
 class AngebotsFormular(FlaskForm):
-    angebotsbeschreibung = StringField('Angebotsbeschreibung', validators=[InputRequired(), Length(min=5)])
-    titel = StringField('Titel', validators=[InputRequired(), Length(min=5)])
+    angebotsbeschreibung = StringField('Angebotsbeschreibung', validators=[InputRequired(), Length(min=5, max=30)])
+    titel = StringField('Titel', validators=[InputRequired(), Length(min=5, max=30)])
     kategorie = SelectField('Kategorie', choices=[('Brot & Brötchen', 'Brot & Brötchen'), ('Belegte Backwaren', 'Belegte Backwaren'), ('Gebäck', 'Gebäck')])
     anzahlTaschen = IntegerField('Anzahl der Taschen', validators=[InputRequired(), NumberRange(min=1)])
     preis = IntegerField('Preis', validators=[InputRequired(), NumberRange(min=1)])
+    altPreis = IntegerField('Alter Preis', validators=[InputRequired(), NumberRange(min=1)])
     abholStartZeit = DateTimeLocalField('Abholbeginn', validators=[InputRequired()], format='%H:%M')
     abholEndZeit = DateTimeLocalField('Abholende', validators=[InputRequired()], format='%H:%M')
     täglicheAnzahlTaschen = BooleanField('Standart tägliche Anzahl von Taschen', validators=[InputRequired()])
@@ -63,7 +62,7 @@ class FiltersFormular(FlaskForm):
         ('Alle Kategorien', 'Alle Kategorien'),
         ('Brot & Brötchen', 'Brot & Brötchen'),
         ('Gebäck', 'Gebäck'),
-        ('Süß', 'Süß')
+        ('Belegte Backwaren', 'Belegte Backwaren')
     ])
     submit = SubmitField('Filtern')
     suche = StringField('Suche', validators=[Optional()])

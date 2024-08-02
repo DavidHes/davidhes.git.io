@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
-{% block HEADER %}Orders{% endblock %}
+{% block HEADER %}
+    <h1 style="font-weight: bold;">Bestellungen</h1>
+{% endblock %}
+
+{% block BACK_BUTTON %}
+    <button class="btn btn-secondary mt-2" style="margin-left: 10px;" onclick="window.history.back();">Zurück</button>
+{% endblock %}
 
 {% block EXTRA_BUTTONS %}
     {% if condition %}
@@ -17,26 +23,27 @@
 
 {% block CONTENT %}
 <div class="container mt-5">
-    <h1>Meine Bestellungen</h1>
     <div class="row">
         {% if order %}
             <div class="col-md-4 mb-4">
-                <div class="card">
+                <div class="card" style="border: 3px solid #EFC864; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
                     <div class="card-body">
+                        <p class="card-text"><strong>Unternehmen:</strong> {{ order['unternehmen'] }}</p>
+                        <p class="card-text"><strong>Adresse:</strong> {{ order['adresse'] }}</p>
+                        <p class="card-text"><strong>Abholzeitraum:</strong> {{ order['abholzeitraum'] }}</p>
                         <p class="card-text"><strong>Preis:</strong> {{ order['preis'] }} €</p>
                         <p class="card-text"><strong>Anzahl:</strong> {{ order['anzahl'] }}</p>
-                        <p class="card-text"><strong>Datum:</strong> {{ order['datum'] }}</p>
-                        <p class="card-text"><strong>Bestell ID:</strong> {{ order['payment_id'] }} €</p>
-                        <p class="card-text"><strong>Status:</strong> {{ order['status'] }}</p>
+                         <p class="card-text"><strong>Datum:</strong> {{ order['datum'] }}</p>
+                         <p class="card-text"><strong>Status:</strong> {{ order['status'] }}</p>
 
                         {% if order['status'] == 'ausstehend' %}
                            <form method="POST">
-                             <button type="submit" name="mark_as_completed" class="btn btn-primary">Jetzt abholen</button>
+                             <button type="submit" name="mark_as_completed" class="btn btn-custom">Jetzt abholen</button>
                            </form>
                         {% endif %}
 
                         {% if order['status'] == 'abgeschlossen' and unrated %}
-                            <a href="{{ url_for('ratenow', key=key) }}" class="btn btn-success">Jetzt bewerten</a>
+                            <a href="{{ url_for('ratenow', key=key) }}" class="btn btn-custom">Jetzt bewerten</a>
                         {% endif %}
                     </div>
                 </div>

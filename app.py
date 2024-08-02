@@ -69,7 +69,7 @@ def firebase_auth_and_register():
     except Exception as e:
         print(f"Fehler bei der token verification: {e}")  # Fehlerprotokollierung
         return jsonify({'success': False, 'error': str(e)}), 401
-
+    
 @app.route('/home')
 def home():
     check_orders()
@@ -88,11 +88,30 @@ def home():
         if user_data:
             user_name = user_data.get('customername' if not user_type else 'companyname', "Gast")
 
-    reviews = [
-    {'name': 'Anoynm', 'review': 'Tolle Produkte, für einen Hammerpreis! sehr empfehlenswert!'},
-    {'name': 'Bob', 'review': 'Ausgezeichnete Produkte und schneller Versand.'},
-    {'name': 'Charlie', 'review': 'Kundendienst war sehr hilfreich und freundlich.'}
-]   
+    review_ids = ['-O3FIv9RwHwFmiZ3UGw6', '-O3DL0eMYlzvep1F_pHZ', '-O3FIdPWneHU1APEdpsn']
+
+    reviews_ref = db.reference('ratings') 
+    reviews = []
+
+    for review_id in review_ids:
+        review_data = reviews_ref.child(review_id).get()
+        if review_data:
+            review_user_id = review_data.get('user')
+            if review_user_id:
+                user_ref = db.reference(f'customers/{review_user_id}')
+                user_data = user_ref.get()
+                if user_data:
+                    firstname = user_data.get('customerFirstName', '')
+                    lastname = user_data.get('customerName', '')
+                    full_name = f"{firstname} {lastname}"
+                else:
+                    full_name = 'Anonym'
+            else:
+                full_name = 'Anonym'
+            reviews.append({
+                'name': full_name,
+                'review': review_data.get('rezension', '') 
+            })
 
     return render_template('home.html', user_name=user_name, user_id=user_id, reviews=reviews, enumerate=enumerate)
 
@@ -119,6 +138,10 @@ def profil():
 
     return render_template('profil.html', user_name=user_name, user_id=user_id, user_type=user_type)
 
+@app.route('/help')
+def help():
+    return render_template('help.html')
+
 @app.route('/browse', methods=['GET', 'POST'])
 def browse():
     check_orders()
@@ -130,9 +153,9 @@ def browse():
     ratings_ref = db.reference('ratings')
 
     # Fetch data
-    offers = offers_ref.get()
-    companies = companies_ref.get()
-    ratings = ratings_ref.get()
+    offers = offers_ref.get() or {}
+    companies = companies_ref.get() or {}
+    ratings = ratings_ref.get() or {}
 
     max_price = None
     category = 'Alle Kategorien'
@@ -140,15 +163,16 @@ def browse():
     current_day = datetime.now(pytz.timezone('Europe/Berlin')).strftime('%A')
 
     wochentage_deutsch = {
-    'Monday': 'Montag',
-    'Tuesday': 'Dienstag',
-    'Wednesday': 'Mittwoch',
-    'Thursday': 'Donnerstag',
-    'Friday': 'Freitag',
-    'Saturday': 'Samstag',
-    'Sunday': 'Sonntag'
-}
-# Den aktuellen Wochentag auf Deutsch anzeigen
+        'Monday': 'Montag',
+        'Tuesday': 'Dienstag',
+        'Wednesday': 'Mittwoch',
+        'Thursday': 'Donnerstag',
+        'Friday': 'Freitag',
+        'Saturday': 'Samstag',
+        'Sunday': 'Sonntag'
+    }
+    
+    # Den aktuellen Wochentag auf Deutsch anzeigen
     aktueller_wochentag = wochentage_deutsch.get(current_day, 'Unbekannter Tag')
     print(aktueller_wochentag)
 
@@ -171,9 +195,8 @@ def browse():
         offers = {key: offer for key, offer in offers.items() if offer['preis'] <= max_price}
     
     if search_term:
-            offers = {key: offer for key, offer in offers.items() if search_term.lower() in offer['titel'].lower() or search_term.lower() in offer['angebotsbeschreibung'].lower()}    
+        offers = {key: offer for key, offer in offers.items() if search_term.lower() in offer['titel'].lower() or search_term.lower() in offer['angebotsbeschreibung'].lower()}    
 
-                
     for offer_key, offer in offers.items():
         company_id = offer['unternehmensID']
         company = companies.get(company_id, {})
@@ -185,12 +208,24 @@ def browse():
         if aktueller_wochentag not in company.get('öffnungstage', []):
             print(company.get('öffnungstage', []))
             offers[offer_key]['is_available'] = False
+        elif offer['anzahlTaschenToday'] <= 0:
+            offers[offer_key]['is_available'] = False
         else:
-            offers[offer_key]['is_available'] = True          
+            offers[offer_key]['is_available'] = True
+
+        company_ref = db.reference(f'companies/{company_id}')
+        company_data = company_ref.get()
+        if company_data:
+            strasse = company_data.get('street', '')
+            nummer = company_data.get('number', '')
+            plz = company_data.get('postcode', '')
+            stadt = company_data.get('city', '') 
+            adresse = f"{strasse} {nummer}, {plz} {stadt}"
+            offers[offer_key]['adresse'] = adresse 
 
     # Pagination logic
     page = request.args.get('page', 1, type=int)
-    per_page = 10
+    per_page = 9
     total = len(offers)
     start = (page - 1) * per_page
     end = start + per_page
@@ -202,44 +237,59 @@ def browse():
     offer_ratings = {}
 
     for offer_id, offer in offers.items():
-             total_rating = 0
-             rating_count = 0
-             for rating in ratings.values():
-                 if rating['offerid'] == offer_id:
-                      total_rating += rating['bewertung']
-                      rating_count += 1
-                 if rating_count > 0:
-                     average_rating = total_rating / rating_count
-                 else:
-                     average_rating = 0
-        
-             offer_ratings[offer_id] = {
+        total_rating = 0
+        rating_count = 0
+        for rating in ratings.values():
+            if rating['offerid'] == offer_id:
+                total_rating += rating['bewertung']
+                rating_count += 1
+        if rating_count > 0:
+            average_rating = round(total_rating / rating_count, 1)
+        else:
+            average_rating = 0
+
+        offer_ratings[offer_id] = {
             'average_rating': average_rating,
             'total_rating': total_rating,
             'rating_count': rating_count,
             'offerid': offer_id
         }
-         
+
     offers = dict(list(offers.items())[start:end])
+    
+    total_pages = max(total_pages, 1)
+    
     return render_template('browse.html', offers=offers, offer_ratings=offer_ratings, page=page, total_pages=total_pages, form=form)
 
 @app.route('/add_to_favourites/<key>', methods=['POST'])
 def add_to_favourites(key):
-     check_orders()
+    check_orders()
 
-     user_id = session.get('user_id')  
+    user_id = session.get('user_id')
 
-     if user_id:
+    if user_id:
+        ref = db.reference('favourites')
+        # Überprüfen, ob der Benutzer das Angebot bereits favorisiert hat
+        existing_favourites = ref.order_by_child('user').equal_to(user_id).get()
+
+        # Prüfen, ob das Angebot bereits in den Favoriten ist
+        for fav_key, fav in existing_favourites.items():
+            if fav['offerid'] == key:
+                flash("Du hast dieses Angebot bereits favorisiert.", "warning")
+                return redirect(url_for('browse'))
+
+        # Wenn das Angebot noch nicht favorisiert wurde, füge es hinzu
         fav_data = {
             'user': user_id,
             'offerid': key,
         }
-        # Bewertung in die Firebase-Datenbank einfügen
-        ref = db.reference('favourites')
         ref.push(fav_data)
+        flash("Angebot wurde zu deinen Favoriten hinzugefügt.", "success")
         return redirect(url_for('browse'))
-     else:
+    else:
+        flash("Du musst dich anmelden, um Favoriten hinzuzufügen.", "danger")
         return redirect(url_for('register'))
+
      
 @app.route('/favourites')
 def favourites():
@@ -252,20 +302,43 @@ def favourites():
         return redirect(url_for('login'))  
 
     refoffers = db.reference('offers')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
-    offers = refoffers.get()    
+    offers = refoffers.get() or {}    
 
-    ref = db.reference('favourites')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
+    ref = db.reference('favourites')  # Annahme: 'favourites' ist der Pfad in der Firebase-Datenbank
     favs = ref.order_by_child('user').equal_to(user_id).get() 
-    
+
     if not favs:
-        favs = []
+        favs = {}
 
     print(f"favs: {favs}")
-    print(f"Type of favs: {type(favs)}")    
+    print(f"Type of favs: {type(favs)}")
+
+    # Sammle die Unternehmens-IDs aus den Angeboten
+    company_ids = {offer['unternehmensID'] for offer in offers.values()}
+
+    # Lade die Unternehmensdaten für alle gesammelten Unternehmens-IDs
+    companies_ref = db.reference('companies')
+    companies_data = {company_id: companies_ref.child(company_id).get() for company_id in company_ids}
+
+    # Füge die Adresse zu jedem Angebot in den Favoriten hinzu
+    for fav_key, fav in favs.items():
+        offer_id = fav['offerid']
+        if offer_id in offers:
+            offer = offers[offer_id]
+            company_id = offer['unternehmensID']
+            if company_id in companies_data:
+                company = companies_data[company_id]
+                strasse = company.get('street', '')
+                nummer = company.get('number', '')
+                plz = company.get('postcode', '')
+                stadt = company.get('city', '') 
+                adresse = f"{strasse} {nummer}, {plz} {stadt}"
+                offer['adresse'] = adresse
 
     form = FavoriteForm()
 
     return render_template('favourite.html', favs=favs, offers=offers, form=form) 
+
 
 @app.route('/update_favourite/<favid>', methods=['POST'])
 def update_favourite(favid):
@@ -300,8 +373,8 @@ def update_favourite(favid):
 @app.route('/angebot/<key>')
 def angebot_details(key):
     check_orders()
-    ref = db.reference('offers')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
-    offers = ref.get()  # Holen der Angebote
+    ref = db.reference('offers')  
+    offers = ref.get()  
 
     if key in offers:
         offer = offers[key]
@@ -389,7 +462,7 @@ def create_offer():
                 if offer['kategorie'] == kategorie:
                     flash('Es darf nur ein Angebot pro Kategorie erstellt werden!', 'danger')
                     return redirect(url_for('create_offer'))
-
+                
             # Wenn kein Angebot in der Kategorie existiert, Angebot erstellen
             offer_data = {
                 'unternehmensID': unternehmensID,
@@ -513,10 +586,10 @@ def login():
             session['user_id'] = user['id']
             session['user_name'] = user.get('customername', "Unknown User")
             session['is_company'] = False  # Setzen des Booleans für Customer
-            flash('Customer logged in successfully', 'success')
+            flash('Erfolgreich angemeldet.', 'success')
             return redirect(url_for('home'))
         else:
-            flash('Invalid email or password', 'danger')
+            flash('Die E-Mail oder das Passwort ist falsch!', 'danger')
 
     if company_form.validate_on_submit() and company_form.absenden.data:
         ref = db.reference('companies')
@@ -602,11 +675,14 @@ def payment_execute(key):
         unternehmensID = session.get('company_id')
         user_id = session['user_id']
 
+        if not payment_id or not payer_id or not anzahl:
+            return "Fehlende Parameter", 400
+        
         customer_ref = db.reference(f'customers/{user_id}')
         customer_data = customer_ref.get()
         if customer_data:
-            firstname = customer_data.get('customerfirstname', '')
-            lastname = customer_data.get('customername', '')
+            firstname = customer_data.get('customerFirstName', '')
+            lastname = customer_data.get('customerName', '')
             full_name = f"{firstname} {lastname}"
         else:
             full_name = "Unternehmensbestellung"
@@ -615,12 +691,25 @@ def payment_execute(key):
         company_data = company_ref.get()
         if company_data:
             unternehmen = company_data.get('companyname', '')
+            strasse = company_data.get('street', '')
+            nummer = company_data.get('number', '')
+            plz = company_data.get('postcode', '')
+            stadt = company_data.get('city', '') 
+            adresse = f"{strasse} {nummer}, {plz} {stadt}"
         else:
-            unternehmen = "Unternehmensbestellung"
+            unternehmen = "Unternehmensbestellung"    
 
-        if not payment_id or not payer_id or not anzahl:
-            return "Fehlende Parameter", 400
+        # Abrufen der Bestellinformationen
+        order_ref = db.reference(f'offers/{key}')
+        order_data = order_ref.get()
+        if order_data:
+            beginn = order_data.get('abholStartZeit', '')
+            ende = order_data.get('abholEndZeit', '')
+            abholzeitraum = f"{beginn} - {ende}"
+        else:
+            abholzeitraum = "Undefiniert"
 
+        # Ausführen der Zahlung
         payment = paypalrestsdk.Payment.find(payment_id)
         if payment.execute({"payer_id": payer_id}):
             order_data = {
@@ -634,7 +723,9 @@ def payment_execute(key):
                 'offer_id': key,
                 'status': "ausstehend",
                 'company_id': unternehmensID,
-                'unternehmen': unternehmen
+                'unternehmen': unternehmen,
+                'adresse': adresse,
+                'abholzeitraum': abholzeitraum
             }
 
             # Speichern der Bestellung
@@ -661,15 +752,20 @@ def payment_execute(key):
                 'date': datetime.utcnow().isoformat(),
                 'status': 'unread',
                 'company_id': unternehmensID,
-                'order_id': order_id  # Die generierte order_id hinzufügen
+                'order_id': order_id,
+                'abholzeitraum': abholzeitraum
             })
 
             print(session)
 
             return redirect(url_for('orders'))
         else:
+            # Debug-Ausgabe bei fehlgeschlagener Zahlung
+            print("Zahlungsabwicklung fehlgeschlagen:", payment.error)
             return "Zahlungsabwicklung fehlgeschlagen!"
     except Exception as e:
+        # Fehlerbehandlung und Debug-Ausgabe
+        print("Fehler:", str(e))
         return f"Fehler: {str(e)}"
 
 
@@ -731,7 +827,6 @@ def notifications():
     else:
         return redirect(url_for('home'))
 
-
 @app.route('/payment/cancel', methods=['GET'])
 def payment_cancel():
     return "Zahlungsabwicklung abgebrochen!"
@@ -751,45 +846,54 @@ def check_orders():
 def orders():
     user_id = session.get('user_id')
 
-    check_orders()
-    
-    if user_id:
-        ref = db.reference('orders')
-        orders = ref.order_by_child('user_id').equal_to(user_id).get() 
-
-        if not orders:
-            orders = {}
-
-        # Bestellungen in umgekehrter Reihenfolge sortieren (neueste zuerst)
-        orders = dict(sorted(orders.items(), key=lambda item: item[1]['datum'], reverse=True))
-
-        # Formatieren des Datums und Hinzufügen des Unternehmensnamens
-        for key, order in orders.items():
-            try:
-                # Datum von String zu datetime konvertieren
-                date = datetime.strptime(order['datum'], '%Y-%m-%dT%H:%M:%S.%f')
-                # Datum in das Format 'TT.MM.JJJJ' bringen
-                order['datum'] = date.strftime('%d.%m.%Y')
-            except ValueError:
-                order['datum'] = order['datum']  # Falls Datum nicht konvertiert werden kann, belasse es als String
-                
-        # Paginierung
-        page = request.args.get('page', 1, type=int)  # Aktuelle Seite aus den Abfrageparametern erhalten
-        per_page = 9  # Anzahl der Bestellungen pro Seite
-        total = len(orders)  # Gesamtanzahl der Bestellungen
-        start = (page - 1) * per_page  # Startindex für die aktuelle Seite
-        end = start + per_page  # Endindex für die aktuelle Seite
-
-        # Gesamtanzahl der Seiten berechnen
-        total_pages = (total + per_page - 1) // per_page
-
-        # Bestellungen für die aktuelle Seite auswählen
-        orders = dict(list(orders.items())[start:end])
-
-        return render_template('orders.html', orders=orders, page=page, total_pages=total_pages)
-    else:
+    if not user_id:
         return redirect(url_for('register'))
     
+    check_orders()
+    
+    ref = db.reference('orders')
+    orders = ref.order_by_child('user_id').equal_to(user_id).get()
+
+    if not orders:
+        orders = {}
+
+    # Debug-Ausgabe der ursprünglichen Bestellungen
+    print("Ursprüngliche Bestellungen:", orders)
+
+    # Bestellungen in umgekehrter Reihenfolge sortieren (neueste zuerst)
+    orders = dict(sorted(orders.items(), key=lambda item: item[1]['datum'], reverse=True))
+
+    # Formatieren des Datums und Hinzufügen des Unternehmensnamens
+    for key, order in orders.items():
+        try:
+            # Datum von String zu datetime konvertieren
+            date = datetime.strptime(order['datum'], '%Y-%m-%dT%H:%M:%S.%f')
+            # Datum in das Format 'TT.MM.JJJJ' bringen
+            order['datum'] = date.strftime('%d.%m.%Y')
+        except ValueError:
+            order['datum'] = order['datum']  # Falls Datum nicht konvertiert werden kann, belasse es als String
+
+    # Debug-Ausgabe der formatierten Bestellungen
+    print("Formatierte Bestellungen:", orders)
+
+    # Paginierung
+    page = request.args.get('page', 1, type=int)  # Aktuelle Seite aus den Abfrageparametern erhalten
+    per_page = 9  # Anzahl der Bestellungen pro Seite
+    total = len(orders)  # Gesamtanzahl der Bestellungen
+    start = (page - 1) * per_page  # Startindex für die aktuelle Seite
+    end = start + per_page  # Endindex für die aktuelle Seite
+
+    # Gesamtanzahl der Seiten berechnen
+    total_pages = (total + per_page - 1) // per_page
+
+    # Bestellungen für die aktuelle Seite auswählen
+    orders = dict(list(orders.items())[start:end])
+
+    # Debug-Ausgabe der Bestellungen für die aktuelle Seite
+    print("Bestellungen für Seite", page, ":", orders)
+
+    return render_template('orders.html', orders=orders, page=page, total_pages=total_pages)
+
 @app.route('/order/<key>', methods=['GET', 'POST'])
 def certain_order(key):
     user_id = session.get('user_id')
@@ -852,7 +956,7 @@ def ratenow(key):
         ref.push(rating_data)
         
         # Nach dem Speichern der Bewertung umleiten
-        flash("Vielen Dank für Ihre Bewertung!", "success")
+        flash("Vielen Dank für deine Bewertung!", "success")
         return redirect(url_for('profil'))
     
     # Das Formular anzeigen
@@ -867,9 +971,9 @@ def reset_taschen():
     
     for key, offer in offers.items():
         if offer['täglicheAnzahlTaschen'] == False:
-            offers_ref.child(key).update({'anzahlTaschen': 0})
+            offers_ref.child(key).update({'anzahlTaschenToday': 0})
         else:
-            offers_ref.child(key).update({'anzahlTaschen': 10})
+            offers_ref.child(key).update({'anzahlTaschenToday': offer['anzahlTaschen']})
 
         print(offer['anzahlTaschen']) 
 
@@ -882,7 +986,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-scheduler.add_job(id='Daily Task', func=reset_taschen, trigger='cron', hour=0, minute=0)
+scheduler.add_job(id='Daily Task', func=reset_taschen, trigger='cron', hour=21, minute=46)
 
 if __name__ == "__main__":
         app.run()
