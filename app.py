@@ -516,7 +516,7 @@ def edit_offer_details(offer_id):
             'angebotsbeschreibung': form.angebotsbeschreibung.data,
             'kategorie': form.kategorie.data,
             'anzahlTaschen': form.anzahlTaschen.data,
-            'StandartanzahlTaschen': form.anzahlTaschen.data,
+            'anzahlTaschenToday': form.anzahlTaschen.data,
             'preis': form.preis.data,
             'altPreis': form.altPreis.data,
             'abholStartZeit': form.abholStartZeit.data.strftime('%H:%M'),
