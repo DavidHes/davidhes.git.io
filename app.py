@@ -681,6 +681,8 @@ def payment_execute(key):
             beginn = order_data.get('abholStartZeit', '')
             ende = order_data.get('abholEndZeit', '')
             abholzeitraum = f"{beginn} - {ende}"
+            kategorie = order_data.get('kategorie')
+
         else:
             abholzeitraum = "Undefiniert"
 
@@ -724,7 +726,8 @@ def payment_execute(key):
                 'status': 'unread',
                 'company_id': unternehmensID,
                 'order_id': order_id,
-                'abholzeitraum': abholzeitraum
+                'abholzeitraum': abholzeitraum,
+                'kategorie': kategorie
             })
 
             print(session)
