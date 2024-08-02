@@ -22,7 +22,7 @@ condition = False
 
 # PayPal configuration
 paypalrestsdk.configure({
-    "mode": "sandbox",  # sandbox or live
+    "mode": "sandbox",  
     "client_id": "AUJPGXC_Q2irXahFthN6EpW2PAW6E-Seh_j1AEcGpDcsbNlL8oyCWJaQ06D4-ourzL3qrOx7pifp6Zj9",
     "client_secret": "EHn6JQE0eJ-EfOflg8w1E4ogCDJrSPgcqnir2PvB_0DgpYh5L7y4G6q8Doi1fsPaXf9CJeYxO8nJw7kW"
 })
@@ -30,7 +30,7 @@ paypalrestsdk.configure({
 @app.route('/firebase_auth_and_register', methods=['POST'])
 def firebase_auth_and_register():
     check_orders()
-    data = request.get_json()  # POST-Anfrage wird an die Route /sessionLogin gesendet
+    data = request.get_json()  
     id_token = data.get('idToken')
     name = data.get('name')
     email = data.get('email')
@@ -39,16 +39,14 @@ def firebase_auth_and_register():
         decoded_token = auth.verify_id_token(id_token)
         firebase_uid = decoded_token['uid']
 
-        # Überprüfen, ob der Benutzer bereits existiert
         ref = db.reference('customers')
         existing_users = ref.order_by_child('email').equal_to(email).get()
 
         user_id = None
         if not existing_users:
-            # Wenn der Benutzer nicht existiert, speichere die Benutzerdaten
             customer_data = {
-                'customerFirstName': name.split()[0],  # Vorname
-                'customername': name,  # Ganzer Name
+                'customerFirstName': name.split()[0], 
+                'customername': name,  
                 'email': email,
                 'firebase_uid': firebase_uid,
                 'is_company': False
@@ -56,18 +54,16 @@ def firebase_auth_and_register():
             new_user_ref = ref.push(customer_data)
             user_id = new_user_ref.key
         else:
-            # Benutzer existiert bereits, hole die benutzerdefinierte User-ID
             for key, value in existing_users.items():
                 user_id = key
 
-        # Speichere die Benutzerinformationen in der Session
-        session['user_id'] = user_id  # benutzerdefinierte User-ID
+        session['user_id'] = user_id  
         session['user_name'] = name
         session['is_company'] = False
 
         return jsonify({'success': True}), 200
     except Exception as e:
-        print(f"Fehler bei der token verification: {e}")  # Fehlerprotokollierung
+        print(f"Fehler bei der token verification: {e}")  
         return jsonify({'success': False, 'error': str(e)}), 401
     
 @app.route('/home')
@@ -119,7 +115,7 @@ def home():
 def profil():
     check_orders()
     user_id = session.get('user_id')
-    user_type = session.get('is_company')  # True für Company, False für Customer
+    user_type = session.get('is_company')  
 
     if user_id:
         if user_type:
@@ -147,12 +143,10 @@ def browse():
     check_orders()
   
     form = FiltersFormular()
-    # References to the collections
     offers_ref = db.reference('offers')
     companies_ref = db.reference('companies')
     ratings_ref = db.reference('ratings')
 
-    # Fetch data
     offers = offers_ref.get() or {}
     companies = companies_ref.get() or {}
     ratings = ratings_ref.get() or {}
@@ -172,21 +166,17 @@ def browse():
         'Sunday': 'Sonntag'
     }
     
-    # Den aktuellen Wochentag auf Deutsch anzeigen
     aktueller_wochentag = wochentage_deutsch.get(current_day, 'Unbekannter Tag')
     print(aktueller_wochentag)
 
-    # Check if the form is submitted
     if form.validate_on_submit():
-        if form.reset.data:  # Check if the reset button was pressed
+        if form.reset.data:  
             return redirect(url_for('browse'))
 
-        # Get filter values from the form
         max_price = form.preis.data if form.preis.data else None
         category = form.kategorie.data if form.kategorie.data else 'Alle Kategorien'
         search_term = form.suche.data
 
-    # Apply filters based on form input
     if category != 'Alle Kategorien' and max_price is not None:
         offers = {key: offer for key, offer in offers.items() if offer['kategorie'] == category and offer['preis'] <= max_price}
     elif category != 'Alle Kategorien':
@@ -223,14 +213,12 @@ def browse():
             adresse = f"{strasse} {nummer}, {plz} {stadt}"
             offers[offer_key]['adresse'] = adresse 
 
-    # Pagination logic
     page = request.args.get('page', 1, type=int)
     per_page = 9
     total = len(offers)
     start = (page - 1) * per_page
     end = start + per_page
 
-    # Calculate total pages
     total_pages = (total + per_page - 1) // per_page
     print(ratings)
 
@@ -269,16 +257,13 @@ def add_to_favourites(key):
 
     if user_id:
         ref = db.reference('favourites')
-        # Überprüfen, ob der Benutzer das Angebot bereits favorisiert hat
         existing_favourites = ref.order_by_child('user').equal_to(user_id).get()
 
-        # Prüfen, ob das Angebot bereits in den Favoriten ist
         for fav_key, fav in existing_favourites.items():
             if fav['offerid'] == key:
                 flash("Du hast dieses Angebot bereits favorisiert.", "warning")
                 return redirect(url_for('browse'))
 
-        # Wenn das Angebot noch nicht favorisiert wurde, füge es hinzu
         fav_data = {
             'user': user_id,
             'offerid': key,
@@ -301,10 +286,10 @@ def favourites():
         flash("Du musst dich anmelden, um deine Favoriten sehen zu können!", "danger")
         return redirect(url_for('login'))  
 
-    refoffers = db.reference('offers')  # Annahme: 'offers' ist der Pfad in der Firebase-Datenbank
+    refoffers = db.reference('offers')  
     offers = refoffers.get() or {}    
 
-    ref = db.reference('favourites')  # Annahme: 'favourites' ist der Pfad in der Firebase-Datenbank
+    ref = db.reference('favourites')  
     favs = ref.order_by_child('user').equal_to(user_id).get() 
 
     if not favs:
@@ -313,14 +298,11 @@ def favourites():
     print(f"favs: {favs}")
     print(f"Type of favs: {type(favs)}")
 
-    # Sammle die Unternehmens-IDs aus den Angeboten
     company_ids = {offer['unternehmensID'] for offer in offers.values()}
 
-    # Lade die Unternehmensdaten für alle gesammelten Unternehmens-IDs
     companies_ref = db.reference('companies')
     companies_data = {company_id: companies_ref.child(company_id).get() for company_id in company_ids}
 
-    # Füge die Adresse zu jedem Angebot in den Favoriten hinzu
     for fav_key, fav in favs.items():
         offer_id = fav['offerid']
         if offer_id in offers:
@@ -348,7 +330,7 @@ def update_favourite(favid):
     offer_id = favid
 
     if not user_id:
-        return redirect(url_for('register'))  # oder eine andere Fehlerseite
+        return redirect(url_for('register'))  
 
     ref = db.reference('favourites')
     favs = ref.order_by_child('user').equal_to(user_id).get()
@@ -454,7 +436,6 @@ def create_offer():
             unternehmensID = session.get('user_id')
             kategorie = form.kategorie.data
 
-            # Überprüfen, ob das Unternehmen bereits ein Angebot in dieser Kategorie hat
             ref = db.reference('offers')
             existing_offers = ref.order_by_child('unternehmensID').equal_to(unternehmensID).get()
             
@@ -463,7 +444,6 @@ def create_offer():
                     flash('Es darf nur ein Angebot pro Kategorie erstellt werden!', 'danger')
                     return redirect(url_for('create_offer'))
                 
-            # Wenn kein Angebot in der Kategorie existiert, Angebot erstellen
             offer_data = {
                 'unternehmensID': unternehmensID,
                 'unternehmen': session.get('user_name'),
@@ -524,7 +504,6 @@ def edit_offer_details(offer_id):
         unternehmensID = session.get('user_id')
         kategorie = form.kategorie.data
 
-        # Überprüfen, ob das Unternehmen bereits ein anderes Angebot in dieser Kategorie hat
         existing_offers = db.reference('offers').order_by_child('unternehmensID').equal_to(unternehmensID).get()
 
         for key, existing_offer in existing_offers.items():
@@ -550,7 +529,6 @@ def edit_offer_details(offer_id):
         flash('Offer successfully updated!', 'success')
         return redirect(url_for('edit_offer'))
 
-    # Set form fields with current offer data
     if request.method == 'GET':
         form.titel.data = offer.get('titel', '')
         form.angebotsbeschreibung.data = offer.get('angebotsbeschreibung', '')
@@ -585,7 +563,7 @@ def login():
         if user and check_password_hash(user['password'], customer_form.passwort.data):
             session['user_id'] = user['id']
             session['user_name'] = user.get('customername', "Unknown User")
-            session['is_company'] = False  # Setzen des Booleans für Customer
+            session['is_company'] = False  
             flash('Erfolgreich angemeldet.', 'success')
             return redirect(url_for('home'))
         else:
@@ -602,7 +580,7 @@ def login():
         if user and check_password_hash(user['password'], company_form.passwort.data):
             session['user_id'] = user['id']
             session['user_name'] = user.get('companyname', "Unknown User")
-            session['is_company'] = True  # Setzen des Booleans für Company
+            session['is_company'] = True  
             flash('Erfolgreich angemeldet.', 'success')
             return redirect(url_for('home'))
         else:
@@ -627,10 +605,8 @@ def payment(key):
         preis_pro_tasche = float(request.form['preis'])
         total_preis = anzahl * preis_pro_tasche
 
-        # Speichern der Parameter in der Sitzung
         session['anzahl'] = anzahl
 
-        # Abrufen der CompanyID aus der Offer-Tabelle
         ref = db.reference(f'offers/{key}')
         offer = ref.get()
         company_id = offer.get('unternehmensID')
@@ -699,7 +675,6 @@ def payment_execute(key):
         else:
             unternehmen = "Unternehmensbestellung"    
 
-        # Abrufen der Bestellinformationen
         order_ref = db.reference(f'offers/{key}')
         order_data = order_ref.get()
         if order_data:
@@ -709,7 +684,6 @@ def payment_execute(key):
         else:
             abholzeitraum = "Undefiniert"
 
-        # Ausführen der Zahlung
         payment = paypalrestsdk.Payment.find(payment_id)
         if payment.execute({"payer_id": payer_id}):
             order_data = {
@@ -728,12 +702,10 @@ def payment_execute(key):
                 'abholzeitraum': abholzeitraum
             }
 
-            # Speichern der Bestellung
             orders_ref = db.reference('orders')
             new_order_ref = orders_ref.push(order_data)
-            order_id = new_order_ref.key  # Die generierte order_id
+            order_id = new_order_ref.key  
 
-            # Aktualisieren der anzahlTaschenToday für das Angebot
             offer_ref = db.reference(f'offers/{key}')
             offer_data = offer_ref.get()
             if offer_data:
@@ -741,7 +713,6 @@ def payment_execute(key):
                 neue_anzahl = aktuelle_anzahl - int(anzahl)
                 offer_ref.update({'anzahlTaschenToday': neue_anzahl})
 
-            # Erstellen der Benachrichtigung
             notification_ref = db.reference('notifications')
             notification_ref.push({
                 'payment_id': payment_id,
@@ -760,11 +731,9 @@ def payment_execute(key):
 
             return redirect(url_for('orders'))
         else:
-            # Debug-Ausgabe bei fehlgeschlagener Zahlung
             print("Zahlungsabwicklung fehlgeschlagen:", payment.error)
             return "Zahlungsabwicklung fehlgeschlagen!"
     except Exception as e:
-        # Fehlerbehandlung und Debug-Ausgabe
         print("Fehler:", str(e))
         return f"Fehler: {str(e)}"
 
@@ -785,7 +754,6 @@ def notifications():
             if notifications:
                 notifications_list = list(notifications.items())
 
-                # Gruppiere Benachrichtigungen nach Datum
                 notifications_by_date = {}
                 for key, notification in notifications_list:
                     date = notification['date'][:10]
@@ -793,33 +761,25 @@ def notifications():
                         notifications_by_date[date] = []
                     notifications_by_date[date].append(notification)
 
-                # Paginierung logik
                 page = request.args.get('page', 1, type=int)
-                per_page = 4  # Anzahl der Tage pro Seite
+                per_page = 4 
                 total_days = len(notifications_by_date)
                 start = (page - 1) * per_page
                 end = start + per_page
 
-                # Gesamtanzahl der Seiten berechnen
                 total_pages = (total_days + per_page - 1) // per_page
 
-                # Benachrichtigungen für die aktuelle Seite auswählen
                 paginated_notifications_by_date = dict(list(notifications_by_date.items())[start:end])
 
-                # Setze den Status der Benachrichtigungen auf 'read'
                 for key, notification in notifications_list:
                     notification_ref.child(key).update({'status': 'read'})
 
-                # Setze die Session-Variable zurück, nachdem die Benachrichtigungen gelesen wurden
                 session['has_notification'] = False
 
-                # Berechne das aktuelle Datum
                 today = datetime.utcnow().strftime('%Y-%m-%d')
 
-                # Übergabe der Benachrichtigungen nach Datum sortiert
                 return render_template('notifications.html', notifications_by_date=paginated_notifications_by_date, today=today, page=page, total_pages=total_pages)
             else:
-                # Berechne das aktuelle Datum
                 today = datetime.utcnow().strftime('%Y-%m-%d')
                 return render_template('notifications.html', notifications_by_date={}, today=today, page=1, total_pages=1)
         except Exception as e:
@@ -857,39 +817,28 @@ def orders():
     if not orders:
         orders = {}
 
-    # Debug-Ausgabe der ursprünglichen Bestellungen
     print("Ursprüngliche Bestellungen:", orders)
 
-    # Bestellungen in umgekehrter Reihenfolge sortieren (neueste zuerst)
     orders = dict(sorted(orders.items(), key=lambda item: item[1]['datum'], reverse=True))
 
-    # Formatieren des Datums und Hinzufügen des Unternehmensnamens
     for key, order in orders.items():
         try:
-            # Datum von String zu datetime konvertieren
             date = datetime.strptime(order['datum'], '%Y-%m-%dT%H:%M:%S.%f')
-            # Datum in das Format 'TT.MM.JJJJ' bringen
             order['datum'] = date.strftime('%d.%m.%Y')
         except ValueError:
-            order['datum'] = order['datum']  # Falls Datum nicht konvertiert werden kann, belasse es als String
+            order['datum'] = order['datum']  
 
-    # Debug-Ausgabe der formatierten Bestellungen
     print("Formatierte Bestellungen:", orders)
 
-    # Paginierung
-    page = request.args.get('page', 1, type=int)  # Aktuelle Seite aus den Abfrageparametern erhalten
-    per_page = 9  # Anzahl der Bestellungen pro Seite
-    total = len(orders)  # Gesamtanzahl der Bestellungen
-    start = (page - 1) * per_page  # Startindex für die aktuelle Seite
-    end = start + per_page  # Endindex für die aktuelle Seite
-
-    # Gesamtanzahl der Seiten berechnen
+    page = request.args.get('page', 1, type=int)  
+    per_page = 9  
+    total = len(orders) 
+    start = (page - 1) * per_page  
+    end = start + per_page 
     total_pages = (total + per_page - 1) // per_page
 
-    # Bestellungen für die aktuelle Seite auswählen
     orders = dict(list(orders.items())[start:end])
 
-    # Debug-Ausgabe der Bestellungen für die aktuelle Seite
     print("Bestellungen für Seite", page, ":", orders)
 
     return render_template('orders.html', orders=orders, page=page, total_pages=total_pages)
@@ -900,14 +849,14 @@ def certain_order(key):
 
     if not user_id:
         flash("Du musst dich anmelden, um deine Bestellungen sehen zu können!", "danger")
-        return redirect(url_for('login'))  # Redirect to login if not logged in
+        return redirect(url_for('login')) 
 
     ref = db.reference('orders')
     orders = ref.get()
 
     if key not in orders:
         flash("Order not found", "danger")
-        return redirect(url_for('orders'))  # Redirect to orders page if order not found
+        return redirect(url_for('orders'))  
 
     order = orders[key]
 
@@ -921,12 +870,10 @@ def certain_order(key):
 
     if request.method == 'POST':
         if 'mark_as_completed' in request.form:
-            # Status auf abgeschlossen setzen und in der Datenbank speichern
             ref.child(key).update({'status': 'abgeschlossen'})
             flash("Deine Bestellung wurde als abgeholt vermerkt.", "success")
             return redirect(url_for('certain_order', key=key, unrated=unrated))
 
-    # Render the template for both GET and POST requests
     return render_template('certain_order.html', order=order, key=key, unrated=unrated)
 
 @app.route('/ratenow/<key>',  methods=['GET', 'POST'])
@@ -940,26 +887,20 @@ def ratenow(key):
         if key in orders:
          order = orders[key]
         
-    # Wenn das Formular abgeschickt wurde
     if form.validate_on_submit():
-        # Daten für die Bewertung vorbereiten
         rating_data = {
             'bewertung': form.bewertung.data,
             'rezension': form.rezension.data,
             'user': user_id,
             'orderid': key,
             'offerid': order['offer_id']
-            ##offerid ist falsch
         }
-        # Bewertung in die Firebase-Datenbank einfügen
         ref = db.reference('ratings')
         ref.push(rating_data)
         
-        # Nach dem Speichern der Bewertung umleiten
         flash("Vielen Dank für deine Bewertung!", "success")
         return redirect(url_for('profil'))
     
-    # Das Formular anzeigen
     return render_template('rating_form.html', form=form, condition=condition)
 
 def reset_taschen():
@@ -986,7 +927,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-scheduler.add_job(id='Daily Task', func=reset_taschen, trigger='cron', hour=21, minute=46)
+scheduler.add_job(id='Daily Task', func=reset_taschen, trigger='cron', hour=0, minute=0)
 
 if __name__ == "__main__":
         app.run()

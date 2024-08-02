@@ -4,21 +4,28 @@ Dieses Repository ergänzt das [online notebook](https://davidhes.github.io/)
 
 # Setup der Web-Anwendung
 
-**Step 1:** Richten Sie eine [Python Virtual Umgebung](https://hwrberlin.github.io/fswd/python-vscode.html#32-use-the-python-virtual-environment-as-default-for-this-workspace) ein.
+**Step 1:** Aus Sicherheitsgründen ist es noch notwendig, dass Sie den Key hinzufügen, der die Verbindung zur Firebase-Datenbank erlaubt.
+Zwei dieser Keys finden Sie in der HWR Cloud [hier](https://cloud.hwr-berlin.de/apps/files/files/11487569?dir=/Abgabe%20Web-Anwendung).
+Alternativ finden Sie auch [hier](https://cloud.hwr-berlin.de/s/LQNnxRN7QSipbN7) die beiden Keys mit dem Passwort: M4SQsMzxJx
+Fügen Sie bitte den Inhalt eines der beiden Keys in die Datei "serviceAccountKey.json". Diese befindet sich im Ordner "static\key\serviceAccountKey.json".
 
-**Step 2:** Installieren Sie sich bitte alle Python-Pakete mittels dem Befehl "pip install -r requirements.txt" im Terminal.
+Begründung: Normalerweise hatten wir die "serviceAccountKey.json"-Datei in der ".gitignore"-Datei vermerkt, um sie nicht auf GitHub hochzuladen. Um Ihnen jedoch Arbeit zu ersparen, haben wir die inhaltslose Datei hochgeladen.
+
+**Step 2:** Richten Sie eine [Python Virtual Umgebung](https://hwrberlin.github.io/fswd/python-vscode.html#32-use-the-python-virtual-environment-as-default-for-this-workspace) ein.
+
+**Step 3:** Installieren Sie sich bitte alle Python-Pakete mittels dem Befehl "pip install -r requirements.txt" im Terminal.
 
 ```console
 (venv) C:\Users\me\projects\webapp> pip install -r requirements.txt
 ```
 
-**Step 3:** Nach der Installation aller notwendigen Pakete, können Sie die Anwendung mit "flask run" starten.
+**Step 4:** Nach der Installation aller notwendigen Pakete, können Sie die Anwendung mit "flask run" starten.
 
 ```console
 (venv) C:\Users\me\projects\webapp> flask run
 ```
 
-**Step 4:** Besuche [http://127.0.0.1:5000/home](http://127.0.0.1:5000/home) um zur Startseite zu gelangen.
+**Step 5:** Besuche [http://127.0.0.1:5000/home](http://127.0.0.1:5000/home) um zur Startseite zu gelangen.
 
 
 # Anmeldung / Registration

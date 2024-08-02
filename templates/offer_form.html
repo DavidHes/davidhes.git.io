@@ -10,7 +10,6 @@
 
 
 {% block EXTRA_BUTTONS %}
-        <!-- Hier fügen wir nur einen Button hinzu -->
          <button class="btn btn-dark me-md-3" type="button">Log out</button>
 {% endblock %}
 
@@ -19,7 +18,7 @@
     <div class="col-md-3 py-3">
      
      <form method="POST" action="">
-    {{ form.hidden_tag() }}  {# CSRF-Schutzfeld hinzufügen #}
+    {{ form.hidden_tag() }}  
 <div class="form-group mb-3">
      {{ form.angebotsbeschreibung.label(class="form-control-label") }}
      {{ form.angebotsbeschreibung(class="form-control", placeholder="Angebotsbeschreibung eingeben") }}

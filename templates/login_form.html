@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
     <script type="module">
-        // Firebase SDK imports (unchanged)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
 
-        // Firebase configuration (unchanged)
         const firebaseConfig = {
             apiKey: "AIzaSyCNLjo_ISSJlMHlsCwbq8Fznd4hxMaXmnk",
             authDomain: "plate-saver.firebaseapp.com",
@@ -19,7 +17,6 @@
             measurementId: "G-S88M06LZR3"
         };
 
-        // Initialize Firebase (unchanged)
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const auth = getAuth(app);

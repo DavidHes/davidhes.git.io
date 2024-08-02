@@ -10,20 +10,20 @@
     <style>
                 .carousel-control-prev-icon,
             .carousel-control-next-icon {
-                border-radius: 50%; /* Rundung der Schaltflächen */
-                height: 50px; /* Höhe der Schaltflächen */
-                width: 50px; /* Breite der Schaltflächen */
+                border-radius: 50%; 
+                height: 50px; 
+                width: 50px; 
             }
 
             .carousel-control-prev-icon {
-                background-image: none; /* Entfernt das standardmäßige Pfeilsymbol */
+                background-image: none; 
                 position: relative;
             }
 
             .carousel-control-prev-icon::after {
-                content: '◀'; /* Pfeilsymbol für die vorherige Steuerung */
-                font-size: 16px; /* Größe des Pfeils */
-                color: #b0742f; /* Farbe des Pfeils */
+                content: '◀'; 
+                font-size: 16px; 
+                color: #b0742f; 
                 position: absolute;
                 top: 50%;
                 left: 50%;
@@ -31,14 +31,14 @@
             }
 
             .carousel-control-next-icon {
-                background-image: none; /* Entfernt das standardmäßige Pfeilsymbol */
+                background-image: none; 
                 position: relative;
             }
 
             .carousel-control-next-icon::after {
-                content: '▶'; /* Pfeilsymbol für die nächste Steuerung */
-                font-size: 16px; /* Größe des Pfeils */
-                color: rgb(176, 116, 47); /* Farbe des Pfeils */
+                content: '▶'; 
+                font-size: 16px; 
+                color: rgb(176, 116, 47); 
                 position: absolute;
                 top: 50%;
                 left: 50%;
@@ -46,10 +46,10 @@
             }
 
             .btn-custom {
-                background-color: #EFC864; /* Hintergrundfarbe des Buttons */
-                color: #ffffff; /* Textfarbe des Buttons */
+                background-color: #EFC864; 
+                color: #ffffff; 
             }
-            /* Kleinere Buttons und Anpassung der Farbe */
+
         .btn-group-toggle .btn {
             margin: 5px;
             background-color: #b0742f;
@@ -64,14 +64,13 @@
             color: white;
         }
 
-        /* Abstände zwischen den Buttons und Ränder für bessere Anordnung */
         .btn-group-toggle {
             display: flex;
             flex-wrap: wrap;
         }
 
         .btn-group-toggle .btn {
-            flex: 1 0 21%; /* 4 Buttons pro Zeile mit Abstand */
+            flex: 1 0 21%; 
             margin: 2px;
         }
 
@@ -80,8 +79,8 @@
         }
     
         .header-logo {
-            max-height: 40px; /* Setzt die maximale Höhe der Glockenbilder */
-            width: auto;      /* Automatische Breite basierend auf der Höhe */
+            max-height: 40px; 
+            width: auto;      
         }
     </style>
 </head>
@@ -127,7 +126,6 @@
     </nav>
 </header>
 
-<!-- Flash Nachrichten Block -->
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         <div class="container">
@@ -146,7 +144,6 @@
 </header>
 
 {% block BACK_BUTTON %}
-    <!-- Standard Back Button, kann bei Bedarf angepasst werden -->
 {% endblock %}
 
 <main class="container">

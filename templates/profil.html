@@ -10,12 +10,10 @@
 
 {% block EXTRA_BUTTONS %}
     {% if user_id %}
-        <!-- Benutzer ist angemeldet -->
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button class="btn btn-dark me-md-4" type="button">Log out</button>
         </div>
     {% else %}
-        <!-- Benutzer ist nicht angemeldet -->
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button class="btn btn-dark me-md-4" type="button">Login</button>
             <button class="btn btn-dark me-md-3" type="button">Registeration</button>
@@ -27,10 +25,7 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         {% if user_id %}
-            <!-- Benutzer ist angemeldet -->
             {% if user_type %}
-                <!-- Company -->
-                <!-- Dritter Kasten -->
                 <div class="col-md-4 mb-4 d-flex justify-content-center">
                     <div class="card" style="width: 400px; height: 200px; border: 3px solid #EFC864;">
                         <div style="height: 50%; overflow: hidden;">
@@ -42,7 +37,6 @@
                     </div>
                 </div>
             {% endif %}
-            <!-- Erster Kasten -->
             <div class="col-md-4 mb-4 d-flex justify-content-center">
                 <div class="card" style="width: 400px; height: 200px; border: 3px solid #EFC864;">
                     <div style="height: 50%; overflow: hidden;">
@@ -53,7 +47,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Zweiter Kasten -->
             <div class="col-md-4 mb-4 d-flex justify-content-center">
                 <div class="card" style="width: 400px; height: 200px; border: 3px solid #EFC864;">
                     <div style="height: 50%; overflow: hidden;">
@@ -65,8 +58,6 @@
                 </div>
             </div>
         {% else %}
-            <!-- Benutzer ist nicht angemeldet -->
-            <!-- Erster Kasten -->
             <div class="col-md-5 mb-4 d-flex justify-content-center">
                 <div class="card" style="width: 400px; height: 200px; border: 3px solid #EFC864;">
                     <div style="height: 50%; overflow: hidden;">
@@ -77,7 +68,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Zweiter Kasten -->
             <div class="col-md-5 mb-4 d-flex justify-content-center">
                 <div class="card" style="width: 400px; height: 200px; border: 3px solid #EFC864;">
                     <div style="height: 50%; overflow: hidden;">
