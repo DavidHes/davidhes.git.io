@@ -13,9 +13,6 @@ nav_order: 3
 + ToC
 {: toc }
 </details>
-
-## [Section / module]
-
 ## 01: favourites Route
 
 ## Abschnitt / Modul: Favoritenverwaltung
