@@ -60,9 +60,11 @@ Dieses Dokument beschreibt das Datenmodell der Firebase Realtime Database. Die D
 {
   "message_id": "string"
 }
+```
 
 # Die notifications-Collection speichert Benachrichtigungen für Benutzer und Unternehmen.
 
+```json
 {
   "notification_id": {
     "company_id": "string",
@@ -95,9 +97,9 @@ Dieses Dokument beschreibt das Datenmodell der Firebase Realtime Database. Die D
 }
 ```
 
-```json
 # Die orders-Collection enthält Bestellungen, die von Benutzern getätigt wurden.
 
+```json
 {
   "order_id": {
     "anzahl": "number",
@@ -125,9 +127,11 @@ Dieses Dokument beschreibt das Datenmodell der Firebase Realtime Database. Die D
     "user": "string"
   }
 }
+```
 
 # Der schlüssel-Knoten enthält allgemeine Schlüssel-Wert-Paare.
 
+```json
 {
   "schlüssel": "string"
 }
