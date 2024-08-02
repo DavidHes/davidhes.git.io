@@ -1,5 +1,5 @@
 ---
-title: # User Evaluation (Bewertungen) Survey
+title: User Evaluation (Bewertungen) Survey
 nav_order: 5
 ---
 
