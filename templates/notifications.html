@@ -36,6 +36,7 @@
                                 <div class="card-body">
                                     <p class="card-text"><strong>Bestell-ID:</strong> {{ notification['order_id'] }}</p>
                                     <p class="card-text"><strong>Besteller*in:</strong> {{ notification['full_name'] }}</p>
+                                    <p class="card-text"><strong>Kategorie:</strong> {{ notification['kategorie'] }}</p>
                                     <p class="card-text"><strong>Abholzeitraum:</strong> {{ notification['abholzeitraum'] }}</p>
                                     <p class="card-text"><strong>Datum:</strong> {{ notification['date'] }}</p>
                                     <p class="card-text"><strong>Preis:</strong> {{ notification['preis'] }} €</p>
@@ -57,9 +58,13 @@
                             <div class="col-md-4 mb-4">
                                 <div class="card" style="border: 3px solid #EFC864; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
                                     <div class="card-body">
-                                        <p class="card-text"><strong>Order ID:</strong> {{ notification['order_id'] }}</p>
-                                        <p class="card-text"><strong>Date:</strong> {{ notification['date'] }}</p>
-                                        <p class="card-text"><strong>Status:</strong> {{ notification['status'] }}</p>
+                                        <p class="card-text"><strong>Bestell-ID:</strong> {{ notification['order_id'] }}</p>
+                                        <p class="card-text"><strong>Besteller*in:</strong> {{ notification['full_name'] }}</p>
+                                        <p class="card-text"><strong>Kategorie:</strong> {{ notification['kategorie'] }}</p>
+                                        <p class="card-text"><strong>Abholzeitraum:</strong> {{ notification['abholzeitraum'] }}</p>
+                                        <p class="card-text"><strong>Datum:</strong> {{ notification['date'] }}</p>
+                                        <p class="card-text"><strong>Preis:</strong> {{ notification['preis'] }} €</p>
+                                        <p class="card-text"><strong>Anzahl:</strong> {{ notification['anzahl'] }}</p>
                                     </div>
                                 </div>
                             </div>
