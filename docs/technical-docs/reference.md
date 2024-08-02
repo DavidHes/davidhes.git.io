@@ -51,7 +51,7 @@ nav_order: 3
 
 - **GET /ratenow/<key>**: Zeigt ein Formular an, in dem der Benutzer eine Bewertung und eine Rezension für eine bestimmte Bestellung abgeben kann.
   
-![get_list_todos_sample](docs\assets\images\Bild 22.png)
+![get_list_todos_sample](../assets/images/Bild 22.png)
 
 - **POST /ratenow/<key>**:  Speichert die Bewertung und Rezension des Benutzers in der Datenbank und leitet den Benutzer zu seinem Profil weiter.
     ```json
@@ -63,7 +63,7 @@ nav_order: 3
         "offerid": "offer_id_789"
     }
     ```
-![get_list_todos_sample](docs\assets\images\Bild 33.png)
+![get_list_todos_sample](../assets/images/Bild 33.png)
 
 
 
@@ -86,11 +86,11 @@ nav_order: 3
    
    **Benutzer angemeldet**
 
-   ![get_list_todos_sample](docs\assets\images\Bild 44.png)
+   ![get_list_todos_sample](../assets/images/Bild 44.png)
 
    **Benutzer NICHT angemeldet**
 
-    ![get_list_todos_sample](docs\assets\images\Bild 55.png)
+    ![get_list_todos_sample](../assets/images/Bild 55.png)
 
 ---
 
@@ -110,7 +110,7 @@ nav_order: 3
  
  **Bild von Angeboten**
 
-  ![get_list_todos_sample](docs\assets\images\Bild 66.png)
+  ![get_list_todos_sample](../assets/images/Bild 66.png)
 
 - **POST /browse**: Verarbeitet das abgesendete Filterformular, um Angebote basierend auf den vom Benutzer eingegebenen Kriterien zu filtern.
   - **Filterlogik:**
@@ -122,7 +122,7 @@ nav_order: 3
 
  **Bild von gefilterten Angeboten**
 
-  ![get_list_todos_sample](docs\assets\images\Bild 77.png)
+  ![get_list_todos_sample](../assets/images/Bild 77.png)
 
 
 
