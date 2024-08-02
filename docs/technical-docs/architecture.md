@@ -20,33 +20,33 @@ nav_order: 1
 
 ### Overview
 
-## Frontend:
+# Frontend:
 
-# HTML-Templates:
+## HTML-Templates:
 Definieren die Struktur und den Inhalt der Webseiten und ermöglichen die Darstellung dynamischer Daten. 
 
-# Bootstrap:
+## Bootstrap:
 Ein Framework für responsive und moderne Weblayouts mit vordefinierten CSS-Klassen und JavaScript-Komponenten. Es erleichtert das schnelle Erstellen ansprechender und konsistenter Benutzeroberflächen.
 
-# Flask WTForms (Formulargenerierung und -validierung im Frontend):
+## Flask WTForms (Formulargenerierung und -validierung im Frontend):
 Erstellung und Validierung von HTML-Formularen im Browser. Es bietet eine bequeme Möglichkeit, Formulare zu generieren und zu validieren, bevor sie an den Server gesendet werden.
 
-# Jinja-Templates:
+## Jinja-Templates:
 Ermöglichen die dynamische Generierung von HTML durch Einbettung von Python-Code. Jinja-Templates bieten eine flexible Möglichkeit, Inhalte und Layouts zu gestalten und Daten aus dem Backend an das Frontend zu übergeben.
 
-## Backend:
+# Backend:
 
-# Flask (Routing und HTTP-Anfragen-Verarbeitung):
+## Flask (Routing und HTTP-Anfragen-Verarbeitung):
 Für die Verwaltung von Routen und die Verarbeitung von HTTP-Anfragen. Es ermöglicht die Definition von Endpunkten und die Verarbeitung von eingehenden Anfragen.
 
-# Python (Geschäftslogik):
+## Python (Geschäftslogik):
 Implementierung der Kernfunktionalität der Anwendung. Python wird verwendet, um die Logik zu schreiben, die die Anwendung antreibt.
 
-# Flask WTForms (Formularvalidierung im Backend):
+## Flask WTForms (Formularvalidierung im Backend):
 Serverseitige Validierung der Formulardaten. Stellt sicher, dass die Daten korrekt und sicher sind, bevor sie verarbeitet oder in die Datenbank gespeichert werden.
 
-# Firebase (Datenbankinteraktionen):
+## Firebase (Datenbankinteraktionen):
 Echtzeit-Datenbank und Backend-Dienste wie Authentication und Realtime database. Firebase bietet eine skalierbare Datenbanklösung und Backend-Dienste, die die Entwicklung und Verwaltung von Anwendungen vereinfachen. 
 
-# PayPal API (Zahlungsabwicklung):
+## PayPal API (Zahlungsabwicklung):
 Integration von Zahlungsfunktionen in die Anwendung. Die PayPal API ermöglicht sichere und effiziente Zahlungsabwicklungen innerhalb der Anwendung.
