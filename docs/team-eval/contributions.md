@@ -5,7 +5,6 @@ nav_order: 4
 ---
 
 {: .no_toc }
-# Summary of individual contributions
 
 ## Beiträge von Majd Noameh und David Heßburg
 
