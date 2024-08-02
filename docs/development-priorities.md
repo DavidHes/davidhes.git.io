@@ -25,11 +25,11 @@ Im Folgenden sind die Entwicklungsprioritäten für unser Projekt aufgeführt, p
 - Angebotsbearbeitung
 - Browse-Funktion
 - Kaufabwicklung
+- Kaufabwicklung (API)
 - Bestellungen
 
 **Nicht MVP:**
 - Bewertungen
 - Favoriten
 - Coupons
-- Kaufabwicklung (API)
 - Google Maps (API)
