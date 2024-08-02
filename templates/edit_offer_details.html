@@ -38,6 +38,10 @@
                 {{ form.preis(class="form-control", placeholder="Preis eingeben") }}
             </div>
             <div class="form-group mb-3">
+                {{ form.altPreis.label(class="form-control-label") }}
+                {{ form.altPreis(class="form-control", placeholder="Alten Preis eingeben") }}
+            </div>
+            <div class="form-group mb-3">
                 {{ form.abholStartZeit.label(class="form-control-label") }}
                 {{ form.abholStartZeit(class="form-control", placeholder="Start Abholzeit eingeben", type="time") }}
             </div>
