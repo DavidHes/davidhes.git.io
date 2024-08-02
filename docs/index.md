@@ -23,7 +23,7 @@ Ein zentrales Feature ist die Möglichkeit für Kunden, Bewertungen für Bäcker
 Unser Ziel als Gruppe ist es, eine voll funktionsfähige und benutzerfreundliche Webanwendung zu entwickeln, die auch in der Realität angeboten werden könnte. Konkret möchten wir eine reibungslose Funktionalität sowohl bei der Datenbankanbindung als auch bei den Hauptfunktionen der Anwendung erreichen. 
 
 ### Präsentation:
-Unsere Präsentation finden Sie ([hier](https://getbootstrap.com/docs/5.3/components/buttons/)). Alternativ finden Sie die PDF-Datei auch im Überordner. 
+Unsere Präsentation finden Sie [hier](https://getbootstrap.com/docs/5.3/components/buttons/). Alternativ finden Sie die PDF-Datei auch im Überordner. 
 
 ## Team members
 
