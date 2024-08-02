@@ -8,8 +8,9 @@ nav_order: 2
 
 Dieses Dokument beschreibt das Datenmodell der Firebase Realtime Database. Die Datenstruktur ist hierarchisch organisiert und besteht aus verschiedenen Hauptknoten. Jeder Knoten enthält spezifische Datentypen und Informationen.
 
-## Die `companies`-Collection enthält Dokumente, die Informationen über verschiedene Unternehmen speichern.
+# Die `companies`-Collection enthält Dokumente, die Informationen über verschiedene Unternehmen speichern.
 
+```json
 {
   "company_id": {
     "city": "string",
@@ -25,9 +26,11 @@ Dieses Dokument beschreibt das Datenmodell der Firebase Realtime Database. Die D
     ]
   }
 }
+```
 
 # Die customers-Collection enthält Dokumente, die Informationen über Kunden speichern.
 
+```json
 {
   "customer_id": {
     "email": "string",
@@ -38,18 +41,22 @@ Dieses Dokument beschreibt das Datenmodell der Firebase Realtime Database. Die D
     "firebase_uid": "string" (optional)
   }
 }
+```
 
 # Die favourites-Collection speichert, welche Angebote ein Benutzer favorisiert hat.
 
+```json
 {
   "favourite_id": {
     "offerid": "string",
     "user": "string"
   }
 }
+```
 
 # Die messages-Collection enthält Nachrichten, die zwischen Benutzern ausgetauscht wurden.
 
+```json
 {
   "message_id": "string"
 }
@@ -64,9 +71,11 @@ Dieses Dokument beschreibt das Datenmodell der Firebase Realtime Database. Die D
     "status": "string"
   }
 }
+```
 
 # Die offers-Collection enthält Angebote, die von Unternehmen bereitgestellt werden.
 
+```json
 {
   "offer_id": {
     "abholEndZeit": "string",
@@ -84,7 +93,9 @@ Dieses Dokument beschreibt das Datenmodell der Firebase Realtime Database. Die D
     "unternehmensID": "string"
   }
 }
+```
 
+```json
 # Die orders-Collection enthält Bestellungen, die von Benutzern getätigt wurden.
 
 {
@@ -100,9 +111,11 @@ Dieses Dokument beschreibt das Datenmodell der Firebase Realtime Database. Die D
     "user_id": "string"
   }
 }
+```
 
 # Die ratings-Collection speichert Bewertungen für Angebote.
 
+```json
 {
   "rating_id": {
     "bewertung": "number",
@@ -118,3 +131,4 @@ Dieses Dokument beschreibt das Datenmodell der Firebase Realtime Database. Die D
 {
   "schlüssel": "string"
 }
+```
