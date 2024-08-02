@@ -15,7 +15,7 @@ nav_order: 5
 
 # #1 User Evaluation Survey - Benutzerfreundlichkeit
 
-![get_list_todos_sample](../assets/images/Umfrage-Benutzerfreundlichkeit1.png)
+![get_list_todos_sample](assets/images/Umfrage-Benutzerfreundlichkeit1.png)
 
 ![get_list_todos_sample](../assets/images/Umfrage-Benutzerfreundlichkeit2.png)
 
